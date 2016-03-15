@@ -47,7 +47,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   
   func applicationShouldHandleReopen(sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
     if !flag {
-     showPreferences()
+      showPreferences()
     }
     
     return true
@@ -181,6 +181,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             if UserPreferences.notificationsSpotifyIcon == 0 {
               notification.contentImage = image
             } else {
+              
+              // adjusting offset for subtitle and informative test
+              // \u{200C} is zero width non-joiner - the only thing treated
+              // as non space otherwise trimmed in nsusernotification
+              let offset = "\u{200C}" + "\u{00a0}\u{00a0}\u{00a0}\u{00a0}\u{00a0}\u{00a0}\u{00a0}"
+              notification.subtitle = notification.subtitle!
+              notification.informativeText = notification.informativeText!
+              
               // private apple apis
               notification.setValue(image, forKey: "_identityImage")
               notification.setValue(2, forKey: "_identityImageStyle")
@@ -195,7 +203,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
         
       }
-      
       
     }
   }
