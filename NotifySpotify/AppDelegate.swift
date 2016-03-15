@@ -197,10 +197,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
       }
       
       
-    } else if playerStatus == "Paused" {
-      
     }
-    
   }
   
   
@@ -252,8 +249,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   func windowNotificationsSpotifyFocus(sender: NSPopUpButton){
     UserPreferences.notificationsSpotifyFocus = sender.indexOfSelectedItem
   }
-  
-  
 
 }
 
