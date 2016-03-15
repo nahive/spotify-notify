@@ -18,7 +18,7 @@
 - [x] Toggle disabling of notifications when Spotify is focused (toggle)
 - [ ] Shortcuts for showing notification (customizable)
 
-[Changelog](https://github.com/nahive/spotify-notify/master/CHANGELOG.md)
+[Changelog](https://github.com/nahive/spotify-notify/blob/master/CHANGELOG.md)
 
 ## Building
 
