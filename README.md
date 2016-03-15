@@ -3,7 +3,7 @@
   <img src="http://i.imgur.com/WSOChtc.png" alt="Spotify Notify"/>
 </p>
 
-## Spotify Notify - inspired by [Spotify Notifications](https://github.com/citruspi/Spotify-Notifications) written in Swift
+# Spotify Notify - inspired by [Spotify Notifications](https://github.com/citruspi/Spotify-Notifications) written in Swift
 
 [![Build Status](https://travis-ci.org/nahive/spotify-notify.png?branch=master)](https://travis-ci.org/nahive/spotify-notify)
 
