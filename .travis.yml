@@ -1,0 +1,3 @@
+language: swift
+xcode_project: SpotifyNotify.xcodeproj
+xcode_scheme: SpotifyNotify
