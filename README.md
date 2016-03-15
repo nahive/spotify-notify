@@ -4,9 +4,9 @@
 </p>
 
 # Spotify Notify
-##### *Inspired by [Spotify Notifications](https://github.com/citruspi/Spotify-Notifications) written in Swift*
-
+![Build Version](https://img.shields.io/github/release/nahive/spotify-notify.svg)
 [![Build Status](https://travis-ci.org/nahive/spotify-notify.png?branch=master)](https://travis-ci.org/nahive/spotify-notify)
+##### *Inspired by [Spotify Notifications](https://github.com/citruspi/Spotify-Notifications) written in Swift*
 
 ## Features
 
@@ -28,6 +28,13 @@ $ git clone https://github.com/nahive/spotify-notify.git
 $ cd spotify-notify
 $ open SpotifyNotify.xcodeproj
 ```
+## Contributing
+
+If you found a **bug**, open an issue.
+
+If you have a **feature** request, open an issue.
+
+If you want to **contribute**, submit a pull request.
 
 ## License
 
