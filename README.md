@@ -1,7 +1,9 @@
 
-## Spotify Notify - inspired by [Spotify Notifications](https://github.com/citruspi/Spotify-Notifications) written in Swift
+<p align="center">
+  <img src="http://i.imgur.com/WSOChtc.png" alt="Spotify Notify"/>
+</p>
 
-![Spotify Notify](http://i.imgur.com/WSOChtc.png)
+## Spotify Notify - inspired by [Spotify Notifications](https://github.com/citruspi/Spotify-Notifications) written in Swift
 
 [![Build Status](https://travis-ci.org/citruspi/Spotify-Notifications.png?branch=master)](https://travis-ci.org/citruspi/Spotify-Notifications)
 
