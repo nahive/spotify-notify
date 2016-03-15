@@ -5,7 +5,7 @@
 
 ## Spotify Notify - inspired by [Spotify Notifications](https://github.com/citruspi/Spotify-Notifications) written in Swift
 
-[![Build Status](https://travis-ci.org/citruspi/Spotify-Notifications.png?branch=master)](https://travis-ci.org/citruspi/Spotify-Notifications)
+[![Build Status](https://travis-ci.org/citruspi/spotify-notify.png?branch=master)](https://travis-ci.org/citruspi/spotify-notify)
 
 ## Features
 
