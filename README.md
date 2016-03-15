@@ -1,5 +1,5 @@
 
-## Spotify Notify
+## Spotify Notify - inspired by [Spotify Notifications](https://github.com/citruspi/Spotify-Notifications) written in Swift
 
 ![Spotify Notify](http://i.imgur.com/WSOChtc.png)
 
