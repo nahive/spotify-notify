@@ -1,6 +1,8 @@
 
 <p align="center">
-  <img src="http://i.imgur.com/WSOChtc.png" alt="Spotify Notify"/>
+  <img src="https://i.imgur.com/WSOChtc.png" alt="Spotify Notify"/>
+  <img src="https://i.imgur.com/rraJU5b.png" alt="Spotify Notify"/>
+  <img src="https://i.imgur.com/eVxoEOS.png" alt="Spotify Notify"/>
 </p>
 
 # Spotify Notify
