@@ -19,14 +19,15 @@
                 <outlet property="statusQuit" destination="MRV-r6-fUM" id="JNd-9a-c3L"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
                 <outlet property="windowHomeButton" destination="R4V-4P-LKQ" id="C9o-8R-2K0"/>
-                <outlet property="windowNotificationsArt" destination="75r-B7-7KD" id="bkv-pG-Lbi"/>
-                <outlet property="windowNotificationsMenuIcon" destination="6Su-cq-0ZO" id="Rc2-pm-J1H"/>
-                <outlet property="windowNotificationsPlayPause" destination="s79-8G-9Xg" id="d8r-Us-gLf"/>
-                <outlet property="windowNotificationsSound" destination="sUP-C2-rwh" id="0TN-QV-Ovv"/>
-                <outlet property="windowNotificationsSpotifyFocus" destination="4rE-30-yg8" id="hcy-2p-jeG"/>
-                <outlet property="windowNotificationsSpotifyIcon" destination="GDK-WV-v21" id="ueH-cE-eUp"/>
-                <outlet property="windowNotificationsStartup" destination="aK1-BB-OEJ" id="fQ8-A2-hkl"/>
-                <outlet property="windowNotificationsToggle" destination="HtY-OM-iZU" id="fT6-Qu-aSQ"/>
+                <outlet property="windowNotificationsArt" destination="EFd-pI-bz8" id="vSP-nT-CHO"/>
+                <outlet property="windowNotificationsMenuIcon" destination="6Su-cq-0ZO" id="hh1-9M-4dE"/>
+                <outlet property="windowNotificationsPlayPause" destination="s7c-o2-cnC" id="Ukc-ac-IuP"/>
+                <outlet property="windowNotificationsRoundAlbum" destination="WAc-gw-RFI" id="sqE-TP-wj3"/>
+                <outlet property="windowNotificationsSound" destination="Dek-tr-EZY" id="OLs-4Y-UN3"/>
+                <outlet property="windowNotificationsSpotifyFocus" destination="CFo-vt-tUg" id="oVd-Do-bnR"/>
+                <outlet property="windowNotificationsSpotifyIcon" destination="beN-Wi-Ry6" id="dB1-sr-MYH"/>
+                <outlet property="windowNotificationsStartup" destination="Sb2-Il-p1t" id="NSa-ez-2DT"/>
+                <outlet property="windowNotificationsToggle" destination="3K2-TY-BqD" id="D84-ZV-uAE"/>
                 <outlet property="windowQuitButton" destination="hGS-gI-9Oz" id="bvH-vT-69Z"/>
                 <outlet property="windowSourceButton" destination="NAb-Oa-tfs" id="Y8v-fj-dpo"/>
             </connections>
@@ -78,73 +79,105 @@
         <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="480" height="360"/>
+            <rect key="contentRect" x="335" y="390" width="350" height="273"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1440"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
+                <rect key="frame" x="0.0" y="0.0" width="350" height="273"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R4V-4P-LKQ">
-                        <rect key="frame" x="199" y="13" width="89" height="32"/>
+                        <rect key="frame" x="131" y="13" width="89" height="32"/>
                         <buttonCell key="cell" type="push" title="Home" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bJj-XE-oIL">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VHO-n3-Crg">
-                        <rect key="frame" x="18" y="259" width="121" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Notification Sound" id="5i8-Wd-gMO">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L8Q-MW-8Hw">
-                        <rect key="frame" x="18" y="179" width="94" height="17"/>
+                        <rect key="frame" x="18" y="63" width="94" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Menu Bar Icon" id="KN9-vf-dl7">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xAc-uT-XbZ">
-                        <rect key="frame" x="18" y="212" width="99" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Run on Startup" id="eJJ-1w-TGk">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gjY-pN-QND">
-                        <rect key="frame" x="18" y="117" width="125" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Include Spotify Icon" id="Ccm-s5-7Co">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QSI-lg-AzX">
-                        <rect key="frame" x="18" y="86" width="202" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Disable when Spotify has Focus" id="sFh-8G-axr">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="nmU-t7-9FY">
-                        <rect key="frame" x="52" y="59" width="382" height="5"/>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="system"/>
-                    </box>
                     <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="U4o-dE-WaF">
-                        <rect key="frame" x="52" y="240" width="382" height="5"/>
+                        <rect key="frame" x="42" y="188" width="267" height="5"/>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <font key="titleFont" metaFont="system"/>
                     </box>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NAb-Oa-tfs">
+                        <rect key="frame" x="14" y="13" width="96" height="32"/>
+                        <buttonCell key="cell" type="push" title="Source" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oxM-N1-OlP">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hGS-gI-9Oz">
+                        <rect key="frame" x="254" y="13" width="82" height="32"/>
+                        <buttonCell key="cell" type="push" title="Quit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="z62-t8-dQy">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3K2-TY-BqD">
+                        <rect key="frame" x="18" y="237" width="141" height="18"/>
+                        <buttonCell key="cell" type="check" title="Enable notifications" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="GXt-X3-YMo">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s7c-o2-cnC">
+                        <rect key="frame" x="18" y="217" width="147" height="18"/>
+                        <buttonCell key="cell" type="check" title="Notify on play/pause" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="gve-hx-URO">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dek-tr-EZY">
+                        <rect key="frame" x="18" y="197" width="175" height="18"/>
+                        <buttonCell key="cell" type="check" title="Enable notification sound" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Equ-V9-fus">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sb2-Il-p1t">
+                        <rect key="frame" x="18" y="166" width="98" height="18"/>
+                        <buttonCell key="cell" type="check" title="Run on login" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="2oS-Fn-z2Z">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EFd-pI-bz8">
+                        <rect key="frame" x="18" y="146" width="128" height="18"/>
+                        <buttonCell key="cell" type="check" title="Include album art" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="dyQ-Hh-mzr">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="beN-Wi-Ry6">
+                        <rect key="frame" x="18" y="106" width="142" height="18"/>
+                        <buttonCell key="cell" type="check" title="Include Spotify icon" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="X68-Pb-zu8">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CFo-vt-tUg">
+                        <rect key="frame" x="18" y="86" width="212" height="18"/>
+                        <buttonCell key="cell" type="check" title="Disable when Spotify has focus" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="wnm-f0-Hz6">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WAc-gw-RFI">
+                        <rect key="frame" x="18" y="126" width="122" height="18"/>
+                        <buttonCell key="cell" type="check" title="Round album art" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="23n-ST-aIz">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Su-cq-0ZO">
-                        <rect key="frame" x="293" y="174" width="170" height="26"/>
+                        <rect key="frame" x="116" y="58" width="170" height="26"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vZ7-hz-6kX">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
@@ -163,166 +196,15 @@
                             </menu>
                         </popUpButtonCell>
                     </popUpButton>
-                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="75r-B7-7KD">
-                        <rect key="frame" x="293" y="143" width="170" height="26"/>
-                        <popUpButtonCell key="cell" type="push" title="Enabled" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" imageScaling="proportionallyDown" inset="2" selectedItem="wrq-JA-g7V" id="DeW-HV-rDV">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu"/>
-                            <menu key="menu" title="OtherViews" id="FI2-Ku-nRb">
-                                <items>
-                                    <menuItem title="Enabled" state="on" tag="1" id="wrq-JA-g7V">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
-                                    <menuItem title="Disabled" tag="2" id="UGB-Q7-Zcj">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
-                                </items>
-                            </menu>
-                        </popUpButtonCell>
-                    </popUpButton>
-                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4rE-30-yg8">
-                        <rect key="frame" x="293" y="81" width="170" height="26"/>
-                        <popUpButtonCell key="cell" type="push" title="Enabled" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" imageScaling="proportionallyDown" inset="2" selectedItem="beb-7D-hVU" id="kj2-Rs-4Ba">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu"/>
-                            <menu key="menu" title="OtherViews" id="h0a-Qf-aQX">
-                                <items>
-                                    <menuItem title="Enabled" state="on" tag="1" id="beb-7D-hVU">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
-                                    <menuItem title="Disabled" tag="2" id="FPu-B9-PYI">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
-                                </items>
-                            </menu>
-                        </popUpButtonCell>
-                    </popUpButton>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WnJ-UK-zwd">
-                        <rect key="frame" x="18" y="146" width="119" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Include Album Art" id="oQT-7y-nqJ">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sUP-C2-rwh">
-                        <rect key="frame" x="293" y="254" width="170" height="26"/>
-                        <popUpButtonCell key="cell" type="push" title="Enabled" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" imageScaling="proportionallyDown" inset="2" selectedItem="Bgf-i0-IdQ" id="9F5-uL-Hh0">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu"/>
-                            <menu key="menu" title="OtherViews" id="ndo-SU-6MJ">
-                                <items>
-                                    <menuItem title="Enabled" state="on" tag="1" id="Bgf-i0-IdQ">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
-                                    <menuItem title="Disabled" tag="2" id="vKb-eD-aIg">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
-                                </items>
-                            </menu>
-                        </popUpButtonCell>
-                    </popUpButton>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1OO-LE-O6A">
-                        <rect key="frame" x="18" y="290" width="145" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Notify on Play/Pause" id="0CC-iJ-3fR">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pSY-vX-gXK">
-                        <rect key="frame" x="18" y="321" width="145" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Notifications" id="Fek-RL-xUT">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s79-8G-9Xg">
-                        <rect key="frame" x="293" y="285" width="170" height="26"/>
-                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Q68-IH-jhj">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu"/>
-                            <menu key="menu" title="OtherViews" id="jI7-Fw-1Av">
-                                <items>
-                                    <menuItem title="Enabled" tag="1" id="mIQ-rI-kTE">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
-                                    <menuItem title="Disabled" tag="2" id="4aW-i1-kqp">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
-                                </items>
-                            </menu>
-                        </popUpButtonCell>
-                    </popUpButton>
-                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aK1-BB-OEJ">
-                        <rect key="frame" x="293" y="207" width="170" height="26"/>
-                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="jid-Y3-bqK">
-                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu"/>
-                            <menu key="menu" title="OtherViews" id="zJc-oX-Scf">
-                                <items>
-                                    <menuItem title="Enabled" id="R3m-Ns-Dil">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
-                                    <menuItem title="Disabled" id="gms-0Y-S11">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
-                                </items>
-                            </menu>
-                        </popUpButtonCell>
-                    </popUpButton>
-                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GDK-WV-v21">
-                        <rect key="frame" x="293" y="112" width="170" height="26"/>
-                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="TXi-CY-15c">
-                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu"/>
-                            <menu key="menu" title="OtherViews" id="MoP-aj-JYi">
-                                <items>
-                                    <menuItem title="Enabled" id="SBp-gw-cTT">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
-                                    <menuItem title="Disabled" id="Af7-aY-D3c">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
-                                </items>
-                            </menu>
-                        </popUpButtonCell>
-                    </popUpButton>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NAb-Oa-tfs">
-                        <rect key="frame" x="46" y="13" width="96" height="32"/>
-                        <buttonCell key="cell" type="push" title="Source" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oxM-N1-OlP">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hGS-gI-9Oz">
-                        <rect key="frame" x="358" y="13" width="82" height="32"/>
-                        <buttonCell key="cell" type="push" title="Quit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="z62-t8-dQy">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
-                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HtY-OM-iZU">
-                        <rect key="frame" x="293" y="316" width="170" height="26"/>
-                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1tv-Cb-b5K">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu"/>
-                            <menu key="menu" title="OtherViews" id="WNK-Ql-SPE">
-                                <items>
-                                    <menuItem title="Enabled" tag="1" id="bg6-DR-xgv">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
-                                    <menuItem title="Disabled" tag="2" id="5c3-5r-ydq">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
-                                </items>
-                            </menu>
-                        </popUpButtonCell>
-                    </popUpButton>
+                    <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="x68-Ob-S2T">
+                        <rect key="frame" x="42" y="47" width="267" height="5"/>
+                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="system"/>
+                    </box>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="419" y="427"/>
+            <point key="canvasLocation" x="372" y="454.5"/>
         </window>
         <menu id="eYd-SQ-yva">
             <items>

@@ -75,6 +75,15 @@ class UserPreferences {
     }
   }
   
+  static var notificationsArtRound: Int {
+    get {
+      return NSUserDefaults.standardUserDefaults().integerForKey("notificationsArtRound")
+    }
+    set {
+      NSUserDefaults.standardUserDefaults().setInteger(newValue, forKey: "notificationsArtRound")
+    }
+  }
+  
   static var notificationsSpotifyIcon: Int {
     get {
       return NSUserDefaults.standardUserDefaults().integerForKey("notificationsSpotifyIcon")

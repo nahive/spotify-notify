@@ -17,15 +17,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   @IBOutlet weak var statusQuit: NSMenuItem!
 
   @IBOutlet weak var window: NSWindow!
-  @IBOutlet weak var windowNotificationsToggle: NSPopUpButton!
-  @IBOutlet weak var windowNotificationsPlayPause: NSPopUpButton!
-  @IBOutlet weak var windowNotificationsSound: NSPopUpButton!
+  @IBOutlet weak var windowNotificationsToggle: NSButton!
+  @IBOutlet weak var windowNotificationsPlayPause: NSButton!
+  @IBOutlet weak var windowNotificationsSound: NSButton!
   
-  @IBOutlet weak var windowNotificationsStartup: NSPopUpButton!
+  @IBOutlet weak var windowNotificationsStartup: NSButton!
   @IBOutlet weak var windowNotificationsMenuIcon: NSPopUpButton!
-  @IBOutlet weak var windowNotificationsArt: NSPopUpButton!
-  @IBOutlet weak var windowNotificationsSpotifyIcon: NSPopUpButton!
-  @IBOutlet weak var windowNotificationsSpotifyFocus: NSPopUpButton!
+  @IBOutlet weak var windowNotificationsArt: NSButton!
+  @IBOutlet weak var windowNotificationsRoundAlbum: NSButton!
+  @IBOutlet weak var windowNotificationsSpotifyIcon: NSButton!
+  @IBOutlet weak var windowNotificationsSpotifyFocus: NSButton!
+  
   
   @IBOutlet weak var windowSourceButton: NSButton!
   @IBOutlet weak var windowHomeButton: NSButton!
@@ -98,7 +100,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   }
   
   private func setupStartup(){
-    if UserPreferences.notificationsStartup == 0 {
+    if UserPreferences.notificationsStartup == 1 {
       GBLaunchAtLogin.addAppAsLoginItem()
     } else {
       GBLaunchAtLogin.removeAppFromLoginItems()
@@ -106,19 +108,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   }
   
   private func setupPreferences(){
-    windowNotificationsToggle.selectItemAtIndex(UserPreferences.notificationsEnabled)
-    windowNotificationsPlayPause.selectItemAtIndex(UserPreferences.notificationsPlayPause)
-    windowNotificationsSound.selectItemAtIndex(UserPreferences.notificationsSound)
+    windowNotificationsToggle.state = (UserPreferences.notificationsEnabled)
+    windowNotificationsPlayPause.state = (UserPreferences.notificationsPlayPause)
+    windowNotificationsSound.state = (UserPreferences.notificationsSound)
     
-    windowNotificationsStartup.selectItemAtIndex(UserPreferences.notificationsStartup)
+    windowNotificationsStartup.state = (UserPreferences.notificationsStartup)
     windowNotificationsMenuIcon.selectItemAtIndex(UserPreferences.notificationsMenuIcon.rawValue)
-    windowNotificationsArt.selectItemAtIndex(UserPreferences.notificationsArt)
-    windowNotificationsSpotifyIcon.selectItemAtIndex(UserPreferences.notificationsSpotifyIcon)
-    windowNotificationsSpotifyFocus.selectItemAtIndex(UserPreferences.notificationsSpotifyFocus)
+    windowNotificationsArt.state = (UserPreferences.notificationsArt)
+    windowNotificationsRoundAlbum.state = (UserPreferences.notificationsArtRound)
+    windowNotificationsSpotifyIcon.state = (UserPreferences.notificationsSpotifyIcon)
+    windowNotificationsSpotifyFocus.state = (UserPreferences.notificationsSpotifyFocus)
     
     if !SystemPreferences.isContentImagePropertyAvailable {
       windowNotificationsArt.enabled = false
-      windowNotificationsArt.selectItemAtIndex(1)
+      windowNotificationsArt.state = (0)
     }
     
   }
@@ -135,6 +138,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     windowNotificationsStartup.action = Selector("windowNotificationsStartup:")
     windowNotificationsMenuIcon.action = Selector("windowNotificationsMenuIcon:")
     windowNotificationsArt.action = Selector("windowNotificationsArt:")
+    windowNotificationsRoundAlbum.action = Selector("windowNotificationsArtRound:")
     windowNotificationsSpotifyIcon.action = Selector("windowNotificationsSpotifyIcon:")
     windowNotificationsSpotifyFocus.action = Selector("windowNotificationsSpotifyFocus:")
     
@@ -154,8 +158,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     if playerStatus == "Playing" {
       
-      if NSWorkspace.sharedWorkspace().frontmostApplication?.bundleIdentifier == ".com.spotify.client"
-        && UserPreferences.notificationsSpotifyFocus == 0 {
+      if NSWorkspace.sharedWorkspace().frontmostApplication?.bundleIdentifier == "com.spotify.client"
+        && UserPreferences.notificationsSpotifyFocus == 1 {
         return
       }
       
@@ -166,9 +170,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
       currentTrack?.title = userInfo["Name"] as? String
       currentTrack?.trackID = userInfo["Track ID"] as? String
       
-      if UserPreferences.notificationsEnabled == 0
+      if UserPreferences.notificationsEnabled == 1
         && previousTrack?.trackID != currentTrack?.trackID
-      || UserPreferences.notificationsPlayPause == 0 {
+      || UserPreferences.notificationsPlayPause == 1 {
         
         let notification = NSUserNotification()
         notification.title = currentTrack?.title
@@ -176,9 +180,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         notification.informativeText = currentTrack?.artist
         
         if SystemPreferences.isContentImagePropertyAvailable
-          && UserPreferences.notificationsArt == 0 {
+          && UserPreferences.notificationsArt == 1 {
           currentTrack?.fetchAlbumArt({ (image) in
-            if UserPreferences.notificationsSpotifyIcon == 0 {
+            if UserPreferences.notificationsSpotifyIcon == 1 {
               notification.contentImage = image
             } else {
               
@@ -191,12 +195,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
               
               // private apple apis
               notification.setValue(image, forKey: "_identityImage")
-              notification.setValue(2, forKey: "_identityImageStyle")
+              if UserPreferences.notificationsArtRound == 1 {
+                 notification.setValue(2, forKey: "_identityImageStyle")
+              } else {
+                 notification.setValue(0, forKey: "_identityImageStyle")
+              }
+             
             }
           })
         }
         
-        if UserPreferences.notificationsSound == 0 {
+        if UserPreferences.notificationsSound == 1 {
           notification.soundName = NSUserNotificationDefaultSoundName
         }
         
@@ -223,20 +232,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     window.makeKeyAndOrderFront(nil)
   }
   
-  func windowNotificationsToggle(sender: NSPopUpButton){
-    UserPreferences.notificationsEnabled = sender.indexOfSelectedItem
+  func windowNotificationsToggle(sender: NSButton){
+    UserPreferences.notificationsEnabled = sender.state
   }
   
-  func windowNotificationsPlayPause(sender: NSPopUpButton){
-    UserPreferences.notificationsPlayPause = sender.indexOfSelectedItem
+  func windowNotificationsPlayPause(sender: NSButton){
+    UserPreferences.notificationsPlayPause = sender.state
   }
   
-  func windowNotificationsSound(sender: NSPopUpButton){
-    UserPreferences.notificationsSound = sender.indexOfSelectedItem
+  func windowNotificationsSound(sender: NSButton){
+    UserPreferences.notificationsSound = sender.state
   }
   
-  func windowNotificationsStartup(sender: NSPopUpButton){
-    UserPreferences.notificationsStartup = sender.indexOfSelectedItem
+  func windowNotificationsStartup(sender: NSButton){
+    UserPreferences.notificationsStartup = sender.state
     setupStartup()
   }
   
@@ -245,16 +254,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     setupIcon()
   }
   
-  func windowNotificationsArt(sender: NSPopUpButton){
-    UserPreferences.notificationsArt = sender.indexOfSelectedItem
+  func windowNotificationsArt(sender: NSButton){
+    UserPreferences.notificationsArt = sender.state
   }
   
-  func windowNotificationsSpotifyIcon(sender: NSPopUpButton){
-    UserPreferences.notificationsSpotifyIcon = sender.indexOfSelectedItem
+  func windowNotificationsArtRound(sender: NSButton){
+    UserPreferences.notificationsArtRound = sender.state
   }
   
-  func windowNotificationsSpotifyFocus(sender: NSPopUpButton){
-    UserPreferences.notificationsSpotifyFocus = sender.indexOfSelectedItem
+  func windowNotificationsSpotifyIcon(sender: NSButton){
+    UserPreferences.notificationsSpotifyIcon = sender.state
+  }
+  
+  func windowNotificationsSpotifyFocus(sender: NSButton){
+    UserPreferences.notificationsSpotifyFocus = sender.state
   }
 
 }
