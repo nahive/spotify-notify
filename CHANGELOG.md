@@ -1,3 +1,8 @@
-### 0.1.0 (March 15, 2016)
+### 0.1.2 (March 16, 2016)
 
-- First build of Spotify Notify
+* redesigned preferences
+* added option to customize album art
+
+### 0.1.1 (March 15, 2016)
+
+* first build of Spotify Notify
