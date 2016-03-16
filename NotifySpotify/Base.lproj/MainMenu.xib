@@ -79,21 +79,21 @@
         <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="350" height="273"/>
+            <rect key="contentRect" x="335" y="390" width="350" height="283"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1440"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="350" height="273"/>
+                <rect key="frame" x="0.0" y="0.0" width="350" height="283"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R4V-4P-LKQ">
-                        <rect key="frame" x="131" y="13" width="89" height="32"/>
+                        <rect key="frame" x="131" y="23" width="89" height="32"/>
                         <buttonCell key="cell" type="push" title="Home" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bJj-XE-oIL">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L8Q-MW-8Hw">
-                        <rect key="frame" x="18" y="63" width="94" height="17"/>
+                        <rect key="frame" x="18" y="73" width="94" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Menu Bar Icon" id="KN9-vf-dl7">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -101,83 +101,83 @@
                         </textFieldCell>
                     </textField>
                     <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="U4o-dE-WaF">
-                        <rect key="frame" x="42" y="188" width="267" height="5"/>
+                        <rect key="frame" x="42" y="198" width="267" height="5"/>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <font key="titleFont" metaFont="system"/>
                     </box>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NAb-Oa-tfs">
-                        <rect key="frame" x="14" y="13" width="96" height="32"/>
+                        <rect key="frame" x="14" y="23" width="96" height="32"/>
                         <buttonCell key="cell" type="push" title="Source" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oxM-N1-OlP">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hGS-gI-9Oz">
-                        <rect key="frame" x="254" y="13" width="82" height="32"/>
+                        <rect key="frame" x="254" y="23" width="82" height="32"/>
                         <buttonCell key="cell" type="push" title="Quit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="z62-t8-dQy">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3K2-TY-BqD">
-                        <rect key="frame" x="18" y="237" width="141" height="18"/>
+                        <rect key="frame" x="18" y="247" width="141" height="18"/>
                         <buttonCell key="cell" type="check" title="Enable notifications" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="GXt-X3-YMo">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s7c-o2-cnC">
-                        <rect key="frame" x="18" y="217" width="147" height="18"/>
+                        <rect key="frame" x="18" y="227" width="147" height="18"/>
                         <buttonCell key="cell" type="check" title="Notify on play/pause" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="gve-hx-URO">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dek-tr-EZY">
-                        <rect key="frame" x="18" y="197" width="175" height="18"/>
+                        <rect key="frame" x="18" y="207" width="175" height="18"/>
                         <buttonCell key="cell" type="check" title="Enable notification sound" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Equ-V9-fus">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sb2-Il-p1t">
-                        <rect key="frame" x="18" y="166" width="98" height="18"/>
+                        <rect key="frame" x="18" y="176" width="98" height="18"/>
                         <buttonCell key="cell" type="check" title="Run on login" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="2oS-Fn-z2Z">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EFd-pI-bz8">
-                        <rect key="frame" x="18" y="146" width="128" height="18"/>
+                        <rect key="frame" x="18" y="156" width="128" height="18"/>
                         <buttonCell key="cell" type="check" title="Include album art" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="dyQ-Hh-mzr">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="beN-Wi-Ry6">
-                        <rect key="frame" x="18" y="106" width="142" height="18"/>
+                        <rect key="frame" x="18" y="116" width="142" height="18"/>
                         <buttonCell key="cell" type="check" title="Include Spotify icon" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="X68-Pb-zu8">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CFo-vt-tUg">
-                        <rect key="frame" x="18" y="86" width="212" height="18"/>
+                        <rect key="frame" x="18" y="96" width="212" height="18"/>
                         <buttonCell key="cell" type="check" title="Disable when Spotify has focus" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="wnm-f0-Hz6">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WAc-gw-RFI">
-                        <rect key="frame" x="18" y="126" width="122" height="18"/>
+                        <rect key="frame" x="18" y="136" width="122" height="18"/>
                         <buttonCell key="cell" type="check" title="Round album art" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="23n-ST-aIz">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Su-cq-0ZO">
-                        <rect key="frame" x="116" y="58" width="170" height="26"/>
+                        <rect key="frame" x="116" y="68" width="170" height="26"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vZ7-hz-6kX">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
@@ -197,14 +197,22 @@
                         </popUpButtonCell>
                     </popUpButton>
                     <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="x68-Ob-S2T">
-                        <rect key="frame" x="42" y="47" width="267" height="5"/>
+                        <rect key="frame" x="42" y="57" width="267" height="5"/>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <font key="titleFont" metaFont="system"/>
                     </box>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ypn-Ds-q8t">
+                        <rect key="frame" x="84" y="6" width="182" height="11"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Spotify Notify created with ❤️ by nahive" id="iwg-KN-kQ7">
+                            <font key="font" metaFont="system" size="8"/>
+                            <color key="textColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="372" y="454.5"/>
+            <point key="canvasLocation" x="372" y="468.5"/>
         </window>
         <menu id="eYd-SQ-yva">
             <items>
