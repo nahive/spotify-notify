@@ -1,8 +1,7 @@
 
-<p align="center"><img src="https://i.imgur.com/WSOChtc.png" alt="Spotify Notify"/></p>
-<p align="center"><img src="https://i.imgur.com/rraJU5b.png" alt="Spotify Notify"/></p>
-<p align="center"><img src="https://i.imgur.com/eVxoEOS.png" alt="Spotify Notify"/></p>
-
+<p align="center"><img src="https://raw.githubusercontent.com/nahive/spotify-notify/master/preview1.png" alt="Spotify Notify"/></p>
+<p align="center"><img src="https://raw.githubusercontent.com/nahive/spotify-notify/master/preview2.png" alt="Spotify Notify"/></p>
+<p align="center"><img src="https://raw.githubusercontent.com/nahive/spotify-notify/master/preview3.png" alt="Spotify Notify"/></p>
 
 # Spotify Notify
 ![Build Version](https://img.shields.io/github/release/nahive/spotify-notify.svg)
