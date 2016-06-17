@@ -128,23 +128,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   
   private func setupTargets(){
     
-    statusPreferences.action = Selector("showPreferences")
-    statusQuit.action = Selector("terminate:")
+    statusPreferences.action = #selector(showPreferences)
+    statusQuit.action = #selector(NSApplication.terminate(_:))
     
-    windowNotificationsToggle.action = Selector("windowNotificationsToggle:")
-    windowNotificationsPlayPause.action = Selector("windowNotificationsPlayPause:")
-    windowNotificationsSound.action = Selector("windowNotificationsSound:")
+    windowNotificationsToggle.action = #selector(windowNotificationsToggle(_:))
+    windowNotificationsPlayPause.action = #selector(windowNotificationsPlayPause(_:))
+    windowNotificationsSound.action = #selector(windowNotificationsSound(_:))
     
-    windowNotificationsStartup.action = Selector("windowNotificationsStartup:")
-    windowNotificationsMenuIcon.action = Selector("windowNotificationsMenuIcon:")
-    windowNotificationsArt.action = Selector("windowNotificationsArt:")
-    windowNotificationsRoundAlbum.action = Selector("windowNotificationsArtRound:")
-    windowNotificationsSpotifyIcon.action = Selector("windowNotificationsSpotifyIcon:")
-    windowNotificationsSpotifyFocus.action = Selector("windowNotificationsSpotifyFocus:")
+    windowNotificationsStartup.action = #selector(windowNotificationsStartup(_:))
+    windowNotificationsMenuIcon.action = #selector(windowNotificationsMenuIcon(_:))
+    windowNotificationsArt.action = #selector(windowNotificationsArt(_:))
+    windowNotificationsRoundAlbum.action = #selector(windowNotificationsArtRound(_:))
+    windowNotificationsSpotifyIcon.action = #selector(windowNotificationsSpotifyIcon(_:))
+    windowNotificationsSpotifyFocus.action = #selector(windowNotificationsSpotifyFocus(_:))
     
-    windowSourceButton.action = Selector("showSource")
-    windowHomeButton.action = Selector("showHome")
-    windowQuitButton.action = Selector("terminate:")
+    windowSourceButton.action = #selector(showSource)
+    windowHomeButton.action = #selector(showHome)
+    windowQuitButton.action = #selector(NSApplication.terminate(_:))
   }
   
   //MARK: spotify notifications
@@ -215,7 +215,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
       
     }
   }
-  
   
   //MARK: helpers
   
