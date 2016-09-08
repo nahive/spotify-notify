@@ -39,15 +39,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   
   //MARK: system functions
   
-  func applicationDidFinishLaunching(aNotification: NSNotification) {
+  func applicationDidFinishLaunching(_ aNotification: Notification) {
     setup()
   }
 
-  func applicationWillTerminate(aNotification: NSNotification) {
+  func applicationWillTerminate(_ aNotification: Notification) {
     // Insert code here to tear down your application
   }
   
-  func applicationShouldHandleReopen(sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+  func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
     if !flag {
       showPreferences()
     }
@@ -55,23 +55,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     return true
   }
   
-  func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification) {
-    NSWorkspace.sharedWorkspace().launchApplication("Spotify")
+  func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {
+    NSWorkspace.shared().launchApplication("Spotify")
   }
   
-  func userNotificationCenter(center: NSUserNotificationCenter, shouldPresentNotification notification: NSUserNotification) -> Bool {
+  func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {
     return true
   }
   
   //MARK: setup functions
   
-  private func setup(){
+  fileprivate func setup(){
     currentTrack = Track()
     previousTrack = Track()
     
-    NSDistributedNotificationCenter.defaultCenter().addObserver(self, selector: Selector("playbackStateChanged:"),
-                                                                name: "com.spotify.client.PlaybackStateChanged",
-                                                                object: nil, suspensionBehavior: .DeliverImmediately)
+    DistributedNotificationCenter.default().addObserver(self, selector: #selector(AppDelegate.playbackStateChanged(_:)),
+                                                                name: NSNotification.Name(rawValue: "com.spotify.client.PlaybackStateChanged"),
+                                                                object: nil, suspensionBehavior: .deliverImmediately)
     
     setupIcon()
     setupStartup()
@@ -80,26 +80,26 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   }
   
   
-  private func setupIcon(){
+  fileprivate func setupIcon(){
     switch UserPreferences.notificationsMenuIcon {
-    case .Default:
-      statusBar = NSStatusBar.systemStatusBar().statusItemWithLength(NSVariableStatusItemLength)
+    case .default:
+      statusBar = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
       statusBar.image = NSImage(named: "status_bar_colour.tiff")
       statusBar.menu = statusMenu
-      statusBar.image?.template = false
+      statusBar.image?.isTemplate = false
       statusBar.highlightMode = true
-    case .Monochromatic:
-      statusBar = NSStatusBar.systemStatusBar().statusItemWithLength(NSVariableStatusItemLength)
+    case .monochromatic:
+      statusBar = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
       statusBar.image = NSImage(named: "status_bar_black.tiff")
       statusBar.menu = statusMenu
-      statusBar.image?.template = true
+      statusBar.image?.isTemplate = true
       statusBar.highlightMode = true
-    case .Disabled:
+    case .disabled:
       statusBar = nil
     }
   }
   
-  private func setupStartup(){
+  fileprivate func setupStartup(){
     if UserPreferences.notificationsStartup == 1 {
       GBLaunchAtLogin.addAppAsLoginItem()
     } else {
@@ -107,26 +107,26 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
   }
   
-  private func setupPreferences(){
+  fileprivate func setupPreferences(){
     windowNotificationsToggle.state = (UserPreferences.notificationsEnabled)
     windowNotificationsPlayPause.state = (UserPreferences.notificationsPlayPause)
     windowNotificationsSound.state = (UserPreferences.notificationsSound)
     
     windowNotificationsStartup.state = (UserPreferences.notificationsStartup)
-    windowNotificationsMenuIcon.selectItemAtIndex(UserPreferences.notificationsMenuIcon.rawValue)
+    windowNotificationsMenuIcon.selectItem(at: UserPreferences.notificationsMenuIcon.rawValue)
     windowNotificationsArt.state = (UserPreferences.notificationsArt)
     windowNotificationsRoundAlbum.state = (UserPreferences.notificationsArtRound)
     windowNotificationsSpotifyIcon.state = (UserPreferences.notificationsSpotifyIcon)
     windowNotificationsSpotifyFocus.state = (UserPreferences.notificationsSpotifyFocus)
     
     if !SystemPreferences.isContentImagePropertyAvailable {
-      windowNotificationsArt.enabled = false
+      windowNotificationsArt.isEnabled = false
       windowNotificationsArt.state = (0)
     }
     
   }
   
-  private func setupTargets(){
+  fileprivate func setupTargets(){
     
     statusPreferences.action = #selector(showPreferences)
     statusQuit.action = #selector(NSApplication.terminate(_:))
@@ -149,8 +149,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   
   //MARK: spotify notifications
   
-  func playbackStateChanged(notification: NSNotification) {
-    guard let userInfo = notification.userInfo else {
+  func playbackStateChanged(_ notification: Notification) {
+    guard let userInfo = (notification as NSNotification).userInfo else {
       return
     }
     
@@ -158,7 +158,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     if playerStatus == "Playing" {
       
-      if NSWorkspace.sharedWorkspace().frontmostApplication?.bundleIdentifier == "com.spotify.client"
+      if NSWorkspace.shared().frontmostApplication?.bundleIdentifier == "com.spotify.client"
         && UserPreferences.notificationsSpotifyFocus == 1 {
         return
       }
@@ -209,7 +209,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
           notification.soundName = NSUserNotificationDefaultSoundName
         }
         
-        NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+        NSUserNotificationCenter.default.deliver(notification)
         
       }
       
@@ -219,53 +219,53 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   //MARK: helpers
   
   func showSource(){
-    NSWorkspace.sharedWorkspace().openURL(NSURL(string: "https://github.com/nahive/spotify-notify")!)
+    NSWorkspace.shared().open(URL(string: "https://github.com/nahive/spotify-notify")!)
   }
   
   func showHome(){
-    NSWorkspace.sharedWorkspace().openURL(NSURL(string: "https://nahive.github.io")!)
+    NSWorkspace.shared().open(URL(string: "https://nahive.github.io")!)
   }
   
   func showPreferences(){
-    NSApp.activateIgnoringOtherApps(true)
+    NSApp.activate(ignoringOtherApps: true)
     window.makeKeyAndOrderFront(nil)
   }
   
-  func windowNotificationsToggle(sender: NSButton){
+  func windowNotificationsToggle(_ sender: NSButton){
     UserPreferences.notificationsEnabled = sender.state
   }
   
-  func windowNotificationsPlayPause(sender: NSButton){
+  func windowNotificationsPlayPause(_ sender: NSButton){
     UserPreferences.notificationsPlayPause = sender.state
   }
   
-  func windowNotificationsSound(sender: NSButton){
+  func windowNotificationsSound(_ sender: NSButton){
     UserPreferences.notificationsSound = sender.state
   }
   
-  func windowNotificationsStartup(sender: NSButton){
+  func windowNotificationsStartup(_ sender: NSButton){
     UserPreferences.notificationsStartup = sender.state
     setupStartup()
   }
   
-  func windowNotificationsMenuIcon(sender: NSPopUpButton){
+  func windowNotificationsMenuIcon(_ sender: NSPopUpButton){
     UserPreferences.notificationsMenuIcon = UserPreferences.StatusBarIcon(rawValue:sender.indexOfSelectedItem)!
     setupIcon()
   }
   
-  func windowNotificationsArt(sender: NSButton){
+  func windowNotificationsArt(_ sender: NSButton){
     UserPreferences.notificationsArt = sender.state
   }
   
-  func windowNotificationsArtRound(sender: NSButton){
+  func windowNotificationsArtRound(_ sender: NSButton){
     UserPreferences.notificationsArtRound = sender.state
   }
   
-  func windowNotificationsSpotifyIcon(sender: NSButton){
+  func windowNotificationsSpotifyIcon(_ sender: NSButton){
     UserPreferences.notificationsSpotifyIcon = sender.state
   }
   
-  func windowNotificationsSpotifyFocus(sender: NSButton){
+  func windowNotificationsSpotifyFocus(_ sender: NSButton){
     UserPreferences.notificationsSpotifyFocus = sender.state
   }
 

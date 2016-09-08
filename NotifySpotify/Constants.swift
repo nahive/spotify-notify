@@ -10,7 +10,7 @@ import Foundation
 
 class SystemPreferences {
   static var isContentImagePropertyAvailable: Bool {
-    let version = NSProcessInfo.processInfo().operatingSystemVersion
+    let version = ProcessInfo.processInfo.operatingSystemVersion
     return version.majorVersion == 10 && version.minorVersion >= 9
   }
 }
@@ -18,87 +18,87 @@ class SystemPreferences {
 class UserPreferences {
   
   enum StatusBarIcon: Int {
-    case Default, Monochromatic, Disabled
+    case `default`, monochromatic, disabled
   }
   
   static var notificationsEnabled: Int {
     get {
-      return NSUserDefaults.standardUserDefaults().integerForKey("notificationsEnabled")
+      return UserDefaults.standard.integer(forKey: "notificationsEnabled")
     }
     set {
-      NSUserDefaults.standardUserDefaults().setInteger(newValue, forKey: "notificationsEnabled")
+      UserDefaults.standard.set(newValue, forKey: "notificationsEnabled")
     }
   }
   
   static var notificationsPlayPause: Int {
     get {
-      return NSUserDefaults.standardUserDefaults().integerForKey("notificationsPlayPause")
+      return UserDefaults.standard.integer(forKey: "notificationsPlayPause")
     }
     set {
-      NSUserDefaults.standardUserDefaults().setInteger(newValue, forKey: "notificationsPlayPause")
+      UserDefaults.standard.set(newValue, forKey: "notificationsPlayPause")
     }
   }
   
   static var notificationsSound: Int {
     get {
-      return NSUserDefaults.standardUserDefaults().integerForKey("notificationsSound")
+      return UserDefaults.standard.integer(forKey: "notificationsSound")
     }
     set {
-      NSUserDefaults.standardUserDefaults().setInteger(newValue, forKey: "notificationsSound")
+      UserDefaults.standard.set(newValue, forKey: "notificationsSound")
     }
   }
   
   static var notificationsStartup: Int {
     get {
-      return NSUserDefaults.standardUserDefaults().integerForKey("notificationsStartup")
+      return UserDefaults.standard.integer(forKey: "notificationsStartup")
     }
     set {     
-      NSUserDefaults.standardUserDefaults().setInteger(newValue, forKey: "notificationsStartup")
+      UserDefaults.standard.set(newValue, forKey: "notificationsStartup")
     }
   }
   
   static var notificationsMenuIcon: StatusBarIcon {
     get {
-      return StatusBarIcon(rawValue: NSUserDefaults.standardUserDefaults().integerForKey("notificationsMenuIcon")) ?? StatusBarIcon.Default
+      return StatusBarIcon(rawValue: UserDefaults.standard.integer(forKey: "notificationsMenuIcon")) ?? StatusBarIcon.default
     }
     set {
-      NSUserDefaults.standardUserDefaults().setInteger(newValue.rawValue, forKey: "notificationsMenuIcon")
+      UserDefaults.standard.set(newValue.rawValue, forKey: "notificationsMenuIcon")
     }
   }
   
   static var notificationsArt: Int {
     get {
-      return NSUserDefaults.standardUserDefaults().integerForKey("notificationsArt")
+      return UserDefaults.standard.integer(forKey: "notificationsArt")
     }
     set {
-      NSUserDefaults.standardUserDefaults().setInteger(newValue, forKey: "notificationsArt")
+      UserDefaults.standard.set(newValue, forKey: "notificationsArt")
     }
   }
   
   static var notificationsArtRound: Int {
     get {
-      return NSUserDefaults.standardUserDefaults().integerForKey("notificationsArtRound")
+      return UserDefaults.standard.integer(forKey: "notificationsArtRound")
     }
     set {
-      NSUserDefaults.standardUserDefaults().setInteger(newValue, forKey: "notificationsArtRound")
+      UserDefaults.standard.set(newValue, forKey: "notificationsArtRound")
     }
   }
   
   static var notificationsSpotifyIcon: Int {
     get {
-      return NSUserDefaults.standardUserDefaults().integerForKey("notificationsSpotifyIcon")
+      return UserDefaults.standard.integer(forKey: "notificationsSpotifyIcon")
     }
     set {
-      NSUserDefaults.standardUserDefaults().setInteger(newValue, forKey: "notificationsSpotifyIcon")
+      UserDefaults.standard.set(newValue, forKey: "notificationsSpotifyIcon")
     }
   }
   
   static var notificationsSpotifyFocus: Int {
     get {
-      return NSUserDefaults.standardUserDefaults().integerForKey("notificationsSpotifyFocus")
+      return UserDefaults.standard.integer(forKey: "notificationsSpotifyFocus")
     }
     set {
-      NSUserDefaults.standardUserDefaults().setInteger(newValue, forKey: "notificationsSpotifyFocus")
+      UserDefaults.standard.set(newValue, forKey: "notificationsSpotifyFocus")
     }
   }
   

@@ -16,39 +16,39 @@ struct Track {
   var albumArt: NSImage?
   var trackID: String?
   
-  mutating func fetchAlbumArt(closure: (image: NSImage?) -> ()) {
+  mutating func fetchAlbumArt(_ closure: (_ image: NSImage?) -> ()) {
     
     guard let trackID = trackID else {
-      closure(image: nil)
+      closure(nil)
       return
     }
     
     let spotifyLocation = "https://embed.spotify.com/oembed/?url=\(trackID)"
     
     guard
-      let spotifyURL = NSURL(string: spotifyLocation),
-      let spotifyData = NSData(contentsOfURL: spotifyURL) else {
-        closure(image: nil)
+      let spotifyURL = URL(string: spotifyLocation),
+      let spotifyData = try? Data(contentsOf: spotifyURL) else {
+        closure(nil)
         return
     }
-    
+
     guard
-      let thumbnailLocation = try! NSJSONSerialization
-        .JSONObjectWithData(spotifyData, options: .AllowFragments)["thumbnail_url"] as? String else {
-          closure(image: nil)
+      let thumbnailObject = try! JSONSerialization.jsonObject(with: spotifyData, options: .allowFragments) as? [String:AnyObject],
+      let thumbnailLocation = thumbnailObject["thumbnail_url"] as? String else {
+          closure(nil)
           return
     }
     
     guard
-    let thumbnailURL = NSURL(string: thumbnailLocation),
-    let thumbnailData = NSData(contentsOfURL: thumbnailURL) else {
-      closure(image: nil)
+    let thumbnailURL = URL(string: thumbnailLocation),
+    let thumbnailData = try? Data(contentsOf: thumbnailURL) else {
+      closure(nil)
       return
     }
     
     albumArt = NSImage(data: thumbnailData)
     
-    closure(image: albumArt)
+    closure(albumArt)
     
   }
   
