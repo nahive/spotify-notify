@@ -17,38 +17,47 @@ struct Track {
 	let title: String?
 	let artist: String?
 	let album: String?
-	var albumArt: NSImage?
+	var albumArt: NSImage? { return fetchAlbumArt() }
 	
-	private let baseSpotifyURL = "https://embed.spotify.com/oembed/?url="
-	
-	mutating func albumArt(result: FetchingResult) {
+	private func fetchAlbumArt() -> NSImage? {
 		
 		guard let id = id else {
-			return result(.error("No track id"))
+			print("No track id")
+			return nil
 		}
 		
-		let spotifyLocation = baseSpotifyURL + "\(id)"
+		let spotifyLocation = SpotifyConstants.albumArtURL + "\(id)"
 		
 		// holy moly this guard ;o
 		guard
 			let spotifyURL = URL(string: spotifyLocation),
-			let spotifyData = try? Data(contentsOf: spotifyURL),
-			let albumAny = try? JSONSerialization.jsonObject(with: spotifyData, options: .allowFragments),
-			let albumJSON = albumAny as? [String: AnyObject],
-			let albumLocation = albumJSON["album_url"] as? String,
-			let albumURL = URL(string: albumLocation),
-			let albumData = try? Data(contentsOf: albumURL),
-			let albumImage = NSImage(data: albumData) else {
-				return result(.error("Problem with parsing data from spotify"))
+			let spotifyData = try? Data(contentsOf: spotifyURL) else {
+				print("Problem with finding url for album")
+				return nil
 		}
 		
-		albumArt = albumImage
-		result(.success(albumImage))
+		guard
+			let albumAny = try? JSONSerialization.jsonObject(with: spotifyData, options: .allowFragments),
+			let albumJSON = albumAny as? [String: AnyObject],
+			let albumLocation = albumJSON["thumbnail_url"] as? String,
+			let albumURL = URL(string: albumLocation) else {
+				print("Problem with finding album art url")
+				return nil
+		}
+		
+		guard
+			let albumData = try? Data(contentsOf: albumURL),
+			let albumImage = NSImage(data: albumData) else {
+				print("Problem with parsing data from spotify")
+				return nil
+		}
+		
+		return albumImage
 	}
 }
 
-extension Track {
-	init() {
-		self.init(id: nil, title: nil, artist: nil, album: nil, albumArt: nil)
+extension Track: Equatable {
+	static func ==(lhs: Track, rhs: Track) -> Bool {
+		return lhs.id == rhs.id
 	}
 }

@@ -12,12 +12,12 @@
 		4C5764CC1C982DC900364AFE /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764CA1C982DC900364AFE /* MainMenu.xib */; };
 		4C5764E31C982E1900364AFE /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5764E21C982E1900364AFE /* Track.swift */; };
 		4C5764E91C982EB900364AFE /* GBLaunchAtLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5764E81C982EB900364AFE /* GBLaunchAtLogin.m */; };
-		4C5764F11C983CB200364AFE /* status_bar_black.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764ED1C983CB200364AFE /* status_bar_black.tiff */; };
-		4C5764F21C983CB200364AFE /* status_bar_black@2x.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764EE1C983CB200364AFE /* status_bar_black@2x.tiff */; };
-		4C5764F31C983CB200364AFE /* status_bar_colour.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764EF1C983CB200364AFE /* status_bar_colour.tiff */; };
-		4C5764F41C983CB200364AFE /* status_bar_colour@2x.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764F01C983CB200364AFE /* status_bar_colour@2x.tiff */; };
+		FB0A9A4E203EC9BA00721E3A /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB0A9A4D203EC9BA00721E3A /* PreferencesView.swift */; };
 		FB6B9D0A203EC22D0062702B /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB6B9D09203EC22D0062702B /* UserPreferences.swift */; };
 		FB6B9D0C203EC24F0062702B /* SystemPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB6B9D0B203EC24F0062702B /* SystemPreferences.swift */; };
+		FBCCA5FB203ED78B008AD1BF /* NotificationsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCCA5FA203ED78B008AD1BF /* NotificationsInteractor.swift */; };
+		FBCCA5FE203EE057008AD1BF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCCA5FD203EE057008AD1BF /* Constants.swift */; };
+		FBCCA600203EE195008AD1BF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCCA5FF203EE195008AD1BF /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,12 +30,12 @@
 		4C5764E61C982EB800364AFE /* NotifySpotify-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NotifySpotify-Bridging-Header.h"; sourceTree = "<group>"; };
 		4C5764E71C982EB900364AFE /* GBLaunchAtLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBLaunchAtLogin.h; sourceTree = "<group>"; };
 		4C5764E81C982EB900364AFE /* GBLaunchAtLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBLaunchAtLogin.m; sourceTree = "<group>"; };
-		4C5764ED1C983CB200364AFE /* status_bar_black.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = status_bar_black.tiff; sourceTree = "<group>"; };
-		4C5764EE1C983CB200364AFE /* status_bar_black@2x.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "status_bar_black@2x.tiff"; sourceTree = "<group>"; };
-		4C5764EF1C983CB200364AFE /* status_bar_colour.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = status_bar_colour.tiff; sourceTree = "<group>"; };
-		4C5764F01C983CB200364AFE /* status_bar_colour@2x.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "status_bar_colour@2x.tiff"; sourceTree = "<group>"; };
+		FB0A9A4D203EC9BA00721E3A /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		FB6B9D09203EC22D0062702B /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
 		FB6B9D0B203EC24F0062702B /* SystemPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPreferences.swift; sourceTree = "<group>"; };
+		FBCCA5FA203ED78B008AD1BF /* NotificationsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsInteractor.swift; sourceTree = "<group>"; };
+		FBCCA5FD203EE057008AD1BF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		FBCCA5FF203EE195008AD1BF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,8 +69,9 @@
 			isa = PBXGroup;
 			children = (
 				4C5764C61C982DC800364AFE /* AppDelegate.swift */,
-				4C5764E21C982E1900364AFE /* Track.swift */,
-				4C5764CA1C982DC900364AFE /* MainMenu.xib */,
+				FB0A9A4F203ECAB500721E3A /* Models */,
+				FB0A9A4C203EC9AB00721E3A /* Usecases */,
+				FBCCA5FC203ED78F008AD1BF /* Storage */,
 				FB6B9D0D203EC2710062702B /* Interactors */,
 				FB6B9D0F203EC29D0062702B /* Resources */,
 				4C5764E41C982E8900364AFE /* Helpers */,
@@ -83,7 +84,7 @@
 		4C5764E41C982E8900364AFE /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				4C5764EC1C983CA800364AFE /* Statusbar Images */,
+				FBCCA5FF203EE195008AD1BF /* Extensions.swift */,
 				4C5764E51C982E9300364AFE /* GBLaunchAtLogin */,
 			);
 			name = Helpers;
@@ -98,22 +99,27 @@
 			name = GBLaunchAtLogin;
 			sourceTree = "<group>";
 		};
-		4C5764EC1C983CA800364AFE /* Statusbar Images */ = {
+		FB0A9A4C203EC9AB00721E3A /* Usecases */ = {
 			isa = PBXGroup;
 			children = (
-				4C5764ED1C983CB200364AFE /* status_bar_black.tiff */,
-				4C5764EE1C983CB200364AFE /* status_bar_black@2x.tiff */,
-				4C5764EF1C983CB200364AFE /* status_bar_colour.tiff */,
-				4C5764F01C983CB200364AFE /* status_bar_colour@2x.tiff */,
+				4C5764CA1C982DC900364AFE /* MainMenu.xib */,
+				FB0A9A4D203EC9BA00721E3A /* PreferencesView.swift */,
 			);
-			name = "Statusbar Images";
+			name = Usecases;
+			sourceTree = "<group>";
+		};
+		FB0A9A4F203ECAB500721E3A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4C5764E21C982E1900364AFE /* Track.swift */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 		FB6B9D0D203EC2710062702B /* Interactors */ = {
 			isa = PBXGroup;
 			children = (
-				FB6B9D09203EC22D0062702B /* UserPreferences.swift */,
-				FB6B9D0B203EC24F0062702B /* SystemPreferences.swift */,
+				FBCCA5FA203ED78B008AD1BF /* NotificationsInteractor.swift */,
 			);
 			name = Interactors;
 			sourceTree = "<group>";
@@ -133,6 +139,16 @@
 				4C5764C81C982DC900364AFE /* Assets.xcassets */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		FBCCA5FC203ED78F008AD1BF /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				FBCCA5FD203EE057008AD1BF /* Constants.swift */,
+				FB6B9D09203EC22D0062702B /* UserPreferences.swift */,
+				FB6B9D0B203EC24F0062702B /* SystemPreferences.swift */,
+			);
+			name = Storage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,12 +178,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Szymon Maślanka";
 				TargetAttributes = {
 					4C5764C21C982DC800364AFE = {
 						CreatedOnToolsVersion = 7.3;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0930;
 					};
 				};
 			};
@@ -195,10 +211,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C5764C91C982DC900364AFE /* Assets.xcassets in Resources */,
-				4C5764F21C983CB200364AFE /* status_bar_black@2x.tiff in Resources */,
-				4C5764F11C983CB200364AFE /* status_bar_black.tiff in Resources */,
-				4C5764F41C983CB200364AFE /* status_bar_colour@2x.tiff in Resources */,
-				4C5764F31C983CB200364AFE /* status_bar_colour.tiff in Resources */,
 				4C5764CC1C982DC900364AFE /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -211,9 +223,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				FB6B9D0A203EC22D0062702B /* UserPreferences.swift in Sources */,
+				FBCCA600203EE195008AD1BF /* Extensions.swift in Sources */,
+				FB0A9A4E203EC9BA00721E3A /* PreferencesView.swift in Sources */,
 				FB6B9D0C203EC24F0062702B /* SystemPreferences.swift in Sources */,
 				4C5764E91C982EB900364AFE /* GBLaunchAtLogin.m in Sources */,
+				FBCCA5FE203EE057008AD1BF /* Constants.swift in Sources */,
 				4C5764C71C982DC800364AFE /* AppDelegate.swift in Sources */,
+				FBCCA5FB203ED78B008AD1BF /* NotificationsInteractor.swift in Sources */,
 				4C5764E31C982E1900364AFE /* Track.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -241,14 +257,22 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -271,11 +295,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -288,14 +313,22 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -312,10 +345,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -331,7 +365,8 @@
 				PRODUCT_NAME = SpotifyNotify;
 				SWIFT_OBJC_BRIDGING_HEADER = "NotifySpotify/NotifySpotify-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -346,7 +381,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = SpotifyNotify;
 				SWIFT_OBJC_BRIDGING_HEADER = "NotifySpotify/NotifySpotify-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

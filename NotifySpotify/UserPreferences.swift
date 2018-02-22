@@ -8,92 +8,74 @@
 
 import Foundation
 
+enum StatusBarIcon: Int {
+	case `default`, monochromatic, disabled
+	
+	init(value: Int) {
+		if let icon = StatusBarIcon(rawValue: value) { self = icon }
+		else { self = .default }
+	}
+}
+
 struct UserPreferences {
-	
-	enum StatusBarIcon: Int {
-		case `default`, monochromatic, disabled
+	private struct Keys {
+		static let notificationsEnabled = "notifications.enabled.key"
+		static let notificationsPlayPause = "notifications.playpause.key"
+		static let notificationsSound = "notifications.sound.key"
+		static let notificationsDisableOnFocus = "notifications.focus.key"
+		
+		static let startOnLogin = "startonlogin.key"
+		static let showAlbumArt = "showalbumart.key"
+		static let roundAlbumArt = "roundalbumart.key"
+		static let showSpotifyIcon = "spotifyicon.key"
+		
+		static let menuIcon = "menuicon.key"
 	}
 	
-	static var notificationsEnabled: Int {
-		get {
-			return UserDefaults.standard.integer(forKey: "notificationsEnabled")
-		}
-		set {
-			UserDefaults.standard.set(newValue, forKey: "notificationsEnabled")
-		}
+	private let defaults = UserDefaults.standard
+	
+	var notificationsEnabled: Bool {
+		get { return defaults.bool(forKey: Keys.notificationsEnabled) }
+		set { defaults.set(newValue, forKey: Keys.notificationsEnabled) }
 	}
 	
-	static var notificationsPlayPause: Int {
-		get {
-			return UserDefaults.standard.integer(forKey: "notificationsPlayPause")
-		}
-		set {
-			UserDefaults.standard.set(newValue, forKey: "notificationsPlayPause")
-		}
+	var notificationsPlayPause: Bool {
+		get { return defaults.bool(forKey: Keys.notificationsPlayPause) }
+		set { defaults.set(newValue, forKey: Keys.notificationsPlayPause) }
 	}
 	
-	static var notificationsSound: Int {
-		get {
-			return UserDefaults.standard.integer(forKey: "notificationsSound")
-		}
-		set {
-			UserDefaults.standard.set(newValue, forKey: "notificationsSound")
-		}
+	var notificationsSound: Bool {
+		get { return defaults.bool(forKey: Keys.notificationsSound) }
+		set { defaults.set(newValue, forKey: Keys.notificationsSound) }
 	}
 	
-	static var notificationsStartup: Int {
-		get {
-			return UserDefaults.standard.integer(forKey: "notificationsStartup")
-		}
-		set {
-			UserDefaults.standard.set(newValue, forKey: "notificationsStartup")
-		}
+	var notificationsDisableOnFocus: Bool {
+		get { return defaults.bool(forKey: Keys.notificationsDisableOnFocus) }
+		set { defaults.set(newValue, forKey: Keys.notificationsDisableOnFocus) }
 	}
 	
-	static var notificationsMenuIcon: StatusBarIcon {
-		get {
-			return StatusBarIcon(rawValue: UserDefaults.standard.integer(forKey: "notificationsMenuIcon")) ?? StatusBarIcon.default
-		}
-		set {
-			UserDefaults.standard.set(newValue.rawValue, forKey: "notificationsMenuIcon")
-		}
+	var startOnLogin: Bool {
+		get { return defaults.bool(forKey: Keys.startOnLogin) }
+		set { defaults.set(newValue, forKey: Keys.startOnLogin) }
 	}
 	
-	static var notificationsArt: Int {
-		get {
-			return UserDefaults.standard.integer(forKey: "notificationsArt")
-		}
-		set {
-			UserDefaults.standard.set(newValue, forKey: "notificationsArt")
-		}
+	var showAlbumArt: Bool {
+		get { return defaults.bool(forKey: Keys.showAlbumArt) }
+		set { defaults.set(newValue, forKey: Keys.showAlbumArt) }
 	}
 	
-	static var notificationsArtRound: Int {
-		get {
-			return UserDefaults.standard.integer(forKey: "notificationsArtRound")
-		}
-		set {
-			UserDefaults.standard.set(newValue, forKey: "notificationsArtRound")
-		}
+	var roundAlbumArt: Bool {
+		get { return defaults.bool(forKey: Keys.roundAlbumArt) }
+		set { defaults.set(newValue, forKey: Keys.roundAlbumArt) }
 	}
 	
-	static var notificationsSpotifyIcon: Int {
-		get {
-			return UserDefaults.standard.integer(forKey: "notificationsSpotifyIcon")
-		}
-		set {
-			UserDefaults.standard.set(newValue, forKey: "notificationsSpotifyIcon")
-		}
+	var showSpotifyIcon: Bool {
+		get { return defaults.bool(forKey: Keys.showSpotifyIcon) }
+		set { 	defaults.set(newValue, forKey: Keys.showSpotifyIcon) }
 	}
 	
-	static var notificationsSpotifyFocus: Int {
-		get {
-			return UserDefaults.standard.integer(forKey: "notificationsSpotifyFocus")
-		}
-		set {
-			UserDefaults.standard.set(newValue, forKey: "notificationsSpotifyFocus")
-		}
+	var menuIcon: StatusBarIcon {
+		get { return StatusBarIcon(value: defaults.integer(forKey: Keys.menuIcon)) }
+		set { defaults.set(newValue.rawValue, forKey: Keys.menuIcon) }
 	}
-	
-	
 }
