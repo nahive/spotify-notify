@@ -13,7 +13,7 @@ extension NSNotification.Name {
 	static let userPreferencesDidChangeIcon = NSNotification.Name(rawValue: "userPreferencesDidChangeIcon.notification")
 }
 
-final class PreferencesView: NSView {
+final class PreferencesView: NSVisualEffectView {
 	@IBOutlet weak var notificationsCheck: NSButton!
 	@IBOutlet weak var notificationsPlayPauseCheck: NSButton!
 	@IBOutlet weak var notificationsSoundCheck: NSButton!
@@ -23,9 +23,14 @@ final class PreferencesView: NSView {
 	@IBOutlet weak var showAlbumArtCheck: NSButton!
 	@IBOutlet weak var roundAlbumArtCheck: NSButton!
 	@IBOutlet weak var showSpotifyIconCheck: NSButton!
-	
+    @IBOutlet weak var showSongProgressCheck: NSButton!
+    
+    @IBOutlet weak var notificationLengthField: NSTextField!
+    @IBOutlet weak var notificationLengthChanger: NSStepper!
+    
+    @IBOutlet weak var menuIconCheck: NSButton!
 	@IBOutlet weak var menuIconPopUpButton: NSPopUpButton!
-	
+    
 	@IBOutlet weak var sourceButton: NSButton!
 	@IBOutlet weak var homeButton: NSButton!
 	@IBOutlet weak var quitButton: NSButton!
@@ -36,6 +41,7 @@ final class PreferencesView: NSView {
 		super.viewWillDraw()
 		checkAvailability()
 		setup()
+        checkCompability()
 		setupTargets()
 	}
 	
@@ -45,6 +51,17 @@ final class PreferencesView: NSView {
 			roundAlbumArtCheck.isEnabled = false
 		}
 	}
+    
+    private func checkCompability() {
+        notificationsPlayPauseCheck.isEnabled = preferences.notificationsEnabled
+        notificationsSoundCheck.isEnabled = preferences.notificationsEnabled
+        notificationsSpotifyFocusCheck.isEnabled = preferences.notificationsEnabled
+        showAlbumArtCheck.isEnabled = preferences.notificationsEnabled
+        showSpotifyIconCheck.isEnabled = preferences.notificationsEnabled
+        roundAlbumArtCheck.isEnabled = preferences.notificationsEnabled && preferences.showAlbumArt
+        showSongProgressCheck.isEnabled = preferences.notificationsEnabled
+        menuIconPopUpButton.isEnabled = preferences.menuIcon != .none
+    }
 	
 	private func setup() {
 		notificationsCheck.isSelected = preferences.notificationsEnabled
@@ -56,13 +73,18 @@ final class PreferencesView: NSView {
 		showAlbumArtCheck.isSelected = preferences.showAlbumArt
 		roundAlbumArtCheck.isSelected = preferences.roundAlbumArt
 		showSpotifyIconCheck.isSelected = preferences.showSpotifyIcon
+        showSongProgressCheck.isSelected = preferences.showSongProgress
 		
-		menuIconPopUpButton.selectItem(at: preferences.menuIcon.rawValue)
+        notificationLengthField.doubleValue = Double(preferences.notificationsLength)
+        notificationLengthChanger.integerValue = preferences.notificationsLength
+        
+        menuIconCheck.isSelected = preferences.menuIcon != .none
+        if preferences.menuIcon != .none { menuIconPopUpButton.selectItem(at: preferences.menuIcon.rawValue) }
 	}
 	
 	private func setupTargets() {
-		notificationsCheck.target = self
-		notificationsCheck.action = #selector(notificationsCheckTapped(sender:))
+        notificationsCheck.target = self
+        notificationsCheck.action = #selector(notificationsCheckTapped(sender:))
 		notificationsPlayPauseCheck.target = self
 		notificationsPlayPauseCheck.action = #selector(notificationsPlayPauseCheckTapped(sender:))
 		notificationsSoundCheck.target = self
@@ -78,7 +100,16 @@ final class PreferencesView: NSView {
 		roundAlbumArtCheck.action = #selector(roundAlbumArtCheckTapped(sender:))
 		showSpotifyIconCheck.target = self
 		showSpotifyIconCheck.action = #selector(showSpotifyIconCheckTapped(sender:))
+        showSongProgressCheck.target = self
+        showSongProgressCheck.action = #selector(showSongProgressCheckTapped(sender:))
+        
+        notificationLengthField.target = self
+        notificationLengthField.action = #selector(notificationLengthFieldChanged(sender:))
+        notificationLengthChanger.target = self
+        notificationLengthChanger.action = #selector(notificationLengthChangerTapped(sender:))
 		
+        menuIconCheck.target = self
+        menuIconCheck.action = #selector(menuIconCheckTapped(sender:))
 		menuIconPopUpButton.target = self
 		menuIconPopUpButton.action = #selector(menuIconPopUpButtonChanged(sender:))
 		
@@ -89,9 +120,10 @@ final class PreferencesView: NSView {
 		quitButton.target = self
 		quitButton.action = #selector(quitButtonTapped(sender:))
 	}
-	
+    
 	@objc func notificationsCheckTapped(sender: NSButton) {
 		preferences.notificationsEnabled = sender.isSelected
+        checkCompability()
 	}
 	
 	@objc func notificationsPlayPauseCheckTapped(sender: NSButton) {
@@ -113,6 +145,7 @@ final class PreferencesView: NSView {
 	
 	@objc func showAlbumArtCheckTapped(sender: NSButton) {
 		preferences.showAlbumArt = sender.isSelected
+        checkCompability()
 	}
 	
 	@objc func roundAlbumArtCheckTapped(sender: NSButton) {
@@ -122,7 +155,45 @@ final class PreferencesView: NSView {
 	@objc func showSpotifyIconCheckTapped(sender: NSButton) {
 		preferences.showSpotifyIcon = sender.isSelected
 	}
+    
+    @objc func showSongProgressCheckTapped(sender: NSButton) {
+        preferences.showSongProgress = sender.isSelected
+    }
+    
+    @objc func notificationLengthFieldChanged(sender: NSTextField) {
+        guard sender.doubleValue >= 1.0 else {
+            notificationLengthField.integerValue = 1
+            preferences.notificationsLength = 1
+            notificationLengthField.doubleValue = 1.0
+            return
+        }
+        
+        preferences.notificationsLength = Int(sender.doubleValue)
+        notificationLengthChanger.integerValue = Int(sender.doubleValue)
+    }
+    
+    @objc func notificationLengthChangerTapped(sender: NSStepper) {
+        guard sender.integerValue >= 1 else {
+            notificationLengthField.integerValue = 1
+            preferences.notificationsLength = 1
+            notificationLengthField.doubleValue = 1
+            return
+        }
+        
+        preferences.notificationsLength = Int(sender.integerValue)
+        notificationLengthField.doubleValue = Double(sender.integerValue)
+    }
 	
+    @objc func menuIconCheckTapped(sender: NSButton) {
+        if sender.isSelected {
+            preferences.menuIcon = StatusBarIcon(value: menuIconPopUpButton.indexOfSelectedItem)
+        } else {
+            preferences.menuIcon = .none
+        }
+        
+        DistributedNotificationCenter.default().post(name: .userPreferencesDidChangeIcon, object: nil)
+    }
+    
 	@objc func menuIconPopUpButtonChanged(sender: NSPopUpButton) {
 		preferences.menuIcon = StatusBarIcon(value: sender.indexOfSelectedItem)
 		DistributedNotificationCenter.default().post(name: .userPreferencesDidChangeIcon, object: nil)

@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import ServiceManagement
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -74,16 +75,16 @@ extension AppDelegate {
 			statusBar.menu = statusMenu
 			statusBar.image?.isTemplate = true
 			statusBar.highlightMode = true
-		case .disabled:
+		case .none:
 			statusBar = nil
 		}
 	}
 	
 	@objc private func setupStartup(){
 		if preferences.startOnLogin {
-			GBLaunchAtLogin.addAppAsLoginItem()
+			SMLoginItemSetEnabled("io.nahive.SpotifyNotify".cfString, true)
 		} else {
-			GBLaunchAtLogin.removeAppFromLoginItems()
+            SMLoginItemSetEnabled("io.nahive.SpotifyNotify".cfString, false)
 		}
 	}
 	

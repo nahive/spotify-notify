@@ -12,9 +12,10 @@ struct NotificationsInteractor {
 	
 	private let preferences = UserPreferences()
 	
-	private var previousTrack: Track?
-	private var currentTrack: Track?
-	
+	private var previousTrack: SpotifyTrack?
+	private var currentTrack: SpotifyTrack?
+    private let spotify: SpotifyApplication? = SBApplication(bundleIdentifier: SpotifyConstants.bundleIdentifier)
+    
 	mutating func handlePlaybackChange(from notification: Notification) {
 		
 		// return if notifications are disabled
@@ -34,34 +35,46 @@ struct NotificationsInteractor {
 		}
 		
 		previousTrack = currentTrack
-		currentTrack  = Track(id: userInfo["Track ID"] as? String,
-						  title: userInfo["Name"] as? String,
-						  artist: userInfo["Artist"] as? String,
-						  album: userInfo["Album"] as? String)
+		currentTrack  = spotify?.currentTrack
 	
 		// return if previous track is same as previous => play/pause and if it's disabled
-		guard previousTrack != currentTrack || preferences.notificationsPlayPause else {
+		guard previousTrack?.id?() != currentTrack?.id?() || preferences.notificationsPlayPause else {
 			return
 		}
-		
+        
 		let notification = NSUserNotification()
-		notification.title = currentTrack?.title
-		notification.subtitle = currentTrack?.album
-		notification.informativeText = currentTrack?.artist
+        
+//        if preferences.showSongProgress {
+//            let artist = currentTrack?.artist ?? "______"
+//            let album = currentTrack?.album ?? "______"
+//            let progress = Int(spotify?.playerPosition ?? 0.0).duration
+//            let duration = currentTrack?.duration?.duration ?? "00:00"
+//
+//            notification.title = currentTrack?.name
+//            notification.subtitle = "\(artist) - \(album)"
+//            notification.informativeText = "\(progress) (\(duration))"
+//        } else {
+            notification.title = currentTrack?.name
+            notification.subtitle = currentTrack?.artist
+            notification.informativeText = currentTrack?.album
+//        }
+        
 		notification.hasActionButton = true
 		notification.actionButtonTitle = "Skip"
+        
+        notification.additionalActions = [.init(identifier: "previous", title: "Previous"),
+                                            ]
 		
 		if SystemPreferences.isContentImagePropertyAvailable && preferences.showAlbumArt {
-			if let art = currentTrack?.albumArt {
+			if let art = currentTrack?.artworkUrl?.url?.image {
 				if preferences.showSpotifyIcon {
 					notification.contentImage = art
 				} else {
-					// private apple apis
-					notification.setValue(art, forKey: "_identityImage")
+					notification.identityImage = art
 					if preferences.roundAlbumArt {
-						notification.setValue(2, forKey: "_identityImageStyle")
+						notification.identityImageStyle = .rounded
 					} else {
-						notification.setValue(0, forKey: "_identityImageStyle")
+						notification.identityImageStyle = .normal
 					}
 				}
 			}
@@ -71,16 +84,17 @@ struct NotificationsInteractor {
 			notification.soundName = NSUserNotificationDefaultSoundName
 		}
 		
+        NSUserNotificationCenter.default.removeAllDeliveredNotifications()
 		NSUserNotificationCenter.default.deliver(notification)
 		
 		// remove after 5 seconds if not taken action
-		DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(preferences.notificationsLength)) {
 			NSUserNotificationCenter.default.removeDeliveredNotification(notification)
 		}
 	}
 	
 	func handleAction() {
-		let spotify = SpotifyWrapper.application()
-		spotify?.nextTrack()
+        spotify?.nextTrack?()
 	}
 }
+

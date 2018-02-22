@@ -65,39 +65,27 @@
                     </menu>
                 </menuItem>
             </items>
+            <point key="canvasLocation" x="-177" y="62"/>
         </menu>
-        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
+        <window title="Spotify Notify" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" titlebarAppearsTransparent="YES" id="QvC-M9-y7g">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" fullSizeContentView="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="350" height="285"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
+            <rect key="contentRect" x="335" y="390" width="350" height="352"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1440"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ" customClass="PreferencesView" customModule="SpotifyNotify" customModuleProvider="target">
-                <rect key="frame" x="0.0" y="0.0" width="350" height="285"/>
+                <rect key="frame" x="0.0" y="0.0" width="350" height="352"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R4V-4P-LKQ">
-                        <rect key="frame" x="131" y="19" width="89" height="32"/>
+                        <rect key="frame" x="131" y="17" width="89" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Home" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bJj-XE-oIL">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L8Q-MW-8Hw">
-                        <rect key="frame" x="18" y="64" width="94" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Menu Bar Icon" id="KN9-vf-dl7">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="U4o-dE-WaF">
-                        <rect key="frame" x="42" y="179" width="267" height="5"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    </box>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NAb-Oa-tfs">
-                        <rect key="frame" x="14" y="19" width="96" height="32"/>
+                        <rect key="frame" x="14" y="17" width="96" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Source" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oxM-N1-OlP">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -105,7 +93,7 @@
                         </buttonCell>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hGS-gI-9Oz">
-                        <rect key="frame" x="254" y="19" width="82" height="32"/>
+                        <rect key="frame" x="254" y="17" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Quit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="z62-t8-dQy">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -113,15 +101,18 @@
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3K2-TY-BqD">
-                        <rect key="frame" x="18" y="249" width="141" height="18"/>
+                        <rect key="frame" x="18" y="245" width="141" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Enable notifications" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="GXt-X3-YMo">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="test:" target="-1" id="2uf-1q-I65"/>
+                        </connections>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s7c-o2-cnC">
-                        <rect key="frame" x="18" y="229" width="147" height="18"/>
+                        <rect key="frame" x="40" y="220" width="147" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Notify on play/pause" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="gve-hx-URO">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -129,7 +120,7 @@
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dek-tr-EZY">
-                        <rect key="frame" x="18" y="209" width="175" height="18"/>
+                        <rect key="frame" x="40" y="200" width="175" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Enable notification sound" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Equ-V9-fus">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -137,15 +128,15 @@
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sb2-Il-p1t">
-                        <rect key="frame" x="18" y="157" width="98" height="18"/>
+                        <rect key="frame" x="18" y="301" width="133" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Run on login" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="2oS-Fn-z2Z">
+                        <buttonCell key="cell" type="check" title="Launch on startup" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="2oS-Fn-z2Z">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EFd-pI-bz8">
-                        <rect key="frame" x="18" y="137" width="128" height="18"/>
+                        <rect key="frame" x="40" y="159" width="128" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Include album art" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="dyQ-Hh-mzr">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -153,67 +144,119 @@
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="beN-Wi-Ry6">
-                        <rect key="frame" x="18" y="97" width="142" height="18"/>
+                        <rect key="frame" x="40" y="119" width="131" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Include Spotify icon" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="X68-Pb-zu8">
+                        <buttonCell key="cell" type="check" title="Show Spotify icon" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="X68-Pb-zu8">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rzk-XJ-FyG">
+                        <rect key="frame" x="41" y="99" width="146" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Show song progress" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="FIx-9B-cNk">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WAc-gw-RFI">
-                        <rect key="frame" x="18" y="117" width="122" height="18"/>
+                        <rect key="frame" x="59" y="139" width="122" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Round album art" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="23n-ST-aIz">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Su-cq-0ZO">
-                        <rect key="frame" x="163" y="59" width="170" height="26"/>
+                    <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="OHp-JL-BRv">
+                        <rect key="frame" x="20" y="238" width="310" height="5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vZ7-hz-6kX">
+                    </box>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HhN-be-E9b">
+                        <rect key="frame" x="40" y="179" width="277" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Hide notifications when Spotify is focused" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="L6Y-nq-51g">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ypn-Ds-q8t">
+                        <rect key="frame" x="84" y="8" width="182" height="11"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Notify created with ❤️ by nahive" id="iwg-KN-kQ7">
+                            <font key="font" metaFont="systemThin" size="9"/>
+                            <color key="textColor" name="controlShadowColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Laj-Tk-jGS">
+                        <rect key="frame" x="18" y="278" width="110" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Menu Bar Icon" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="2uA-78-ROR">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Su-cq-0ZO">
+                        <rect key="frame" x="135" y="273" width="170" height="26"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <popUpButtonCell key="cell" type="push" title="Default" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" imageScaling="proportionallyDown" inset="2" selectedItem="jNS-Ug-VUB" id="vZ7-hz-6kX">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
                             <menu key="menu" title="OtherViews" id="laJ-MQ-sAY">
                                 <items>
-                                    <menuItem title="Default" tag="1" id="jNS-Ug-VUB">
+                                    <menuItem title="Default" state="on" tag="1" id="jNS-Ug-VUB">
                                         <modifierMask key="keyEquivalentModifierMask"/>
                                     </menuItem>
                                     <menuItem title="Monochromatic" tag="2" id="6yG-hz-ZWy">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
-                                    <menuItem title="None" tag="3" id="ZJu-Y3-kem">
                                         <modifierMask key="keyEquivalentModifierMask"/>
                                     </menuItem>
                                 </items>
                             </menu>
                         </popUpButtonCell>
                     </popUpButton>
-                    <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="x68-Ob-S2T">
-                        <rect key="frame" x="42" y="87" width="267" height="5"/>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="35N-gj-qOP">
+                        <rect key="frame" x="59" y="76" width="58" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    </box>
-                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HhN-be-E9b">
-                        <rect key="frame" x="18" y="188" width="212" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Disable when Spotify has focus" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="L6Y-nq-51g">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Show for" id="jV0-Mb-AJ6">
                             <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ypn-Ds-q8t">
-                        <rect key="frame" x="84" y="7" width="182" height="11"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ye7-Fb-IhE">
+                        <rect key="frame" x="123" y="73" width="26" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Spotify Notify created with ❤️ by nahive" id="iwg-KN-kQ7">
-                            <font key="font" metaFont="systemThin" size="8"/>
-                            <color key="textColor" name="controlShadowColor" catalog="System" colorSpace="catalog"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="5" drawsBackground="YES" id="sGI-Zq-gXE">
+                            <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="MSg-0Q-3UC"/>
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <action selector="notificationDisplayLength:" target="-1" id="sAo-dJ-INa"/>
+                        </connections>
+                    </textField>
+                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LmF-lZ-GXh">
+                        <rect key="frame" x="154" y="70" width="19" height="27"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="nj2-7h-eK6"/>
+                    </stepper>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mAs-Ty-mns">
+                        <rect key="frame" x="176" y="75" width="56" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="seconds" id="gxI-Mu-i0B">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                 </subviews>
                 <connections>
                     <outlet property="homeButton" destination="R4V-4P-LKQ" id="AjD-A1-Gg1"/>
+                    <outlet property="menuIconCheck" destination="Laj-Tk-jGS" id="XA1-U1-oUd"/>
                     <outlet property="menuIconPopUpButton" destination="6Su-cq-0ZO" id="JTa-ro-xW0"/>
+                    <outlet property="notificationLengthChanger" destination="LmF-lZ-GXh" id="U1c-BC-mjr"/>
+                    <outlet property="notificationLengthField" destination="ye7-Fb-IhE" id="6sP-oy-4IZ"/>
                     <outlet property="notificationsCheck" destination="3K2-TY-BqD" id="PBE-7k-OcG"/>
                     <outlet property="notificationsPlayPauseCheck" destination="s7c-o2-cnC" id="KBN-wz-15U"/>
                     <outlet property="notificationsSoundCheck" destination="Dek-tr-EZY" id="dh0-FZ-6wd"/>
@@ -221,12 +264,13 @@
                     <outlet property="quitButton" destination="hGS-gI-9Oz" id="iKA-Pr-jB5"/>
                     <outlet property="roundAlbumArtCheck" destination="WAc-gw-RFI" id="SQ1-Kw-8Qp"/>
                     <outlet property="showAlbumArtCheck" destination="EFd-pI-bz8" id="NW6-Sd-MPO"/>
+                    <outlet property="showSongProgressCheck" destination="Rzk-XJ-FyG" id="A65-gg-suK"/>
                     <outlet property="showSpotifyIconCheck" destination="beN-Wi-Ry6" id="yph-tV-sug"/>
                     <outlet property="sourceButton" destination="NAb-Oa-tfs" id="lPt-TW-b25"/>
                     <outlet property="startOnLoginCheck" destination="Sb2-Il-p1t" id="f5P-53-vsK"/>
                 </connections>
             </view>
-            <point key="canvasLocation" x="372" y="469.5"/>
+            <point key="canvasLocation" x="372" y="458"/>
         </window>
         <menu id="eYd-SQ-yva">
             <items>

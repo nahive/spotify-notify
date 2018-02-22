@@ -9,12 +9,14 @@
 import Foundation
 
 enum StatusBarIcon: Int {
-	case `default`, monochromatic, disabled
-	
-	init(value: Int) {
-		if let icon = StatusBarIcon(rawValue: value) { self = icon }
-		else { self = .default }
-	}
+	case `default` = 0
+    case monochromatic = 1
+    case none = 99
+    
+    init(value: Int?) {
+        guard let value = value else { self = .none; return }
+        self = StatusBarIcon(rawValue: value) ?? .none
+    }
 }
 
 struct UserPreferences {
@@ -23,11 +25,13 @@ struct UserPreferences {
 		static let notificationsPlayPause = "notifications.playpause.key"
 		static let notificationsSound = "notifications.sound.key"
 		static let notificationsDisableOnFocus = "notifications.focus.key"
-		
+		static let notificationsLength = "notifications.length.key"
+        
 		static let startOnLogin = "startonlogin.key"
 		static let showAlbumArt = "showalbumart.key"
 		static let roundAlbumArt = "roundalbumart.key"
 		static let showSpotifyIcon = "spotifyicon.key"
+        static let showSongProgress = "songprogress.key"
 		
 		static let menuIcon = "menuicon.key"
 	}
@@ -53,6 +57,11 @@ struct UserPreferences {
 		get { return defaults.bool(forKey: Keys.notificationsDisableOnFocus) }
 		set { defaults.set(newValue, forKey: Keys.notificationsDisableOnFocus) }
 	}
+    
+    var notificationsLength: Int {
+        get { return defaults.integer(forKey: Keys.notificationsLength) }
+        set { defaults.set(newValue, forKey: Keys.notificationsLength) }
+    }
 	
 	var startOnLogin: Bool {
 		get { return defaults.bool(forKey: Keys.startOnLogin) }
@@ -71,9 +80,14 @@ struct UserPreferences {
 	
 	var showSpotifyIcon: Bool {
 		get { return defaults.bool(forKey: Keys.showSpotifyIcon) }
-		set { 	defaults.set(newValue, forKey: Keys.showSpotifyIcon) }
+		set { defaults.set(newValue, forKey: Keys.showSpotifyIcon) }
 	}
 	
+    var showSongProgress: Bool {
+        get { return defaults.bool(forKey: Keys.showSongProgress) }
+        set { defaults.set(newValue, forKey: Keys.showSongProgress) }
+    }
+    
 	var menuIcon: StatusBarIcon {
 		get { return StatusBarIcon(value: defaults.integer(forKey: Keys.menuIcon)) }
 		set { defaults.set(newValue.rawValue, forKey: Keys.menuIcon) }
