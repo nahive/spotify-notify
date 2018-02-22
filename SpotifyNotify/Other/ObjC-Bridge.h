@@ -3,3 +3,4 @@
 //
 
 #import "GBLaunchAtLogin.h"
+#import "SpotifyWrapper.h"

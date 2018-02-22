@@ -55,6 +55,9 @@ extension AppDelegate {
 		
 		center.addObserver(self, selector: #selector(setupMenuBarIcon),
 						   name: .userPreferencesDidChangeIcon, object: nil)
+		
+		
+		NSUserNotificationCenter.default.delegate = self
 	}
 	
 	@objc private func setupMenuBarIcon(){
@@ -101,8 +104,18 @@ extension AppDelegate {
 
 // MARK: notification delegates
 extension AppDelegate: NSUserNotificationCenterDelegate {
+	func userNotificationCenter(_ center: NSUserNotificationCenter, didDeliver notification: NSUserNotification) {
+		
+	}
+	
 	func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {
-		NSWorkspace.shared.launchApplication(SpotifyConstants.applicationName)
+		switch notification.activationType {
+		case .actionButtonClicked:
+			notificationsInteractor.handleAction()
+		default:
+			NSWorkspace.shared.launchApplication(SpotifyConstants.applicationName)
+		}
+		
 	}
 	
 	func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {

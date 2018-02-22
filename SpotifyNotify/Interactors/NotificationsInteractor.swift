@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import ScriptingBridge
 
 struct NotificationsInteractor {
 	
@@ -47,6 +48,8 @@ struct NotificationsInteractor {
 		notification.title = currentTrack?.title
 		notification.subtitle = currentTrack?.album
 		notification.informativeText = currentTrack?.artist
+		notification.hasActionButton = true
+		notification.actionButtonTitle = "Skip"
 		
 		if SystemPreferences.isContentImagePropertyAvailable && preferences.showAlbumArt {
 			if let art = currentTrack?.albumArt {
@@ -69,5 +72,15 @@ struct NotificationsInteractor {
 		}
 		
 		NSUserNotificationCenter.default.deliver(notification)
+		
+		// remove after 5 seconds if not taken action
+		DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+			NSUserNotificationCenter.default.removeDeliveredNotification(notification)
+		}
+	}
+	
+	func handleAction() {
+		let spotify = SpotifyWrapper.application()
+		spotify?.nextTrack()
 	}
 }

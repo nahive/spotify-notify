@@ -12,7 +12,9 @@
 		4C5764CC1C982DC900364AFE /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764CA1C982DC900364AFE /* MainMenu.xib */; };
 		4C5764E31C982E1900364AFE /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5764E21C982E1900364AFE /* Track.swift */; };
 		4C5764E91C982EB900364AFE /* GBLaunchAtLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5764E81C982EB900364AFE /* GBLaunchAtLogin.m */; };
+		FB01DB5D203EFF7E00B4BB3A /* SpotifyWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = FB01DB5B203EFF7E00B4BB3A /* SpotifyWrapper.m */; };
 		FB0A9A4E203EC9BA00721E3A /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB0A9A4D203EC9BA00721E3A /* PreferencesView.swift */; };
+		FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */; };
 		FB6B9D0A203EC22D0062702B /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB6B9D09203EC22D0062702B /* UserPreferences.swift */; };
 		FB6B9D0C203EC24F0062702B /* SystemPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB6B9D0B203EC24F0062702B /* SystemPreferences.swift */; };
 		FBCCA5FB203ED78B008AD1BF /* NotificationsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCCA5FA203ED78B008AD1BF /* NotificationsInteractor.swift */; };
@@ -27,10 +29,14 @@
 		4C5764CB1C982DC900364AFE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		4C5764CD1C982DC900364AFE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C5764E21C982E1900364AFE /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
-		4C5764E61C982EB800364AFE /* NotifySpotify-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NotifySpotify-Bridging-Header.h"; sourceTree = "<group>"; };
+		4C5764E61C982EB800364AFE /* ObjC-Bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ObjC-Bridge.h"; sourceTree = "<group>"; };
 		4C5764E71C982EB900364AFE /* GBLaunchAtLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBLaunchAtLogin.h; sourceTree = "<group>"; };
 		4C5764E81C982EB900364AFE /* GBLaunchAtLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBLaunchAtLogin.m; sourceTree = "<group>"; };
+		FB01DB5B203EFF7E00B4BB3A /* SpotifyWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpotifyWrapper.m; sourceTree = "<group>"; };
+		FB01DB5C203EFF7E00B4BB3A /* SpotifyWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpotifyWrapper.h; sourceTree = "<group>"; };
 		FB0A9A4D203EC9BA00721E3A /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
+		FB400A8D203EF68F00F2D63C /* Spotify.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Spotify.h; sourceTree = "<group>"; };
+		FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 		FB6B9D09203EC22D0062702B /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
 		FB6B9D0B203EC24F0062702B /* SystemPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPreferences.swift; sourceTree = "<group>"; };
 		FBCCA5FA203ED78B008AD1BF /* NotificationsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsInteractor.swift; sourceTree = "<group>"; };
@@ -43,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				4C5764C51C982DC800364AFE /* SpotifyNotify */,
+				FB400A8E203EFA3800F2D63C /* Frameworks */,
 				4C5764C41C982DC800364AFE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -70,24 +78,24 @@
 			children = (
 				4C5764C61C982DC800364AFE /* AppDelegate.swift */,
 				FB0A9A4F203ECAB500721E3A /* Models */,
-				FB0A9A4C203EC9AB00721E3A /* Usecases */,
-				FBCCA5FC203ED78F008AD1BF /* Storage */,
 				FB6B9D0D203EC2710062702B /* Interactors */,
-				FB6B9D0F203EC29D0062702B /* Resources */,
+				FBCCA5FC203ED78F008AD1BF /* Storage */,
+				FB0A9A4C203EC9AB00721E3A /* Usecases */,
 				4C5764E41C982E8900364AFE /* Helpers */,
+				FB6B9D0F203EC29D0062702B /* Resources */,
 				FB6B9D0E203EC28E0062702B /* Other */,
 			);
-			name = SpotifyNotify;
-			path = NotifySpotify;
+			path = SpotifyNotify;
 			sourceTree = "<group>";
 		};
 		4C5764E41C982E8900364AFE /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				FBCCA5FF203EE195008AD1BF /* Extensions.swift */,
 				4C5764E51C982E9300364AFE /* GBLaunchAtLogin */,
+				FB400A8C203EF65A00F2D63C /* SpotifyBridge */,
+				FBCCA5FF203EE195008AD1BF /* Extensions.swift */,
 			);
-			name = Helpers;
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		4C5764E51C982E9300364AFE /* GBLaunchAtLogin */ = {
@@ -96,7 +104,7 @@
 				4C5764E71C982EB900364AFE /* GBLaunchAtLogin.h */,
 				4C5764E81C982EB900364AFE /* GBLaunchAtLogin.m */,
 			);
-			name = GBLaunchAtLogin;
+			path = GBLaunchAtLogin;
 			sourceTree = "<group>";
 		};
 		FB0A9A4C203EC9AB00721E3A /* Usecases */ = {
@@ -105,7 +113,7 @@
 				4C5764CA1C982DC900364AFE /* MainMenu.xib */,
 				FB0A9A4D203EC9BA00721E3A /* PreferencesView.swift */,
 			);
-			name = Usecases;
+			path = Usecases;
 			sourceTree = "<group>";
 		};
 		FB0A9A4F203ECAB500721E3A /* Models */ = {
@@ -113,7 +121,25 @@
 			children = (
 				4C5764E21C982E1900364AFE /* Track.swift */,
 			);
-			name = Models;
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FB400A8C203EF65A00F2D63C /* SpotifyBridge */ = {
+			isa = PBXGroup;
+			children = (
+				FB01DB5C203EFF7E00B4BB3A /* SpotifyWrapper.h */,
+				FB01DB5B203EFF7E00B4BB3A /* SpotifyWrapper.m */,
+				FB400A8D203EF68F00F2D63C /* Spotify.h */,
+			);
+			path = SpotifyBridge;
+			sourceTree = "<group>";
+		};
+		FB400A8E203EFA3800F2D63C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		FB6B9D0D203EC2710062702B /* Interactors */ = {
@@ -121,16 +147,16 @@
 			children = (
 				FBCCA5FA203ED78B008AD1BF /* NotificationsInteractor.swift */,
 			);
-			name = Interactors;
+			path = Interactors;
 			sourceTree = "<group>";
 		};
 		FB6B9D0E203EC28E0062702B /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				4C5764E61C982EB800364AFE /* NotifySpotify-Bridging-Header.h */,
 				4C5764CD1C982DC900364AFE /* Info.plist */,
+				4C5764E61C982EB800364AFE /* ObjC-Bridge.h */,
 			);
-			name = Other;
+			path = Other;
 			sourceTree = "<group>";
 		};
 		FB6B9D0F203EC29D0062702B /* Resources */ = {
@@ -138,17 +164,17 @@
 			children = (
 				4C5764C81C982DC900364AFE /* Assets.xcassets */,
 			);
-			name = Resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		FBCCA5FC203ED78F008AD1BF /* Storage */ = {
 			isa = PBXGroup;
 			children = (
 				FBCCA5FD203EE057008AD1BF /* Constants.swift */,
-				FB6B9D09203EC22D0062702B /* UserPreferences.swift */,
 				FB6B9D0B203EC24F0062702B /* SystemPreferences.swift */,
+				FB6B9D09203EC22D0062702B /* UserPreferences.swift */,
 			);
-			name = Storage;
+			path = Storage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -227,6 +253,7 @@
 				FB0A9A4E203EC9BA00721E3A /* PreferencesView.swift in Sources */,
 				FB6B9D0C203EC24F0062702B /* SystemPreferences.swift in Sources */,
 				4C5764E91C982EB900364AFE /* GBLaunchAtLogin.m in Sources */,
+				FB01DB5D203EFF7E00B4BB3A /* SpotifyWrapper.m in Sources */,
 				FBCCA5FE203EE057008AD1BF /* Constants.swift in Sources */,
 				4C5764C71C982DC800364AFE /* AppDelegate.swift in Sources */,
 				FBCCA5FB203ED78B008AD1BF /* NotificationsInteractor.swift in Sources */,
@@ -243,6 +270,7 @@
 				4C5764CB1C982DC900364AFE /* Base */,
 			);
 			name = MainMenu.xib;
+			path = .;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -356,14 +384,15 @@
 		4C5764DC1C982DC900364AFE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = NotifySpotify/Info.plist;
+				INFOPLIST_FILE = SpotifyNotify/Other/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = SpotifyNotify;
-				SWIFT_OBJC_BRIDGING_HEADER = "NotifySpotify/NotifySpotify-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "SpotifyNotify/Other/ObjC-Bridge.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
@@ -373,14 +402,15 @@
 		4C5764DD1C982DC900364AFE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = NotifySpotify/Info.plist;
+				INFOPLIST_FILE = SpotifyNotify/Other/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = SpotifyNotify;
-				SWIFT_OBJC_BRIDGING_HEADER = "NotifySpotify/NotifySpotify-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "SpotifyNotify/Other/ObjC-Bridge.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
 			};
