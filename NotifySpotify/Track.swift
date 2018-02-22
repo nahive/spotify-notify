@@ -9,47 +9,46 @@
 import Foundation
 import AppKit
 
-struct Track {
-  var title: String?
-  var artist: String?
-  var album: String?
-  var albumArt: NSImage?
-  var trackID: String?
-  
-  mutating func fetchAlbumArt(_ closure: (_ image: NSImage?) -> ()) {
-    
-    guard let trackID = trackID else {
-      closure(nil)
-      return
-    }
-    
-    let spotifyLocation = "https://embed.spotify.com/oembed/?url=\(trackID)"
-    
-    guard
-      let spotifyURL = URL(string: spotifyLocation),
-      let spotifyData = try? Data(contentsOf: spotifyURL) else {
-        closure(nil)
-        return
-    }
+typealias FetchingResult = (Result) -> Void
+enum Result { case success(NSImage), error(String) }
 
-    guard
-      let thumbnailObject = try! JSONSerialization.jsonObject(with: spotifyData, options: .allowFragments) as? [String:AnyObject],
-      let thumbnailLocation = thumbnailObject["thumbnail_url"] as? String else {
-          closure(nil)
-          return
-    }
-    
-    guard
-    let thumbnailURL = URL(string: thumbnailLocation),
-    let thumbnailData = try? Data(contentsOf: thumbnailURL) else {
-      closure(nil)
-      return
-    }
-    
-    albumArt = NSImage(data: thumbnailData)
-    
-    closure(albumArt)
-    
-  }
-  
+struct Track {
+	let id: String?
+	let title: String?
+	let artist: String?
+	let album: String?
+	var albumArt: NSImage?
+	
+	private let baseSpotifyURL = "https://embed.spotify.com/oembed/?url="
+	
+	mutating func albumArt(result: FetchingResult) {
+		
+		guard let id = id else {
+			return result(.error("No track id"))
+		}
+		
+		let spotifyLocation = baseSpotifyURL + "\(id)"
+		
+		// holy moly this guard ;o
+		guard
+			let spotifyURL = URL(string: spotifyLocation),
+			let spotifyData = try? Data(contentsOf: spotifyURL),
+			let albumAny = try? JSONSerialization.jsonObject(with: spotifyData, options: .allowFragments),
+			let albumJSON = albumAny as? [String: AnyObject],
+			let albumLocation = albumJSON["album_url"] as? String,
+			let albumURL = URL(string: albumLocation),
+			let albumData = try? Data(contentsOf: albumURL),
+			let albumImage = NSImage(data: albumData) else {
+				return result(.error("Problem with parsing data from spotify"))
+		}
+		
+		albumArt = albumImage
+		result(.success(albumImage))
+	}
+}
+
+extension Track {
+	init() {
+		self.init(id: nil, title: nil, artist: nil, album: nil, albumArt: nil)
+	}
 }

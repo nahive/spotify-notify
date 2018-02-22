@@ -12,6 +12,7 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
   
   var statusBar: NSStatusItem!
+	
   @IBOutlet weak var statusMenu: NSMenu!
   @IBOutlet weak var statusPreferences: NSMenuItem!
   @IBOutlet weak var statusQuit: NSMenuItem!
@@ -37,16 +38,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   var previousTrack: Track?
 
   
-  //MARK: system functions
-  
+  // MARK: system functions
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     setup()
   }
-
-  func applicationWillTerminate(_ aNotification: Notification) {
-    // Insert code here to tear down your application
-  }
-  
+	
   func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
     if !flag {
       showPreferences()
