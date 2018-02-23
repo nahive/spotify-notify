@@ -208,6 +208,6 @@ final class PreferencesView: NSVisualEffectView {
 	}
 	
 	@objc func quitButtonTapped(sender: NSButton) {
-//		NSApplication.terminate(nil)
+        NSApplication.shared.terminate(sender)
 	}
 }

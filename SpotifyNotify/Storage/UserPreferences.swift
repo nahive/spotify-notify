@@ -21,6 +21,8 @@ enum StatusBarIcon: Int {
 
 struct UserPreferences {
 	private struct Keys {
+        static let isNotFirstRun = "first.run.key"
+        
 		static let notificationsEnabled = "notifications.enabled.key"
 		static let notificationsPlayPause = "notifications.playpause.key"
 		static let notificationsSound = "notifications.sound.key"
@@ -37,6 +39,11 @@ struct UserPreferences {
 	}
 	
 	private let defaults = UserDefaults.standard
+    
+    var isNotFirstRun: Bool {
+        get { return defaults.bool(forKey: Keys.isNotFirstRun) }
+        set { defaults.set(newValue, forKey: Keys.isNotFirstRun) }
+    }
 	
 	var notificationsEnabled: Bool {
 		get { return defaults.bool(forKey: Keys.notificationsEnabled) }

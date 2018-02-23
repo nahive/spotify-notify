@@ -54,11 +54,3 @@ extension NSUserNotification {
         }
     }
 }
-
-extension Int {
-    var duration: String {
-        let minutes = Int(Double(self)/60.0)
-        let seconds = self - minutes * 60
-        return "\(minutes):\(seconds)"
-    }
-}

@@ -44,26 +44,25 @@ struct NotificationsInteractor {
         
 		let notification = NSUserNotification()
         
-//        if preferences.showSongProgress {
-//            let artist = currentTrack?.artist ?? "______"
-//            let album = currentTrack?.album ?? "______"
-//            let progress = Int(spotify?.playerPosition ?? 0.0).duration
-//            let duration = currentTrack?.duration?.duration ?? "00:00"
-//
-//            notification.title = currentTrack?.name
-//            notification.subtitle = "\(artist) - \(album)"
-//            notification.informativeText = "\(progress) (\(duration))"
-//        } else {
+        if preferences.showSongProgress {
+            let artist = currentTrack?.artist ?? "______"
+            let album = currentTrack?.album ?? "______"
+            let duration = progress(for: currentTrack)
+            
+            notification.title = currentTrack?.name
+            notification.subtitle = "\(artist) - \(album)"
+            notification.informativeText = duration
+        } else {
             notification.title = currentTrack?.name
             notification.subtitle = currentTrack?.artist
             notification.informativeText = currentTrack?.album
-//        }
+        }
         
 		notification.hasActionButton = true
 		notification.actionButtonTitle = "Skip"
         
-        notification.additionalActions = [.init(identifier: "previous", title: "Previous"),
-                                            ]
+//        notification.additionalActions = [.init(identifier: "previous", title: "Previous"),
+//                                            ]
 		
 		if SystemPreferences.isContentImagePropertyAvailable && preferences.showAlbumArt {
 			if let art = currentTrack?.artworkUrl?.url?.image {
@@ -96,5 +95,30 @@ struct NotificationsInteractor {
 	func handleAction() {
         spotify?.nextTrack?()
 	}
+    
+    private func progress(for track: SpotifyTrack?) -> String {
+        guard
+            let position = spotify?.playerPosition,
+            let duration = track?.duration else {
+                return "0:00/0:00"
+        }
+        
+        let percentage = position / (Double(duration) / 1000.0)
+        
+        let progressDone = "▪︎"
+        let progressNotDone = "⁃"
+        let progressMax = 15
+        let currentProgress = Int(Double(progressMax) * percentage)
+        
+        let progressString = String(repeating: progressDone, count: currentProgress) + String(repeating: progressNotDone, count: progressMax - currentProgress)
+        
+        let now = convert(seconds: Int(position))
+        let length = convert(seconds: duration / 1000)
+        return "\(now.minutes):\(now.seconds)  \(progressString)  \(length.minutes):\(length.seconds)"
+    }
+    
+    private func convert(seconds: Int) -> (minutes: Int, seconds: Int) {
+        return ((seconds % 3600) / 60, (seconds % 3600) % 60)
+    }
 }
 

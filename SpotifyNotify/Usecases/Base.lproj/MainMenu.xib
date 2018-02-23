@@ -215,7 +215,7 @@
                         </popUpButtonCell>
                     </popUpButton>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="35N-gj-qOP">
-                        <rect key="frame" x="59" y="76" width="58" height="17"/>
+                        <rect key="frame" x="41" y="76" width="58" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Show for" id="jV0-Mb-AJ6">
                             <font key="font" metaFont="system"/>
@@ -224,7 +224,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ye7-Fb-IhE">
-                        <rect key="frame" x="123" y="73" width="26" height="22"/>
+                        <rect key="frame" x="105" y="73" width="26" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="5" drawsBackground="YES" id="sGI-Zq-gXE">
                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="MSg-0Q-3UC"/>
@@ -237,12 +237,12 @@
                         </connections>
                     </textField>
                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LmF-lZ-GXh">
-                        <rect key="frame" x="154" y="70" width="19" height="27"/>
+                        <rect key="frame" x="136" y="70" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="nj2-7h-eK6"/>
                     </stepper>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mAs-Ty-mns">
-                        <rect key="frame" x="176" y="75" width="56" height="17"/>
+                        <rect key="frame" x="158" y="75" width="56" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="seconds" id="gxI-Mu-i0B">
                             <font key="font" metaFont="system"/>

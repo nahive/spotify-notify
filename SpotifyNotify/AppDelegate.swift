@@ -17,7 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var statusPreferences: NSMenuItem!
 	@IBOutlet weak var statusQuit: NSMenuItem!
 	
-	fileprivate let preferences = UserPreferences()
+	fileprivate var preferences = UserPreferences()
 	fileprivate var notificationsInteractor = NotificationsInteractor()
 	
 	var statusBar: NSStatusItem!
@@ -42,6 +42,7 @@ extension AppDelegate {
 		setupMenuBarIcon()
 		setupStartup()
 		setupTargets()
+        setupFirstRun()
 	}
 	
 	private func setupObservers() {
@@ -92,6 +93,23 @@ extension AppDelegate {
 		statusPreferences.action = #selector(showPreferences)
 		statusQuit.action = #selector(NSApplication.terminate(_:))
 	}
+    
+    fileprivate func setupFirstRun() {
+        if !preferences.isNotFirstRun {
+            preferences.isNotFirstRun = true
+            preferences.notificationsEnabled = true
+            preferences.notificationsPlayPause = true
+            preferences.notificationsSound = false
+            preferences.notificationsDisableOnFocus = true
+            preferences.notificationsLength = 5
+            preferences.startOnLogin = false
+            preferences.showAlbumArt = true
+            preferences.roundAlbumArt = false
+            preferences.showSpotifyIcon = true
+            preferences.showSongProgress = false
+            preferences.menuIcon = .default
+        }
+    }
 	
 	@objc fileprivate func showPreferences(){
 		NSApp.activate(ignoringOtherApps: true)
