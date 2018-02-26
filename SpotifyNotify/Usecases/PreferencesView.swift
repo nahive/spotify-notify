@@ -7,6 +7,10 @@
 //
 
 import Cocoa
+import KeyHolder
+import Magnet
+
+final class RecordingView: RecordView { }
 
 extension NSNotification.Name {
 	static let userPreferencesDidChangeStartup = NSNotification.Name(rawValue: "userPreferencesDidChangeStartup.notification")
@@ -30,12 +34,20 @@ final class PreferencesView: NSVisualEffectView {
     
     @IBOutlet weak var menuIconCheck: NSButton!
 	@IBOutlet weak var menuIconPopUpButton: NSPopUpButton!
-    
+	
+	@IBOutlet weak var recordShortcutView: RecordingView! {
+		didSet {
+			recordShortcutView.cornerRadius = 14
+			recordShortcutView.tintColor = .darkGray
+		}
+	}
+	
 	@IBOutlet weak var sourceButton: NSButton!
 	@IBOutlet weak var homeButton: NSButton!
 	@IBOutlet weak var quitButton: NSButton!
 	
 	private var preferences = UserPreferences()
+	private let shortcutsInteractor = ShortcutsInteractor()
 	
 	override func viewWillDraw() {
 		super.viewWillDraw()
@@ -80,6 +92,8 @@ final class PreferencesView: NSVisualEffectView {
         
         menuIconCheck.isSelected = preferences.menuIcon != .none
         if preferences.menuIcon != .none { menuIconPopUpButton.selectItem(at: preferences.menuIcon.rawValue) }
+		
+		recordShortcutView.keyCombo = preferences.shortcut
 	}
 	
 	private func setupTargets() {
@@ -112,6 +126,8 @@ final class PreferencesView: NSVisualEffectView {
         menuIconCheck.action = #selector(menuIconCheckTapped(sender:))
 		menuIconPopUpButton.target = self
 		menuIconPopUpButton.action = #selector(menuIconPopUpButtonChanged(sender:))
+		
+		recordShortcutView.delegate = self
 		
 		sourceButton.target = self
 		sourceButton.action = #selector(sourceButtonTapped(sender:))
@@ -209,5 +225,29 @@ final class PreferencesView: NSVisualEffectView {
 	
 	@objc func quitButtonTapped(sender: NSButton) {
         NSApplication.shared.terminate(sender)
+	}
+}
+
+extension PreferencesView: RecordViewDelegate {
+	func recordViewShouldBeginRecording(_ recordView: RecordView) -> Bool {
+		return true
+	}
+	
+	func recordView(_ recordView: RecordView, canRecordKeyCombo keyCombo: KeyCombo) -> Bool {
+		return true
+	}
+	
+	func recordViewDidClearShortcut(_ recordView: RecordView) {
+		shortcutsInteractor.unregister()
+		preferences.shortcut = nil
+	}
+	
+	func recordView(_ recordView: RecordView, didChangeKeyCombo keyCombo: KeyCombo) {
+		shortcutsInteractor.register(combo: keyCombo)
+		preferences.shortcut = keyCombo
+	}
+	
+	func recordViewDidEndRecording(_ recordView: RecordView) {
+		// nothing
 	}
 }

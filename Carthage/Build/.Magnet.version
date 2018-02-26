@@ -1,0 +1,9 @@
+{
+  "commitish" : "v2.1.0",
+  "Mac" : [
+    {
+      "name" : "Magnet",
+      "hash" : "8661fce60a0dcabb8d19463b4129295b15b54b9196f884edf5f277b406f3c20d"
+    }
+  ]
+}

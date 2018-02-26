@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Magnet
 
 enum StatusBarIcon: Int {
 	case `default` = 0
@@ -36,6 +37,8 @@ struct UserPreferences {
         static let showSongProgress = "songprogress.key"
 		
 		static let menuIcon = "menuicon.key"
+		static let shortcutKeyCode = "shortcut.keycode.key"
+		static let shortcutModifiers = "shortcut.modifiers.key"
 	}
 	
 	private let defaults = UserDefaults.standard
@@ -98,5 +101,25 @@ struct UserPreferences {
 	var menuIcon: StatusBarIcon {
 		get { return StatusBarIcon(value: defaults.integer(forKey: Keys.menuIcon)) }
 		set { defaults.set(newValue.rawValue, forKey: Keys.menuIcon) }
+	}
+	
+	var shortcut: KeyCombo? {
+		get {
+			let keycode = defaults.integer(forKey: Keys.shortcutKeyCode)
+			let modifiers = defaults.integer(forKey: Keys.shortcutModifiers)
+			guard keycode != 0 && modifiers != 0 else { return nil }
+			return KeyCombo(keyCode: keycode, carbonModifiers: modifiers)
+		}
+		set {
+			guard let keyCombo = newValue else {
+				defaults.set(0, forKey: Keys.shortcutKeyCode)
+				defaults.set(0, forKey: Keys.shortcutModifiers)
+				return
+			}
+			
+			defaults.set(keyCombo.keyCode, forKey: Keys.shortcutKeyCode)
+			defaults.set(keyCombo.modifiers, forKey: Keys.shortcutModifiers)
+			
+		}
 	}
 }

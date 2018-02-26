@@ -19,6 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	fileprivate var preferences = UserPreferences()
 	fileprivate var notificationsInteractor = NotificationsInteractor()
+	fileprivate let shortcutsInteractor = ShortcutsInteractor()
 	
 	var statusBar: NSStatusItem!
 	
@@ -43,6 +44,7 @@ extension AppDelegate {
 		setupStartup()
 		setupTargets()
         setupFirstRun()
+		setupShortcuts()
 	}
 	
 	private func setupObservers() {
@@ -111,20 +113,29 @@ extension AppDelegate {
         }
     }
 	
+	fileprivate func setupShortcuts() {
+		guard let shortcut = preferences.shortcut else { return }
+		shortcutsInteractor.register(combo: shortcut)
+	}
+	
 	@objc fileprivate func showPreferences(){
 		NSApp.activate(ignoringOtherApps: true)
 		preferencesWindow.makeKeyAndOrderFront(nil)
 	}
 	
 	@objc fileprivate func playbackStateChanged(_ notification: Notification) {
-		notificationsInteractor.handlePlaybackChange(from: notification)
+		notificationsInteractor.showNotification()
+	}
+	
+	@objc func shortcutKeyTapped() {
+		notificationsInteractor.showNotification()
 	}
 }
 
 // MARK: notification delegates
 extension AppDelegate: NSUserNotificationCenterDelegate {
 	func userNotificationCenter(_ center: NSUserNotificationCenter, didDeliver notification: NSUserNotification) {
-		
+		// nothing
 	}
 	
 	func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {

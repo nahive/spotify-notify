@@ -19,7 +19,27 @@
 		FBCCA5FB203ED78B008AD1BF /* NotificationsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCCA5FA203ED78B008AD1BF /* NotificationsInteractor.swift */; };
 		FBCCA5FE203EE057008AD1BF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCCA5FD203EE057008AD1BF /* Constants.swift */; };
 		FBCCA600203EE195008AD1BF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCCA5FF203EE195008AD1BF /* Extensions.swift */; };
+		FBF18DE320442A7D00FAD80A /* Magnet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF18DE120442A7D00FAD80A /* Magnet.framework */; };
+		FBF18DE420442A7D00FAD80A /* Magnet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FBF18DE120442A7D00FAD80A /* Magnet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FBF18DE520442A7D00FAD80A /* KeyHolder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF18DE220442A7D00FAD80A /* KeyHolder.framework */; };
+		FBF18DE620442A7D00FAD80A /* KeyHolder.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FBF18DE220442A7D00FAD80A /* KeyHolder.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FBF18DE920442BB000FAD80A /* ShortcutsInterector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF18DE820442BB000FAD80A /* ShortcutsInterector.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FBF18DE720442A7D00FAD80A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				FBF18DE620442A7D00FAD80A /* KeyHolder.framework in Embed Frameworks */,
+				FBF18DE420442A7D00FAD80A /* Magnet.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4C5764C31C982DC800364AFE /* SpotifyNotify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpotifyNotify.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -36,6 +56,9 @@
 		FBCCA5FA203ED78B008AD1BF /* NotificationsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsInteractor.swift; sourceTree = "<group>"; };
 		FBCCA5FD203EE057008AD1BF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		FBCCA5FF203EE195008AD1BF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		FBF18DE120442A7D00FAD80A /* Magnet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Magnet.framework; path = Carthage/Build/Mac/Magnet.framework; sourceTree = "<group>"; };
+		FBF18DE220442A7D00FAD80A /* KeyHolder.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KeyHolder.framework; path = Carthage/Build/Mac/KeyHolder.framework; sourceTree = "<group>"; };
+		FBF18DE820442BB000FAD80A /* ShortcutsInterector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsInterector.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +66,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBF18DE520442A7D00FAD80A /* KeyHolder.framework in Frameworks */,
+				FBF18DE320442A7D00FAD80A /* Magnet.framework in Frameworks */,
 				FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,6 +136,8 @@
 		FB400A8E203EFA3800F2D63C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FBF18DE220442A7D00FAD80A /* KeyHolder.framework */,
+				FBF18DE120442A7D00FAD80A /* Magnet.framework */,
 				FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */,
 			);
 			name = Frameworks;
@@ -120,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				FBCCA5FA203ED78B008AD1BF /* NotificationsInteractor.swift */,
+				FBF18DE820442BB000FAD80A /* ShortcutsInterector.swift */,
 			);
 			path = Interactors;
 			sourceTree = "<group>";
@@ -160,6 +188,7 @@
 				4C5764BF1C982DC800364AFE /* Sources */,
 				4C5764C01C982DC800364AFE /* Frameworks */,
 				4C5764C11C982DC800364AFE /* Resources */,
+				FBF18DE720442A7D00FAD80A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -229,6 +258,7 @@
 				FBCCA5FE203EE057008AD1BF /* Constants.swift in Sources */,
 				4C5764C71C982DC800364AFE /* AppDelegate.swift in Sources */,
 				FBCCA5FB203ED78B008AD1BF /* NotificationsInteractor.swift in Sources */,
+				FBF18DE920442BB000FAD80A /* ShortcutsInterector.swift in Sources */,
 				4C5764E31C982E1900364AFE /* Track.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -359,6 +389,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = SpotifyNotify/Other/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
@@ -375,6 +409,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = SpotifyNotify/Other/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;

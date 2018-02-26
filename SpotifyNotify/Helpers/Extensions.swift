@@ -18,6 +18,10 @@ extension NSButton {
 extension String {
 	var url: URL? { return URL(string: self) }
     var cfString: CFString { return self as CFString }
+	var withLeadingZeroes: String {
+		guard let int = Int(self) else { return self }
+		return String(format: "%02d", int)
+	}
 }
 
 extension URL {

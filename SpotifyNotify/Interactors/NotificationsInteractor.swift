@@ -16,7 +16,7 @@ struct NotificationsInteractor {
 	private var currentTrack: SpotifyTrack?
     private let spotify: SpotifyApplication? = SBApplication(bundleIdentifier: SpotifyConstants.bundleIdentifier)
     
-	mutating func handlePlaybackChange(from notification: Notification) {
+	mutating func showNotification() {
 		
 		// return if notifications are disabled
 		guard preferences.notificationsEnabled else { return }
@@ -25,14 +25,6 @@ struct NotificationsInteractor {
 		
 		// return if notifications are disabled when in focus
 		if isFrontmostSpotify && preferences.notificationsDisableOnFocus { return }
-		
-		// return if something is wrong with user info
-		guard
-		 	let userInfo = notification.userInfo,
-			let status = userInfo["Player State"] as? String,
-			status == "Playing" else {
-			return
-		}
 		
 		previousTrack = currentTrack
 		currentTrack  = spotify?.currentTrack
@@ -43,7 +35,8 @@ struct NotificationsInteractor {
 		}
         
 		let notification = NSUserNotification()
-        
+		
+		// decide whether to add progress
         if preferences.showSongProgress {
             let artist = currentTrack?.artist ?? "______"
             let album = currentTrack?.album ?? "______"
@@ -60,16 +53,18 @@ struct NotificationsInteractor {
         
 		notification.hasActionButton = true
 		notification.actionButtonTitle = "Skip"
-        
-//        notification.additionalActions = [.init(identifier: "previous", title: "Previous"),
-//                                            ]
 		
+		// decide whether to add art
 		if SystemPreferences.isContentImagePropertyAvailable && preferences.showAlbumArt {
 			if let art = currentTrack?.artworkUrl?.url?.image {
+				
+				// decide whether to add spotify icon
 				if preferences.showSpotifyIcon {
 					notification.contentImage = art
 				} else {
 					notification.identityImage = art
+					
+					// decide whether to round art
 					if preferences.roundAlbumArt {
 						notification.identityImageStyle = .rounded
 					} else {
@@ -79,6 +74,7 @@ struct NotificationsInteractor {
 			}
 		}
 		
+		// decide whether to add sound
 		if preferences.notificationsSound {
 			notification.soundName = NSUserNotificationDefaultSoundName
 		}
@@ -86,7 +82,7 @@ struct NotificationsInteractor {
         NSUserNotificationCenter.default.removeAllDeliveredNotifications()
 		NSUserNotificationCenter.default.deliver(notification)
 		
-		// remove after 5 seconds if not taken action
+		// remove after userset number of seconds if not taken action
 		DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(preferences.notificationsLength)) {
 			NSUserNotificationCenter.default.removeDeliveredNotification(notification)
 		}
@@ -100,21 +96,25 @@ struct NotificationsInteractor {
         guard
             let position = spotify?.playerPosition,
             let duration = track?.duration else {
-                return "0:00/0:00"
+                return "00:00/00:00"
         }
         
         let percentage = position / (Double(duration) / 1000.0)
         
         let progressDone = "▪︎"
         let progressNotDone = "⁃"
-        let progressMax = 15
+        let progressMax = 14
         let currentProgress = Int(Double(progressMax) * percentage)
         
         let progressString = String(repeating: progressDone, count: currentProgress) + String(repeating: progressNotDone, count: progressMax - currentProgress)
         
         let now = convert(seconds: Int(position))
         let length = convert(seconds: duration / 1000)
-        return "\(now.minutes):\(now.seconds)  \(progressString)  \(length.minutes):\(length.seconds)"
+		
+		let nowS = "\(now.minutes)".withLeadingZeroes + ":" + "\(now.seconds)".withLeadingZeroes
+		let lengthS = "\(length.minutes)".withLeadingZeroes + ":" + "\(length.seconds)".withLeadingZeroes
+		
+        return "\(nowS)  \(progressString)  \(lengthS)"
     }
     
     private func convert(seconds: Int) -> (minutes: Int, seconds: Int) {
