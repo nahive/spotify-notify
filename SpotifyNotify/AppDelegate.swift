@@ -97,7 +97,7 @@ extension AppDelegate {
 		}
 	}
 	
-	fileprivate func setupTargets(){
+	private func setupTargets(){
 		statusPrevious.action = #selector(previousSong)
 		statusPlay.action = #selector(playPause)
 		statusNext.action = #selector(nextSong)
@@ -105,7 +105,7 @@ extension AppDelegate {
 		statusQuit.action = #selector(NSApplication.terminate(_:))
 	}
     
-    fileprivate func setupFirstRun() {
+    private func setupFirstRun() {
         if !preferences.isNotFirstRun {
             preferences.isNotFirstRun = true
             preferences.notificationsEnabled = true
@@ -162,7 +162,7 @@ extension AppDelegate {
 		case .stopped?:
 			statusStatus.title = "Status: Stopped"
 		case .none:
-			statusStatus.title = "Spotify unavailable"
+			statusStatus.title = "Status: Unavailable"
 		}
 	}
 }
