@@ -8,6 +8,8 @@
 [![Build Status](https://travis-ci.org/nahive/spotify-notify.png?branch=master)](https://travis-ci.org/nahive/spotify-notify)
 ##### *Inspired by [Spotify Notifications](https://github.com/citruspi/Spotify-Notifications) written in Swift*
 
+## [Download latest release here](https://github.com/nahive/spotify-notify/releases)
+
 ## Features
 
 - [x] Notification sounds (toggle)
