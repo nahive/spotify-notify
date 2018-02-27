@@ -18,8 +18,12 @@
             <connections>
                 <outlet property="preferencesWindow" destination="QvC-M9-y7g" id="kSZ-HB-vaG"/>
                 <outlet property="statusMenu" destination="eYd-SQ-yva" id="Xym-t4-Hiu"/>
+                <outlet property="statusNext" destination="5fW-sO-rA3" id="gfD-3s-htf"/>
+                <outlet property="statusPlay" destination="mBB-ji-C0c" id="eYN-UM-Z9C"/>
                 <outlet property="statusPreferences" destination="f1Z-RK-tbG" id="gUf-EY-euG"/>
+                <outlet property="statusPrevious" destination="qPp-Jc-TdL" id="iGM-6C-T8x"/>
                 <outlet property="statusQuit" destination="MRV-r6-fUM" id="JNd-9a-c3L"/>
+                <outlet property="statusStatus" destination="2sd-2A-FEy" id="c2G-EJ-W0C"/>
             </connections>
         </customObject>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
@@ -288,11 +292,25 @@
         </window>
         <menu id="eYd-SQ-yva">
             <items>
+                <menuItem title="Status: Playing" enabled="NO" id="2sd-2A-FEy">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="uJg-fw-2Kd"/>
+                <menuItem title="Previous song" id="qPp-Jc-TdL">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem title="Play/Pause" id="mBB-ji-C0c">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem title="Next song" id="5fW-sO-rA3">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="VIe-5r-cU4"/>
                 <menuItem title="Preferences" keyEquivalent="," id="f1Z-RK-tbG"/>
                 <menuItem isSeparatorItem="YES" id="4WQ-eU-Ryx"/>
                 <menuItem title="Quit" keyEquivalent="q" id="MRV-r6-fUM"/>
             </items>
-            <point key="canvasLocation" x="450.5" y="797.5"/>
+            <point key="canvasLocation" x="255" y="807"/>
         </menu>
     </objects>
 </document>

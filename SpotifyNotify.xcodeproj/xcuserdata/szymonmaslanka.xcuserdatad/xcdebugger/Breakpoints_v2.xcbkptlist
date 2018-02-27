@@ -10,29 +10,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SpotifyNotify/AppDelegate.swift"
-            timestampString = "541345551.682444"
+            timestampString = "541416328.6242599"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
             landmarkName = "setupFirstRun()"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SpotifyNotify/AppDelegate.swift"
-            timestampString = "541345551.682567"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
-            landmarkName = "AppDelegate"
-            landmarkType = "21">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

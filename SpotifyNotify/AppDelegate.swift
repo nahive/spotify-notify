@@ -8,18 +8,24 @@
 
 import Cocoa
 import ServiceManagement
+import ScriptingBridge
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	@IBOutlet weak var preferencesWindow: NSWindow!
 	@IBOutlet weak var statusMenu: NSMenu!
+	@IBOutlet weak var statusStatus: NSMenuItem!
+	@IBOutlet weak var statusPrevious: NSMenuItem!
+	@IBOutlet weak var statusPlay: NSMenuItem!
+	@IBOutlet weak var statusNext: NSMenuItem!
 	@IBOutlet weak var statusPreferences: NSMenuItem!
 	@IBOutlet weak var statusQuit: NSMenuItem!
 	
 	fileprivate var preferences = UserPreferences()
 	fileprivate var notificationsInteractor = NotificationsInteractor()
 	fileprivate let shortcutsInteractor = ShortcutsInteractor()
+	fileprivate let spotify: SpotifyApplication? = SBApplication(bundleIdentifier: SpotifyConstants.bundleIdentifier)
 	
 	var statusBar: NSStatusItem!
 	
@@ -92,6 +98,9 @@ extension AppDelegate {
 	}
 	
 	fileprivate func setupTargets(){
+		statusPrevious.action = #selector(previousSong)
+		statusPlay.action = #selector(playPause)
+		statusNext.action = #selector(nextSong)
 		statusPreferences.action = #selector(showPreferences)
 		statusQuit.action = #selector(NSApplication.terminate(_:))
 	}
@@ -118,6 +127,18 @@ extension AppDelegate {
 		shortcutsInteractor.register(combo: shortcut)
 	}
 	
+	@objc fileprivate func previousSong(){
+		spotify?.previousTrack?()
+	}
+	
+	@objc fileprivate func playPause(){
+		spotify?.playpause?()
+	}
+	
+	@objc fileprivate func nextSong(){
+		spotify?.nextTrack?()
+	}
+	
 	@objc fileprivate func showPreferences(){
 		NSApp.activate(ignoringOtherApps: true)
 		preferencesWindow.makeKeyAndOrderFront(nil)
@@ -125,10 +146,24 @@ extension AppDelegate {
 	
 	@objc fileprivate func playbackStateChanged(_ notification: Notification) {
 		notificationsInteractor.showNotification()
+		updateStatus()
 	}
 	
 	@objc func shortcutKeyTapped() {
 		notificationsInteractor.showNotification()
+	}
+	
+	private func updateStatus() {
+		switch spotify?.playerState {
+		case .playing?:
+			statusStatus.title = "Status: Playing"
+		case .paused?:
+			statusStatus.title = "Status: Paused"
+		case .stopped?:
+			statusStatus.title = "Status: Stopped"
+		case .none:
+			statusStatus.title = "Spotify unavailable"
+		}
 	}
 }
 
