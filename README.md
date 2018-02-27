@@ -17,7 +17,11 @@
 - [x] Album artwork (toggle)
 - [x] Swap places of spotify icon with artwork (toggle)
 - [x] Toggle disabling of notifications when Spotify is focused (toggle)
-- [ ] Shortcuts for showing notification (customizable)
+- [x] Shortcuts for showing notification (customizable) ✨
+- [x] Show progress of a song in notification ✨
+- [x] Ability to skip song from notification ✨
+- [x] Options to control Spotify from menu bar ✨
+- [ ] Customizable options in notification
 
 [Changelog](https://github.com/nahive/spotify-notify/blob/master/CHANGELOG.md)
 
@@ -26,6 +30,7 @@
 ```
 $ git clone https://github.com/nahive/spotify-notify.git
 $ cd spotify-notify
+$ carthage update --platform macos --no-use-binaries
 $ open SpotifyNotify.xcodeproj
 ```
 ## Contributing
