@@ -19,6 +19,7 @@
 		FBCCA5FB203ED78B008AD1BF /* NotificationsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCCA5FA203ED78B008AD1BF /* NotificationsInteractor.swift */; };
 		FBCCA5FE203EE057008AD1BF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCCA5FD203EE057008AD1BF /* Constants.swift */; };
 		FBCCA600203EE195008AD1BF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCCA5FF203EE195008AD1BF /* Extensions.swift */; };
+		FBEF395320455FCC0039536B /* SpotifyInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEF395220455FCC0039536B /* SpotifyInteractor.swift */; };
 		FBF18DE320442A7D00FAD80A /* Magnet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF18DE120442A7D00FAD80A /* Magnet.framework */; };
 		FBF18DE420442A7D00FAD80A /* Magnet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FBF18DE120442A7D00FAD80A /* Magnet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FBF18DE520442A7D00FAD80A /* KeyHolder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF18DE220442A7D00FAD80A /* KeyHolder.framework */; };
@@ -56,6 +57,7 @@
 		FBCCA5FA203ED78B008AD1BF /* NotificationsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsInteractor.swift; sourceTree = "<group>"; };
 		FBCCA5FD203EE057008AD1BF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		FBCCA5FF203EE195008AD1BF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		FBEF395220455FCC0039536B /* SpotifyInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyInteractor.swift; sourceTree = "<group>"; };
 		FBF18DE120442A7D00FAD80A /* Magnet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Magnet.framework; path = Carthage/Build/Mac/Magnet.framework; sourceTree = "<group>"; };
 		FBF18DE220442A7D00FAD80A /* KeyHolder.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KeyHolder.framework; path = Carthage/Build/Mac/KeyHolder.framework; sourceTree = "<group>"; };
 		FBF18DE820442BB000FAD80A /* ShortcutsInterector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsInterector.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 			children = (
 				FBCCA5FA203ED78B008AD1BF /* NotificationsInteractor.swift */,
 				FBF18DE820442BB000FAD80A /* ShortcutsInterector.swift */,
+				FBEF395220455FCC0039536B /* SpotifyInteractor.swift */,
 			);
 			path = Interactors;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 				FBCCA5FE203EE057008AD1BF /* Constants.swift in Sources */,
 				4C5764C71C982DC800364AFE /* AppDelegate.swift in Sources */,
 				FBCCA5FB203ED78B008AD1BF /* NotificationsInteractor.swift in Sources */,
+				FBEF395320455FCC0039536B /* SpotifyInteractor.swift in Sources */,
 				FBF18DE920442BB000FAD80A /* ShortcutsInterector.swift in Sources */,
 				4C5764E31C982E1900364AFE /* Track.swift in Sources */,
 			);

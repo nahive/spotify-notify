@@ -63,5 +63,3 @@ extension SBApplication: SpotifyApplication {}
     @objc optional func setSpotifyUrl(_ spotifyUrl: String!) // The URL of the track.
 }
 extension SBObject: SpotifyTrack {}
-
-

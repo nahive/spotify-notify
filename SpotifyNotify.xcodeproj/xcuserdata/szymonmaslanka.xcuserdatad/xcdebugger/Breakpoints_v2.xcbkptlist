@@ -9,13 +9,29 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SpotifyNotify/AppDelegate.swift"
-            timestampString = "541416328.6242599"
+            filePath = "SpotifyNotify/Interactors/NotificationsInteractor.swift"
+            timestampString = "541417876.631192"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
-            landmarkName = "setupFirstRun()"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "showNotification()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SpotifyNotify/Interactors/NotificationsInteractor.swift"
+            timestampString = "541417876.631258"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
+            landmarkName = "showNotification()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

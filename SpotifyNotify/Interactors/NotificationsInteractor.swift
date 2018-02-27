@@ -8,29 +8,31 @@
 import Cocoa
 import ScriptingBridge
 
-struct NotificationsInteractor {
+final class NotificationsInteractor {
 	
 	private let preferences = UserPreferences()
+	private let spotifyInteractor = SpotifyInteractor()
 	
-	private var previousTrack: SpotifyTrack?
-	private var currentTrack: SpotifyTrack?
-    private let spotify: SpotifyApplication? = SBApplication(bundleIdentifier: SpotifyConstants.bundleIdentifier)
+	private var previousTrack: Track?
+	private var currentTrack: Track?
     
-	mutating func showNotification() {
+	func showNotification() {
 		
 		// return if notifications are disabled
 		guard preferences.notificationsEnabled else { return }
 		
-		let isFrontmostSpotify = NSWorkspace.shared.frontmostApplication?.bundleIdentifier == SpotifyConstants.bundleIdentifier
-		
 		// return if notifications are disabled when in focus
-		if isFrontmostSpotify && preferences.notificationsDisableOnFocus { return }
+		if spotifyInteractor.isFrontmost && preferences.notificationsDisableOnFocus { return }
 		
 		previousTrack = currentTrack
-		currentTrack  = spotify?.currentTrack
+		currentTrack  = spotifyInteractor.currentTrack
 	
 		// return if previous track is same as previous => play/pause and if it's disabled
-		guard previousTrack?.id?() != currentTrack?.id?() || preferences.notificationsPlayPause else {
+		guard currentTrack != previousTrack || preferences.notificationsPlayPause else {
+			return
+		}
+		
+		guard spotifyInteractor.playerState == .some(.playing) else {
 			return
 		}
         
@@ -56,7 +58,7 @@ struct NotificationsInteractor {
 		
 		// decide whether to add art
 		if SystemPreferences.isContentImagePropertyAvailable && preferences.showAlbumArt {
-			if let art = currentTrack?.artworkUrl?.url?.image {
+			if let art = currentTrack?.artworkURL?.image {
 				
 				// decide whether to add spotify icon
 				if preferences.showSpotifyIcon {
@@ -89,12 +91,12 @@ struct NotificationsInteractor {
 	}
 	
 	func handleAction() {
-        spotify?.nextTrack?()
+        spotifyInteractor.nextTrack()
 	}
     
-    private func progress(for track: SpotifyTrack?) -> String {
+    private func progress(for track: Track?) -> String {
         guard
-            let position = spotify?.playerPosition,
+            let position = spotifyInteractor.playerPosition,
             let duration = track?.duration else {
                 return "00:00/00:00"
         }

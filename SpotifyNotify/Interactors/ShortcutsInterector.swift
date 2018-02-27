@@ -10,7 +10,7 @@ import Cocoa
 import Magnet
 import KeyHolder
 
-struct ShortcutsInteractor {
+final class ShortcutsInteractor {
 	func register(combo: KeyCombo) {
 		let key = HotKey(identifier: "testKey", keyCombo: combo,
 						 target: NSApplication.shared.delegate,

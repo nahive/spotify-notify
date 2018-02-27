@@ -23,9 +23,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var statusQuit: NSMenuItem!
 	
 	fileprivate var preferences = UserPreferences()
-	fileprivate var notificationsInteractor = NotificationsInteractor()
+	fileprivate let notificationsInteractor = NotificationsInteractor()
 	fileprivate let shortcutsInteractor = ShortcutsInteractor()
-	fileprivate let spotify: SpotifyApplication? = SBApplication(bundleIdentifier: SpotifyConstants.bundleIdentifier)
+	fileprivate let spotifyInteractor = SpotifyInteractor()
 	
 	var statusBar: NSStatusItem!
 	
@@ -128,15 +128,15 @@ extension AppDelegate {
 	}
 	
 	@objc fileprivate func previousSong(){
-		spotify?.previousTrack?()
+		spotifyInteractor.previousTrack()
 	}
 	
 	@objc fileprivate func playPause(){
-		spotify?.playpause?()
+		spotifyInteractor.playPause()
 	}
 	
 	@objc fileprivate func nextSong(){
-		spotify?.nextTrack?()
+		spotifyInteractor.nextTrack()
 	}
 	
 	@objc fileprivate func showPreferences(){
@@ -154,7 +154,7 @@ extension AppDelegate {
 	}
 	
 	private func updateStatus() {
-		switch spotify?.playerState {
+		switch spotifyInteractor.playerState {
 		case .playing?:
 			statusStatus.title = "Status: Playing"
 		case .paused?:
