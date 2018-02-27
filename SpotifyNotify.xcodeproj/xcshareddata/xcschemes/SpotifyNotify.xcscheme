@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4C5764C21C982DC800364AFE"
-               BuildableName = "SpotifyNotify.app"
+               BuildableName = "Notify.app"
                BlueprintName = "SpotifyNotify"
                ReferencedContainer = "container:SpotifyNotify.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4C5764C21C982DC800364AFE"
-            BuildableName = "SpotifyNotify.app"
+            BuildableName = "Notify.app"
             BlueprintName = "SpotifyNotify"
             ReferencedContainer = "container:SpotifyNotify.xcodeproj">
          </BuildableReference>
@@ -66,7 +66,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4C5764C21C982DC800364AFE"
-            BuildableName = "SpotifyNotify.app"
+            BuildableName = "Notify.app"
             BlueprintName = "SpotifyNotify"
             ReferencedContainer = "container:SpotifyNotify.xcodeproj">
          </BuildableReference>
@@ -85,7 +85,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4C5764C21C982DC800364AFE"
-            BuildableName = "SpotifyNotify.app"
+            BuildableName = "Notify.app"
             BlueprintName = "SpotifyNotify"
             ReferencedContainer = "container:SpotifyNotify.xcodeproj">
          </BuildableReference>

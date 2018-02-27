@@ -10,6 +10,10 @@ import Cocoa
 import ServiceManagement
 import ScriptingBridge
 
+extension Notification.Name {
+	static let killLauncher = Notification.Name("kill.launcher.notification")
+}
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 	
@@ -90,10 +94,14 @@ extension AppDelegate {
 	}
 	
 	@objc private func setupStartup(){
-		if preferences.startOnLogin {
-			SMLoginItemSetEnabled("io.nahive.SpotifyNotify".cfString, true)
-		} else {
-            SMLoginItemSetEnabled("io.nahive.SpotifyNotify".cfString, false)
+		let isRunning = NSWorkspace.shared.runningApplications
+			.filter { $0.bundleIdentifier == AppConstants.launchIdentifier }.isEmpty
+		
+		SMLoginItemSetEnabled(AppConstants.launchIdentifier.cfString, preferences.startOnLogin)
+		
+		if isRunning {
+			DistributedNotificationCenter.default().post(name: .killLauncher,
+														 object: Bundle.main.bundleIdentifier)
 		}
 	}
 	

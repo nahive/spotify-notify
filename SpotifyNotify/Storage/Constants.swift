@@ -20,3 +20,8 @@ struct NahiveConstraints {
 	static let homepage = "https://nahive.github.io".url!
 	static let repo = "https://github.com/nahive/spotify-notify".url!
 }
+
+struct AppConstants {
+	static let bundleIdentifier = "io.nahive.SpotifyNotify"
+	static let launchIdentifier = "io.nahive.LauncherApplication"
+}
