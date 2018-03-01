@@ -479,6 +479,7 @@
 				);
 				INFOPLIST_FILE = SpotifyNotify/Other/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = Notify;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -500,6 +501,7 @@
 				);
 				INFOPLIST_FILE = SpotifyNotify/Other/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = Notify;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
