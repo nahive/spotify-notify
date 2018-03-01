@@ -94,8 +94,8 @@ extension AppDelegate {
 	}
 	
 	@objc private func setupStartup(){
-		let isRunning = NSWorkspace.shared.runningApplications
-			.filter { $0.bundleIdentifier == AppConstants.launchIdentifier }.isEmpty
+        let runningApps = NSWorkspace.shared.runningApplications
+        let isRunning = !runningApps.filter { $0.bundleIdentifier == AppConstants.launchIdentifier }.isEmpty
 		
 		SMLoginItemSetEnabled(AppConstants.launchIdentifier.cfString, preferences.startOnLogin)
 		

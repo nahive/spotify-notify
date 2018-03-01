@@ -23,5 +23,5 @@ struct NahiveConstraints {
 
 struct AppConstants {
 	static let bundleIdentifier = "io.nahive.SpotifyNotify"
-	static let launchIdentifier = "io.nahive.LauncherApplication"
+	static let launchIdentifier = "io.nahive.SpotifyNotifyAgent"
 }

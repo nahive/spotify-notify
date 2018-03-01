@@ -16,8 +16,9 @@ extension Notification.Name {
 class AppDelegate: NSObject, NSApplicationDelegate {
 
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
-		let isRunning = !NSWorkspace.shared.runningApplications
-			.filter { $0.bundleIdentifier == AppConstants.bundleIdentifier }.isEmpty
+        
+        let runningApps = NSWorkspace.shared.runningApplications
+        let isRunning = !runningApps.filter { $0.bundleIdentifier == AppConstants.bundleIdentifier }.isEmpty
 		
 		guard !isRunning else {
 			terminate()
@@ -51,6 +52,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 private struct AppConstants {
 	static let bundleIdentifier = "io.nahive.SpotifyNotify"
-	static let launchIdentifier = "io.nahive.LauncherApplication"
+	static let launchIdentifier = "io.nahive.SpotifyNotifyAgent"
 }
 
