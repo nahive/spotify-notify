@@ -76,7 +76,11 @@
 		FBEF395A204565ED0039536B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FBEF395E204565EE0039536B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FBEF3963204565EE0039536B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		FBEF3964204565EE0039536B /* NotifyAgent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotifyAgent.entitlements; sourceTree = "<group>"; };
+=======
+		FBEF3964204565EE0039536B /* NotifyEntitlements.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotifyEntitlements.entitlements; sourceTree = "<group>"; };
+>>>>>>> 52a2d0f5e744182aa3a827762bf241481c07f20c
 		FBEF3968204566240039536B /* Notify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Notify.entitlements; sourceTree = "<group>"; };
 		FBEF396B2045669F0039536B /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		FBF18DE120442A7D00FAD80A /* Magnet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Magnet.framework; path = Carthage/Build/Mac/Magnet.framework; sourceTree = "<group>"; };
@@ -220,7 +224,11 @@
 				FBEF395A204565ED0039536B /* AppDelegate.swift */,
 				FBEF395E204565EE0039536B /* Assets.xcassets */,
 				FBEF3963204565EE0039536B /* Info.plist */,
+<<<<<<< HEAD
 				FBEF3964204565EE0039536B /* NotifyAgent.entitlements */,
+=======
+				FBEF3964204565EE0039536B /* NotifyEntitlements.entitlements */,
+>>>>>>> 52a2d0f5e744182aa3a827762bf241481c07f20c
 			);
 			path = SpotifyNotifyAgent;
 			sourceTree = "<group>";
@@ -531,7 +539,11 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+<<<<<<< HEAD
 				CODE_SIGN_ENTITLEMENTS = SpotifyNotifyAgent/NotifyAgent.entitlements;
+=======
+				CODE_SIGN_ENTITLEMENTS = SpotifyNotifyAgent/NotifyEntitlements.entitlements;
+>>>>>>> 52a2d0f5e744182aa3a827762bf241481c07f20c
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -558,7 +570,11 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+<<<<<<< HEAD
 				CODE_SIGN_ENTITLEMENTS = SpotifyNotifyAgent/NotifyAgent.entitlements;
+=======
+				CODE_SIGN_ENTITLEMENTS = SpotifyNotifyAgent/NotifyEntitlements.entitlements;
+>>>>>>> 52a2d0f5e744182aa3a827762bf241481c07f20c
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
