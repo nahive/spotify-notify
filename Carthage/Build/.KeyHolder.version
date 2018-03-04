@@ -1,9 +1,18 @@
 {
-  "commitish" : "v2.1.0",
   "Mac" : [
     {
       "name" : "KeyHolder",
-      "hash" : "8aa044f7dcb4240dd5e5dfe8d9817696c338423cd72870812bb6ca7ee30b8b72"
+      "hash" : "628f807ec4364ec842f5510be067125c71b070cf2be8107969a5ee9fd92ad070"
     }
+  ],
+  "watchOS" : [
+
+  ],
+  "tvOS" : [
+
+  ],
+  "commitish" : "v2.1.0",
+  "iOS" : [
+
   ]
 }

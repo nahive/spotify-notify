@@ -16,8 +16,8 @@ final class NotificationsInteractor {
 	private var previousTrack: Track?
 	private var currentTrack: Track?
     
-	func showNotification() {
-		
+    func showNotification() {
+        
 		// return if notifications are disabled
 		guard preferences.notificationsEnabled else { return }
 		

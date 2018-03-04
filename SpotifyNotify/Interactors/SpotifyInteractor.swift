@@ -6,10 +6,10 @@
 //  Copyright © 2018 Szymon Maślanka. All rights reserved.
 //
 
-import Foundation
+import AppKit
 import ScriptingBridge
 
-final class SpotifyInteractor {
+final class SpotifyInteractor {    
 	private let spotify: SpotifyApplication? = SBApplication(bundleIdentifier: SpotifyConstants.bundleIdentifier)
 	
 	var isFrontmost: Bool { return spotify?.frontmost ?? false }

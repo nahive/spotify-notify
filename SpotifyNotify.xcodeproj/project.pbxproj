@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C4AD3B02048158000A62803 /* NotifyAgent.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBEF3958204565ED0039536B /* NotifyAgent.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4C2FABAA204C112600354C1B /* LaunchAtLogin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2FABA9204C112600354C1B /* LaunchAtLogin.framework */; };
+		4C2FABAB204C112600354C1B /* LaunchAtLogin.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2FABA9204C112600354C1B /* LaunchAtLogin.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C5764C71C982DC800364AFE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5764C61C982DC800364AFE /* AppDelegate.swift */; };
 		4C5764C91C982DC900364AFE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764C81C982DC900364AFE /* Assets.xcassets */; };
 		4C5764CC1C982DC900364AFE /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764CA1C982DC900364AFE /* MainMenu.xib */; };
@@ -21,9 +22,6 @@
 		FBCCA5FE203EE057008AD1BF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCCA5FD203EE057008AD1BF /* Constants.swift */; };
 		FBCCA600203EE195008AD1BF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCCA5FF203EE195008AD1BF /* Extensions.swift */; };
 		FBEF395320455FCC0039536B /* SpotifyInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEF395220455FCC0039536B /* SpotifyInteractor.swift */; };
-		FBEF395B204565ED0039536B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEF395A204565ED0039536B /* AppDelegate.swift */; };
-		FBEF395F204565EE0039536B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FBEF395E204565EE0039536B /* Assets.xcassets */; };
-		FBEF396C2045669F0039536B /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBEF396B2045669F0039536B /* ServiceManagement.framework */; };
 		FBF18DE320442A7D00FAD80A /* Magnet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF18DE120442A7D00FAD80A /* Magnet.framework */; };
 		FBF18DE420442A7D00FAD80A /* Magnet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FBF18DE120442A7D00FAD80A /* Magnet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FBF18DE520442A7D00FAD80A /* KeyHolder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF18DE220442A7D00FAD80A /* KeyHolder.framework */; };
@@ -32,16 +30,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		FBEF39692045665B0039536B /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = Contents/Library/LoginItems;
-			dstSubfolderSpec = 1;
-			files = (
-				4C4AD3B02048158000A62803 /* NotifyAgent.app in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		FBF18DE720442A7D00FAD80A /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -50,6 +38,7 @@
 			files = (
 				FBF18DE620442A7D00FAD80A /* KeyHolder.framework in Embed Frameworks */,
 				FBF18DE420442A7D00FAD80A /* Magnet.framework in Embed Frameworks */,
+				4C2FABAB204C112600354C1B /* LaunchAtLogin.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -57,6 +46,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C2FABA9204C112600354C1B /* LaunchAtLogin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LaunchAtLogin.framework; path = Carthage/Build/Mac/LaunchAtLogin.framework; sourceTree = "<group>"; };
 		4C5764C31C982DC800364AFE /* Notify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5764C61C982DC800364AFE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4C5764C81C982DC900364AFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -72,17 +62,6 @@
 		FBCCA5FD203EE057008AD1BF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		FBCCA5FF203EE195008AD1BF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FBEF395220455FCC0039536B /* SpotifyInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyInteractor.swift; sourceTree = "<group>"; };
-		FBEF3958204565ED0039536B /* NotifyAgent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotifyAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FBEF395A204565ED0039536B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		FBEF395E204565EE0039536B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		FBEF3963204565EE0039536B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-<<<<<<< HEAD
-		FBEF3964204565EE0039536B /* NotifyAgent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotifyAgent.entitlements; sourceTree = "<group>"; };
-=======
-		FBEF3964204565EE0039536B /* NotifyEntitlements.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotifyEntitlements.entitlements; sourceTree = "<group>"; };
->>>>>>> 52a2d0f5e744182aa3a827762bf241481c07f20c
-		FBEF3968204566240039536B /* Notify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Notify.entitlements; sourceTree = "<group>"; };
-		FBEF396B2045669F0039536B /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		FBF18DE120442A7D00FAD80A /* Magnet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Magnet.framework; path = Carthage/Build/Mac/Magnet.framework; sourceTree = "<group>"; };
 		FBF18DE220442A7D00FAD80A /* KeyHolder.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KeyHolder.framework; path = Carthage/Build/Mac/KeyHolder.framework; sourceTree = "<group>"; };
 		FBF18DE820442BB000FAD80A /* ShortcutsInterector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsInterector.swift; sourceTree = "<group>"; };
@@ -93,17 +72,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FBEF396C2045669F0039536B /* ServiceManagement.framework in Frameworks */,
+				4C2FABAA204C112600354C1B /* LaunchAtLogin.framework in Frameworks */,
 				FBF18DE520442A7D00FAD80A /* KeyHolder.framework in Frameworks */,
 				FBF18DE320442A7D00FAD80A /* Magnet.framework in Frameworks */,
 				FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FBEF3955204565ED0039536B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,7 +86,6 @@
 			isa = PBXGroup;
 			children = (
 				4C5764C51C982DC800364AFE /* SpotifyNotify */,
-				FBEF3959204565ED0039536B /* SpotifyNotifyAgent */,
 				FB400A8E203EFA3800F2D63C /* Frameworks */,
 				4C5764C41C982DC800364AFE /* Products */,
 			);
@@ -124,7 +95,6 @@
 			isa = PBXGroup;
 			children = (
 				4C5764C31C982DC800364AFE /* Notify.app */,
-				FBEF3958204565ED0039536B /* NotifyAgent.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -132,7 +102,6 @@
 		4C5764C51C982DC800364AFE /* SpotifyNotify */ = {
 			isa = PBXGroup;
 			children = (
-				FBEF3968204566240039536B /* Notify.entitlements */,
 				4C5764C61C982DC800364AFE /* AppDelegate.swift */,
 				FB0A9A4F203ECAB500721E3A /* Models */,
 				FB6B9D0D203EC2710062702B /* Interactors */,
@@ -148,6 +117,7 @@
 		4C5764E41C982E8900364AFE /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				FBCCA5FD203EE057008AD1BF /* Constants.swift */,
 				4C858884203F218800ED1692 /* Spotify.swift */,
 				FBCCA5FF203EE195008AD1BF /* Extensions.swift */,
 			);
@@ -174,7 +144,7 @@
 		FB400A8E203EFA3800F2D63C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FBEF396B2045669F0039536B /* ServiceManagement.framework */,
+				4C2FABA9204C112600354C1B /* LaunchAtLogin.framework */,
 				FBF18DE220442A7D00FAD80A /* KeyHolder.framework */,
 				FBF18DE120442A7D00FAD80A /* Magnet.framework */,
 				FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */,
@@ -211,26 +181,10 @@
 		FBCCA5FC203ED78F008AD1BF /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				FBCCA5FD203EE057008AD1BF /* Constants.swift */,
 				FB6B9D0B203EC24F0062702B /* SystemPreferences.swift */,
 				FB6B9D09203EC22D0062702B /* UserPreferences.swift */,
 			);
 			path = Storage;
-			sourceTree = "<group>";
-		};
-		FBEF3959204565ED0039536B /* SpotifyNotifyAgent */ = {
-			isa = PBXGroup;
-			children = (
-				FBEF395A204565ED0039536B /* AppDelegate.swift */,
-				FBEF395E204565EE0039536B /* Assets.xcassets */,
-				FBEF3963204565EE0039536B /* Info.plist */,
-<<<<<<< HEAD
-				FBEF3964204565EE0039536B /* NotifyAgent.entitlements */,
-=======
-				FBEF3964204565EE0039536B /* NotifyEntitlements.entitlements */,
->>>>>>> 52a2d0f5e744182aa3a827762bf241481c07f20c
-			);
-			path = SpotifyNotifyAgent;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -243,8 +197,8 @@
 				4C5764BF1C982DC800364AFE /* Sources */,
 				4C5764C01C982DC800364AFE /* Frameworks */,
 				4C5764C11C982DC800364AFE /* Resources */,
-				FBEF39692045665B0039536B /* CopyFiles */,
 				FBF18DE720442A7D00FAD80A /* Embed Frameworks */,
+				4C2FABAC204C113300354C1B /* Launch At Login */,
 			);
 			buildRules = (
 			);
@@ -253,23 +207,6 @@
 			name = SpotifyNotify;
 			productName = NotifySpotify;
 			productReference = 4C5764C31C982DC800364AFE /* Notify.app */;
-			productType = "com.apple.product-type.application";
-		};
-		FBEF3957204565ED0039536B /* SpotifyNotifyAgent */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FBEF3965204565EE0039536B /* Build configuration list for PBXNativeTarget "SpotifyNotifyAgent" */;
-			buildPhases = (
-				FBEF3954204565ED0039536B /* Sources */,
-				FBEF3955204565ED0039536B /* Frameworks */,
-				FBEF3956204565ED0039536B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = SpotifyNotifyAgent;
-			productName = LauncherApplication;
-			productReference = FBEF3958204565ED0039536B /* NotifyAgent.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -286,11 +223,12 @@
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = LK98J2HBA6;
 						LastSwiftMigration = 0930;
-						ProvisioningStyle = Automatic;
-					};
-					FBEF3957204565ED0039536B = {
-						DevelopmentTeam = LK98J2HBA6;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -308,7 +246,6 @@
 			projectRoot = "";
 			targets = (
 				4C5764C21C982DC800364AFE /* SpotifyNotify */,
-				FBEF3957204565ED0039536B /* SpotifyNotifyAgent */,
 			);
 		};
 /* End PBXProject section */
@@ -323,15 +260,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FBEF3956204565ED0039536B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4C2FABAC204C113300354C1B /* Launch At Login */ = {
+			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FBEF395F204565EE0039536B /* Assets.xcassets in Resources */,
+			);
+			inputPaths = (
+			);
+			name = "Launch At Login";
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Carthage/Build/Mac/LaunchAtLogin.framework/Resources/copy-helper.sh";
 		};
-/* End PBXResourcesBuildPhase section */
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4C5764BF1C982DC800364AFE /* Sources */ = {
@@ -349,14 +295,6 @@
 				FBEF395320455FCC0039536B /* SpotifyInteractor.swift in Sources */,
 				FBF18DE920442BB000FAD80A /* ShortcutsInterector.swift in Sources */,
 				4C5764E31C982E1900364AFE /* Track.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FBEF3954204565ED0039536B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FBEF395B204565ED0039536B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -485,11 +423,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = SpotifyNotify/Notify.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = LK98J2HBA6;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
@@ -511,10 +448,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = LK98J2HBA6;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
@@ -526,67 +463,6 @@
 				PRODUCT_NAME = Notify;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
-			};
-			name = Release;
-		};
-		FBEF3966204565EE0039536B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-<<<<<<< HEAD
-				CODE_SIGN_ENTITLEMENTS = SpotifyNotifyAgent/NotifyAgent.entitlements;
-=======
-				CODE_SIGN_ENTITLEMENTS = SpotifyNotifyAgent/NotifyEntitlements.entitlements;
->>>>>>> 52a2d0f5e744182aa3a827762bf241481c07f20c
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = LK98J2HBA6;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "$(SRCROOT)/SpotifyNotifyAgent/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotifyAgent;
-				PRODUCT_NAME = NotifyAgent;
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.0;
-			};
-			name = Debug;
-		};
-		FBEF3967204565EE0039536B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-<<<<<<< HEAD
-				CODE_SIGN_ENTITLEMENTS = SpotifyNotifyAgent/NotifyAgent.entitlements;
-=======
-				CODE_SIGN_ENTITLEMENTS = SpotifyNotifyAgent/NotifyEntitlements.entitlements;
->>>>>>> 52a2d0f5e744182aa3a827762bf241481c07f20c
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = LK98J2HBA6;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "$(SRCROOT)/SpotifyNotifyAgent/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotifyAgent;
-				PRODUCT_NAME = NotifyAgent;
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
@@ -608,15 +484,6 @@
 			buildConfigurations = (
 				4C5764DC1C982DC900364AFE /* Debug */,
 				4C5764DD1C982DC900364AFE /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FBEF3965204565EE0039536B /* Build configuration list for PBXNativeTarget "SpotifyNotifyAgent" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FBEF3966204565EE0039536B /* Debug */,
-				FBEF3967204565EE0039536B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -1,2 +1,3 @@
 github "Clipy/KeyHolder"
 github "Clipy/Magnet"
+github "sindresorhus/LaunchAtLogin"

@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import ServiceManagement
+import LaunchAtLogin
 import ScriptingBridge
 
 extension Notification.Name {
@@ -94,15 +94,7 @@ extension AppDelegate {
 	}
 	
 	@objc private func setupStartup(){
-        let runningApps = NSWorkspace.shared.runningApplications
-        let isRunning = !runningApps.filter { $0.bundleIdentifier == AppConstants.launchIdentifier }.isEmpty
-		
-		SMLoginItemSetEnabled(AppConstants.launchIdentifier.cfString, preferences.startOnLogin)
-		
-		if isRunning {
-			DistributedNotificationCenter.default().post(name: .killLauncher,
-														 object: Bundle.main.bundleIdentifier)
-		}
+        LaunchAtLogin.isEnabled = preferences.startOnLogin
 	}
 	
 	private func setupTargets(){
@@ -153,7 +145,10 @@ extension AppDelegate {
 	}
 	
 	@objc fileprivate func playbackStateChanged(_ notification: Notification) {
-		notificationsInteractor.showNotification()
+        // guard against reopening spotify on closing
+        guard notification.userInfo?["Player State"] as? String != "Stopped" else { return }
+        
+        notificationsInteractor.showNotification()
 		updateStatus()
 	}
 	
