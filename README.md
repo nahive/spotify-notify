@@ -24,8 +24,7 @@
 - [x] Ability to skip song from notification ✨
 - [x] Options to control Spotify from menu bar ✨
 - [ ] Customizable options in notification
-
-[Changelog](https://github.com/nahive/spotify-notify/blob/master/CHANGELOG.md)
+- [ ] Add support for iTunes
 
 ## Building
 
