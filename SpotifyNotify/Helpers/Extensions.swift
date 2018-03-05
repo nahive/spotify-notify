@@ -42,6 +42,12 @@ extension URL {
 	}
 }
 
+extension Data {
+	var image: NSImage? {
+		return NSImage(data: self)
+	}
+}
+
 // private apple apis
 extension NSUserNotification {
     

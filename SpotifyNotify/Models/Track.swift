@@ -26,6 +26,31 @@ struct Track {
 	let artist: String?
 	let artworkURL: URL?
 	let duration: Int?
+	
+	var artworkData: Data? {
+		guard let id = id else { return nil }
+		let spotifyLocation = SpotifyConstants.albumArtURL + id
+		
+		guard
+			let spotifyURL = URL(string: spotifyLocation),
+			let spotifyData = try? Data(contentsOf: spotifyURL) else {
+				return nil
+		}
+		
+		guard
+			let thumbnailObject = try! JSONSerialization.jsonObject(with: spotifyData, options: .allowFragments) as? [String:AnyObject],
+			let thumbnailLocation = thumbnailObject["thumbnail_url"] as? String else {
+				return nil
+		}
+		
+		guard
+			let thumbnailURL = URL(string: thumbnailLocation),
+			let thumbnailData = try? Data(contentsOf: thumbnailURL) else {
+				return nil
+		}
+		
+		return thumbnailData
+	}
 }
 
 extension Track: Equatable {
