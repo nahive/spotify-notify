@@ -27,7 +27,9 @@ struct Track {
 	let artworkURL: URL?
 	let duration: Int?
 	
-	var artworkData: Data? {
+	// backup spotify method to get artwork
+	// deprecated for now
+	private var artworkData: Data? {
 		guard let id = id else { return nil }
 		let spotifyLocation = SpotifyConstants.albumArtURL + id
 		
