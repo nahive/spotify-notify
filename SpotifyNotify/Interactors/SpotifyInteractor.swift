@@ -12,7 +12,7 @@ import ScriptingBridge
 final class SpotifyInteractor {    
 	private let spotify: SpotifyApplication? = SBApplication(bundleIdentifier: SpotifyConstants.bundleIdentifier)
 	
-	var isFrontmost: Bool { return spotify?.frontmost ?? false }
+	var isFrontmost: Bool { return NSWorkspace.shared.frontmostApplication?.bundleIdentifier == SpotifyConstants.bundleIdentifier }
 	
 	var currentTrack: Track? { return spotify?.currentTrack?.track }
 	var soundVolume: Int? { return spotify?.soundVolume }
