@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8f745e58-21e0-4cff-a36f-974e5d8f4483" name="Default" comment="fixes #2 - changed usage of">
-      <change beforePath="$PROJECT_DIR$/SpotifyNotify.xcodeproj/xcuserdata/nahive.xcuserdatad/xcschemes/xcschememanagement.plist" beforeDir="false" afterPath="$PROJECT_DIR$/SpotifyNotify.xcodeproj/xcuserdata/nahive.xcuserdatad/xcschemes/xcschememanagement.plist" afterDir="false" />
-    </list>
+    <list default="true" id="8f745e58-21e0-4cff-a36f-974e5d8f4483" name="Default" comment="fixes #2 - changed usage of" />
     <ignored path="$USER_HOME$/Library/Developer/Xcode/DerivedData/SpotifyNotify-arsfutmgrojdztfomkxbzghxshrj/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -57,8 +55,8 @@
       <file leaf-file-name="SpotifyInteractor.swift" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/SpotifyNotify/Interactors/SpotifyInteractor.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="11" column="35" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
+            <state relative-caret-position="272">
+              <caret line="18" column="64" selection-start-line="18" selection-start-column="64" selection-end-line="18" selection-end-column="64" />
             </state>
           </provider>
         </entry>
@@ -176,9 +174,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="298" y="45" width="1773" height="1141" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17865297" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17865297" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32901555" />
@@ -400,8 +399,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/SpotifyNotify/Interactors/SpotifyInteractor.swift">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="11" column="35" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
+        <state relative-caret-position="272">
+          <caret line="18" column="64" selection-start-line="18" selection-start-column="64" selection-end-line="18" selection-end-column="64" />
         </state>
       </provider>
     </entry>
