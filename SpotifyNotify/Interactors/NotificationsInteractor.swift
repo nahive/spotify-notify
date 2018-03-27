@@ -58,20 +58,26 @@ final class NotificationsInteractor {
 		
 		// decide whether to add art
 		if SystemPreferences.isContentImagePropertyAvailable && preferences.showAlbumArt {
-			if let art = currentTrack?.artworkURL?.image {
+			currentTrack?.artworkURL?.asyncImage { art in
 				
 				// decide whether to add spotify icon
-				if preferences.showSpotifyIcon {
+				if self.preferences.showSpotifyIcon {
 					notification.contentImage = art
 				} else {
 					notification.identityImage = art
 					
 					// decide whether to round art
-					if preferences.roundAlbumArt {
+					if self.preferences.roundAlbumArt {
 						notification.identityImageStyle = .rounded
 					} else {
 						notification.identityImageStyle = .normal
 					}
+				}
+				
+				// remove previous notification and replace it with one with image
+				DispatchQueue.main.async {
+					NSUserNotificationCenter.default.removeAllDeliveredNotifications()
+					NSUserNotificationCenter.default.deliver(notification)
 				}
 			}
 		}

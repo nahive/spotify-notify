@@ -26,8 +26,26 @@ extension String {
 
 extension URL {
     var image: NSImage? {
-        return NSImage(contentsOf: self)
+		guard let data = try? Data(contentsOf: self) else { return nil }
+		return NSImage(data: data)
     }
+	
+	func asyncImage(result: @escaping (NSImage?) -> Void) {
+		URLSession.shared.dataTask(with: self) { (data, res, err) in
+			guard let data = data, let image = NSImage(data: data) else {
+				result(nil)
+				return
+			}
+			result(image)
+		}.resume()
+		
+	}
+}
+
+extension Data {
+	var image: NSImage? {
+		return NSImage(data: self)
+	}
 }
 
 // private apple apis
