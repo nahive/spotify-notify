@@ -7,7 +7,7 @@
 		<key>LauncherApplication.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 		<key>SpotifyNotify.xcscheme_^#shared#^_</key>
 		<dict>
@@ -20,12 +20,12 @@
 		<key>4C5764C21C982DC800364AFE</key>
 		<dict>
 			<key>primary</key>
-			<true/>
+			<true />
 		</dict>
 		<key>4C5764D11C982DC900364AFE</key>
 		<dict>
 			<key>primary</key>
-			<true/>
+			<true />
 		</dict>
 	</dict>
 </dict>
