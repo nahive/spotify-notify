@@ -206,7 +206,7 @@ final class PreferencesView: NSVisualEffectView {
         } else {
             preferences.menuIcon = .none
         }
-        
+
         DistributedNotificationCenter.default().post(name: .userPreferencesDidChangeIcon, object: nil)
     }
     

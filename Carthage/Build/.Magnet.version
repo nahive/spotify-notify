@@ -1,18 +1,9 @@
 {
+  "commitish" : "v2.1.0",
   "Mac" : [
     {
       "name" : "Magnet",
-      "hash" : "2281a6771483a6df3cda55efe610e3cd634035388020e4fcb696e9b4763e0559"
+      "hash" : "d759ae97463f9661e84b1c2e203c8488ecb7677d718fd79fefa22e5bd12d851e"
     }
-  ],
-  "watchOS" : [
-
-  ],
-  "tvOS" : [
-
-  ],
-  "commitish" : "v2.1.0",
-  "iOS" : [
-
   ]
 }

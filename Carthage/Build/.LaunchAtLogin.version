@@ -1,18 +1,9 @@
 {
+  "commitish" : "v2.1.0",
   "Mac" : [
     {
       "name" : "LaunchAtLogin",
-      "hash" : "b935814c40fa1511d19c9e017846bd0afd407abb6fc2fa4690d04921ea2a2d1a"
+      "hash" : "69b866794108558659fa8008111ddb8af278ff468bc49405c95b099e080d50ca"
     }
-  ],
-  "watchOS" : [
-
-  ],
-  "tvOS" : [
-
-  ],
-  "commitish" : "v2.0.0",
-  "iOS" : [
-
   ]
 }

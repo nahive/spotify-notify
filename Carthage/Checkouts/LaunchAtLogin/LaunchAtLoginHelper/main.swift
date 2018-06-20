@@ -7,7 +7,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 		let mainBundleId = bundleId.replacingOccurrences(of: "-LaunchAtLoginHelper", with: "")
 
 		// Ensure the app is not already running
-		if !NSRunningApplication.runningApplications(withBundleIdentifier: mainBundleId).isEmpty {
+		guard NSRunningApplication.runningApplications(withBundleIdentifier: mainBundleId).isEmpty else {
 			NSApp.terminate(nil)
 			return
 		}
@@ -19,7 +19,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 }
 
-let app = NSApplication.shared
-let delegate = AppDelegate()
+private let app = NSApplication.shared
+private let delegate = AppDelegate()
 app.delegate = delegate
 app.run()
