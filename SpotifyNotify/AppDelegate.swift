@@ -155,10 +155,9 @@ extension AppDelegate {
     @available(OSX 10.14, *)
     private func setNotificationCategories() {
         let skip = UNNotificationAction(identifier: NotificationIdentifier.skip, title: "Skip")
-        let close = UNNotificationAction(identifier: NotificationIdentifier.close, title: "Close")
 
         let category = UNNotificationCategory(identifier: NotificationIdentifier.category,
-                                              actions: [skip, close],
+                                              actions: [skip],
                                               intentIdentifiers: [],
                                               options: [])
 
@@ -247,8 +246,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         switch response.actionIdentifier {
         case NotificationIdentifier.skip:
             notificationsInteractor.handleAction()
-        case NotificationIdentifier.close:
-            break
         default:
             NSWorkspace.shared.launchApplication(SpotifyConstants.applicationName)
         }

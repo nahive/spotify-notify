@@ -26,7 +26,6 @@ struct AppConstants {
 }
 
 struct NotificationIdentifier {
-    static let close = "notification.close"
     static let skip = "notification.skip"
     static let category = "notification.category"
 }
