@@ -40,6 +40,10 @@ If you click Don't Allow by accident, you can reset the permissions dialogue usi
 $ tccutil reset AppleEvents
 ```
 
+Additionally, it is now required to sign the app using a paid developer account. To do this, simply set the signing team and certificate in the General settings of the SpotifyNotify target:
+
+<p align="center"><img src="docs/signing.png" alt="Signing"/></p>
+
 ## Building
 
 ```
