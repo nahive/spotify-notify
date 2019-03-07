@@ -43,5 +43,7 @@
 	<string>NSApplication</string>
 	<key>NSUserNotificationAlertStyle</key>
 	<string>alert</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Access is required in order to retrieve current track information, and to allow control of Spotify from the menu bar.</string>
 </dict>
 </plist>
