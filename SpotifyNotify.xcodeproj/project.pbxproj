@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0EE94FA32231128A00B0BEA1 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE94FA22231128A00B0BEA1 /* NotificationViewModel.swift */; };
+		0EF142532231503600E8301D /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EF142522231503600E8301D /* UserNotifications.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4C2FABAA204C112600354C1B /* LaunchAtLogin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2FABA9204C112600354C1B /* LaunchAtLogin.framework */; };
 		4C2FABAB204C112600354C1B /* LaunchAtLogin.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2FABA9204C112600354C1B /* LaunchAtLogin.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C5764C71C982DC800364AFE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5764C61C982DC800364AFE /* AppDelegate.swift */; };
@@ -48,6 +49,7 @@
 
 /* Begin PBXFileReference section */
 		0EE94FA22231128A00B0BEA1 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
+		0EF142522231503600E8301D /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		4C2FABA9204C112600354C1B /* LaunchAtLogin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LaunchAtLogin.framework; path = Carthage/Build/Mac/LaunchAtLogin.framework; sourceTree = "<group>"; };
 		4C5764C31C982DC800364AFE /* Notify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5764C61C982DC800364AFE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0EF142532231503600E8301D /* UserNotifications.framework in Frameworks */,
 				4C2FABAA204C112600354C1B /* LaunchAtLogin.framework in Frameworks */,
 				FBF18DE520442A7D00FAD80A /* KeyHolder.framework in Frameworks */,
 				FBF18DE320442A7D00FAD80A /* Magnet.framework in Frameworks */,
@@ -147,6 +150,7 @@
 		FB400A8E203EFA3800F2D63C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0EF142522231503600E8301D /* UserNotifications.framework */,
 				4C2FABA9204C112600354C1B /* LaunchAtLogin.framework */,
 				FBF18DE220442A7D00FAD80A /* KeyHolder.framework */,
 				FBF18DE120442A7D00FAD80A /* Magnet.framework */,
