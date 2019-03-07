@@ -91,10 +91,10 @@ extension NSImage {
 
         do {
             try fileManager.createDirectory(at: bundleURL, withIntermediateDirectories: true)
-            let fileURL = bundleURL.appendingPathComponent(name + ".jpg")
+            let fileURL = bundleURL.appendingPathComponent(name + ".png")
 
             try NSBitmapImageRep(data: data)?
-                .representation(using: .jpeg, properties: [:])?
+                .representation(using: .png, properties: [:])?
                 .write(to: fileURL)
 
             return fileURL
@@ -103,5 +103,21 @@ extension NSImage {
         }
 
         return nil
+    }
+}
+
+extension NSImage {
+    /// Apply a circular mask to the image
+    func applyCircularMask() -> NSImage {
+        let image = NSImage(size: size)
+        image.lockFocus()
+
+        NSGraphicsContext.current?.imageInterpolation = .high
+        let frame = NSRect(origin: .zero, size: size)
+        NSBezierPath(ovalIn: frame).addClip()
+        draw(at: .zero, from: frame, operation: .sourceOver, fraction: 1)
+
+        image.unlockFocus()
+        return image
     }
 }

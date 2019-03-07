@@ -144,8 +144,16 @@ final class NotificationsInteractor {
         guard viewModel.shouldShowArtwork else { return }
 
         viewModel.artworkURL?.asyncImage { art in
+            // Create a mutable copy of the downloaded artwork
+            var artwork = art
+
+            // If user wants round album art, then round the image
+            if self.preferences.roundAlbumArt {
+                artwork = art?.applyCircularMask()
+            }
+
             // Save the artwork to the temporary directory
-            guard let url = art?.saveToTemporaryDirectory(withName: "artwork") else { return }
+            guard let url = artwork?.saveToTemporaryDirectory(withName: "artwork") else { return }
 
             // Add the attachment to the notification
             do {
