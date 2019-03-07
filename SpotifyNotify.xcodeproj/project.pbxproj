@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0EE94FA32231128A00B0BEA1 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE94FA22231128A00B0BEA1 /* NotificationViewModel.swift */; };
 		4C2FABAA204C112600354C1B /* LaunchAtLogin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2FABA9204C112600354C1B /* LaunchAtLogin.framework */; };
 		4C2FABAB204C112600354C1B /* LaunchAtLogin.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2FABA9204C112600354C1B /* LaunchAtLogin.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C5764C71C982DC800364AFE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5764C61C982DC800364AFE /* AppDelegate.swift */; };
@@ -46,6 +47,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0EE94FA22231128A00B0BEA1 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		4C2FABA9204C112600354C1B /* LaunchAtLogin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LaunchAtLogin.framework; path = Carthage/Build/Mac/LaunchAtLogin.framework; sourceTree = "<group>"; };
 		4C5764C31C982DC800364AFE /* Notify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5764C61C982DC800364AFE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 		FB0A9A4F203ECAB500721E3A /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0EE94FA22231128A00B0BEA1 /* NotificationViewModel.swift */,
 				4C5764E21C982E1900364AFE /* Track.swift */,
 			);
 			path = Models;
@@ -292,6 +295,7 @@
 				FBCCA5FE203EE057008AD1BF /* Constants.swift in Sources */,
 				4C5764C71C982DC800364AFE /* AppDelegate.swift in Sources */,
 				FBCCA5FB203ED78B008AD1BF /* NotificationsInteractor.swift in Sources */,
+				0EE94FA32231128A00B0BEA1 /* NotificationViewModel.swift in Sources */,
 				FBEF395320455FCC0039536B /* SpotifyInteractor.swift in Sources */,
 				FBF18DE920442BB000FAD80A /* ShortcutsInterector.swift in Sources */,
 				4C5764E31C982E1900364AFE /* Track.swift in Sources */,
