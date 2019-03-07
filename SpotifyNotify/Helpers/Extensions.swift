@@ -76,3 +76,48 @@ extension NSUserNotification {
         }
     }
 }
+
+extension NSImage {
+    /// Save an NSImage to a temporary directory
+    ///
+    /// - Parameter name: The file name, to use
+    /// - Returns: A URL if saving is successful, or nil if there was an error
+    func saveToTemporaryDirectory(withName name: String) -> URL? {
+        guard let data = tiffRepresentation else { return nil }
+
+        let fileManager = FileManager.default
+        let tempURL = URL(fileURLWithPath: NSTemporaryDirectory())
+        let bundleURL = tempURL.appendingPathComponent(AppConstants.bundleIdentifier, isDirectory: true)
+
+        do {
+            try fileManager.createDirectory(at: bundleURL, withIntermediateDirectories: true)
+            let fileURL = bundleURL.appendingPathComponent(name + ".png")
+
+            try NSBitmapImageRep(data: data)?
+                .representation(using: .png, properties: [:])?
+                .write(to: fileURL)
+
+            return fileURL
+        } catch {
+            print("Error: " + error.localizedDescription)
+        }
+
+        return nil
+    }
+}
+
+extension NSImage {
+    /// Apply a circular mask to the image
+    func applyCircularMask() -> NSImage {
+        let image = NSImage(size: size)
+        image.lockFocus()
+
+        NSGraphicsContext.current?.imageInterpolation = .high
+        let frame = NSRect(origin: .zero, size: size)
+        NSBezierPath(ovalIn: frame).addClip()
+        draw(at: .zero, from: frame, operation: .sourceOver, fraction: 1)
+
+        image.unlockFocus()
+        return image
+    }
+}

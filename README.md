@@ -26,6 +26,24 @@
 - [ ] Customizable options in notification
 - [ ] Add support for iTunes
 
+## Notes
+
+When running the app on macOS Mojave (10.14) or higher, the first time you attempt to control Spotify you will be presented with the following dialog box:
+
+<p align="center"><img src="docs/authorisation.png" alt="Authorisation"/></p>
+
+You must grant permission for the app to work. Choosing Don't Allow will make the app unable to retrieve any information about the currently playing track.
+
+If you click Don't Allow by accident, you can reset the permissions dialogue using
+
+```
+$ tccutil reset AppleEvents
+```
+
+Additionally, it is now required to sign the app using a paid developer account. To do this, simply set the signing team and certificate in the General settings of the SpotifyNotify target:
+
+<p align="center"><img src="docs/signing.png" alt="Signing"/></p>
+
 ## Building
 
 ```
@@ -34,6 +52,7 @@ $ cd spotify-notify
 $ carthage update --platform macos --no-use-binaries
 $ open SpotifyNotify.xcodeproj
 ```
+
 ## Contributing
 
 If you found a **bug**, open an issue.

@@ -24,3 +24,8 @@ struct NahiveConstraints {
 struct AppConstants {
 	static let bundleIdentifier = "io.nahive.SpotifyNotify"
 }
+
+struct NotificationIdentifier {
+    static let skip = "notification.skip"
+    static let category = "notification.category"
+}
