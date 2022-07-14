@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Volumes/MacUtils/Git/spotify-notify/SpotifyNotify.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>
