@@ -13,7 +13,7 @@
 
 # Spotify Notify
 ![Build Version](https://img.shields.io/github/release/nahive/spotify-notify.svg)
-[![Build Status](https://travis-ci.org/nahive/spotify-notify.png?branch=master)](https://travis-ci.org/nahive/spotify-notify)
+<!-- [![Build Status](https://travis-ci.org/nahive/spotify-notify.png?branch=master)](https://travis-ci.org/nahive/spotify-notify) -->
 ##### *Inspired by [Spotify Notifications](https://github.com/citruspi/Spotify-Notifications) written in Swift*
 
 ## [Download latest release here](https://github.com/nahive/spotify-notify/releases)
@@ -25,7 +25,6 @@
 - [x] Customizable status bar icon (default, dark and none)
 - [x] Launch on login (toggle)
 - [x] Album artwork (toggle)
-- [x] Swap places of spotify icon with artwork (toggle)
 - [x] Toggle disabling of notifications when Spotify is focused (toggle)
 - [x] Shortcuts for showing notification (customizable) ✨
 - [x] Show progress of a song in notification ✨
@@ -57,7 +56,6 @@ Additionally, it is now required to sign the app using a paid developer account.
 ```
 $ git clone https://github.com/nahive/spotify-notify.git
 $ cd spotify-notify
-$ carthage update --platform macos --no-use-binaries
 $ open SpotifyNotify.xcodeproj
 ```
 
