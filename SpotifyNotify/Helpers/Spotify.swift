@@ -13,6 +13,7 @@ import ScriptingBridge
 
 // MARK: SpotifyEPlS
 @objc public enum SpotifyEPlS : AEKeyword {
+    case unknown = 0 /* this happens when permissions for reading macos interactions are disabled */
     case stopped = 0x6b505353 /* 'kPSS' */
     case playing = 0x6b505350 /* 'kPSP' */
     case paused = 0x6b505370 /* 'kPSp' */

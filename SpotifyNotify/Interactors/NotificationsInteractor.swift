@@ -23,20 +23,28 @@ final class NotificationsInteractor {
     func showNotification() {
         
 		// return if notifications are disabled
-		guard preferences.notificationsEnabled else { return }
+		guard preferences.notificationsEnabled else {
+            print("⚠ notification disabled")
+            return
+        }
 		
 		// return if notifications are disabled when in focus
-		if spotifyInteractor.isFrontmost && preferences.notificationsDisableOnFocus { return }
+		if spotifyInteractor.isFrontmost && preferences.notificationsDisableOnFocus {
+            print("⚠ spotify is frontmost")
+            return
+        }
 		
 		previousTrack = currentTrack
 		currentTrack  = spotifyInteractor.currentTrack
 	
 		// return if previous track is same as previous => play/pause and if it's disabled
 		guard currentTrack != previousTrack || preferences.notificationsPlayPause else {
+            print("⚠ spotify is changing from play/pause")
 			return
 		}
 		
-		guard spotifyInteractor.playerState == .some(.playing) else {
+        guard spotifyInteractor.isPlaying else {
+            print("⚠ spotify is not playing")
 			return
 		}
 
@@ -44,7 +52,7 @@ final class NotificationsInteractor {
         guard let currentTrack = currentTrack else { return }
 
         // Create and deliver notifications
-        let viewModel = NotificationViewModel(track: currentTrack)
+        let viewModel = NotificationViewModel(track: currentTrack, showSongProgress: preferences.showSongProgress)
         if #available(macOS 10.14, *) {
             createModernNotification(using: viewModel)
         } else {
@@ -81,7 +89,7 @@ final class NotificationsInteractor {
     }
 
     private func addArtwork(to notification: NSUserNotification, using viewModel: NotificationViewModel) {
-        guard viewModel.shouldShowArtwork else { return }
+        guard preferences.showAlbumArt else { return }
 
         viewModel.artworkURL?.asyncImage { art in
             // decide whether to add spotify icon
@@ -132,7 +140,7 @@ final class NotificationsInteractor {
             notification.sound = .default
         }
 
-        if viewModel.shouldShowArtwork {
+        if preferences.showAlbumArt {
             addArtwork(to: notification, using: viewModel)
         } else {
             deliverModernNotification(identifier: viewModel.identifier, content: notification)
@@ -141,14 +149,14 @@ final class NotificationsInteractor {
 
     @available(OSX 10.14, *)
     private func addArtwork(to notification: UNMutableNotificationContent, using viewModel: NotificationViewModel) {
-        guard viewModel.shouldShowArtwork else { return }
+        guard preferences.showAlbumArt else { return }
 
-        viewModel.artworkURL?.asyncImage { art in
+        viewModel.artworkURL?.asyncImage { [weak self] art in
             // Create a mutable copy of the downloaded artwork
             var artwork = art
 
             // If user wants round album art, then round the image
-            if self.preferences.roundAlbumArt {
+            if self?.preferences.roundAlbumArt == true {
                 artwork = art?.applyCircularMask()
             }
 
@@ -165,7 +173,7 @@ final class NotificationsInteractor {
 
             // remove previous notification and replace it with one with image
             DispatchQueue.main.async {
-                self.deliverModernNotification(identifier: viewModel.identifier, content: notification)
+                self?.deliverModernNotification(identifier: viewModel.identifier, content: notification)
             }
         }
     }

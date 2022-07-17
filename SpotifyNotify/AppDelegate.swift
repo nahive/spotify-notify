@@ -195,6 +195,8 @@ extension AppDelegate {
 	
 	private func updateStatus() {
 		switch spotifyInteractor.playerState {
+        case .unknown?:
+            statusStatus.title = "Status: Unknown"
 		case .playing?:
 			statusStatus.title = "Status: Playing"
 		case .paused?:
@@ -209,7 +211,7 @@ extension AppDelegate {
 	}
 }
 
-// MARK: notification delegates
+// MARK: notification NSUserNotificationCenterDelegate
 extension AppDelegate: NSUserNotificationCenterDelegate {
 	func userNotificationCenter(_ center: NSUserNotificationCenter, didDeliver notification: NSUserNotification) {
 		// nothing
@@ -230,6 +232,7 @@ extension AppDelegate: NSUserNotificationCenterDelegate {
 	}
 }
 
+// MARK: UNUserNotificationCenterDelegate
 @available(OSX 10.14, *)
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,

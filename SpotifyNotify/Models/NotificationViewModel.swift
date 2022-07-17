@@ -14,63 +14,53 @@ struct NotificationViewModel {
     let title: String
     let subtitle: String
     let body: String
-    let shouldShowArtwork: Bool
     let artworkURL: URL?
-    let needsNotificationSound: Bool
 
     /// Defaults to show if, for any reason, Spotify returns nil
-    private static let unknownArtist = "Unknown Artist"
-    private static let unknownAlbum = "Unknown Album"
-    private static let unknownTrack = "Unknown Track"
+    private let unknownArtist = "Unknown Artist"
+    private let unknownAlbum = "Unknown Album"
+    private let unknownTrack = "Unknown Track"
 
-    init(track: Track) {
-        let preferences = UserPreferences()
-        // decide whether to add progress
-        if preferences.showSongProgress {
-            let artist = track.artist ?? NotificationViewModel.unknownArtist
-            let album = track.album ?? NotificationViewModel.unknownAlbum
-            let duration = NotificationViewModel.progress(for: track)
+    init(track: Track, showSongProgress: Bool) {
+        
+        func progress(for track: Track) -> String {
+            guard
+                let position = SpotifyInteractor().playerPosition,
+                let duration = track.duration else {
+                    return "00:00/00:00"
+            }
 
-            title = track.name ?? NotificationViewModel.unknownTrack
-            subtitle = "\(artist) - \(album)"
-            body = duration
-        } else {
-            title = track.name ?? NotificationViewModel.unknownTrack
-            subtitle = track.artist ?? NotificationViewModel.unknownArtist
-            body = track.album ?? NotificationViewModel.unknownAlbum
+            let percentage = position / (Double(duration) / 1000.0)
+
+            let progressDone = "▪︎"
+            let progressNotDone = "⁃"
+            let progressMax = 14
+            let currentProgress = Int(Double(progressMax) * percentage)
+
+            let progressString = String(repeating: progressDone, count: currentProgress) + String(repeating: progressNotDone, count: progressMax - currentProgress)
+
+            let now = Int(position).minutesSeconds
+            let length = (duration / 1000).minutesSeconds
+
+            let nowS = "\(now.minutes)".withLeadingZeroes + ":" + "\(now.seconds)".withLeadingZeroes
+            let lengthS = "\(length.minutes)".withLeadingZeroes + ":" + "\(length.seconds)".withLeadingZeroes
+
+            return "\(nowS)  \(progressString)  \(lengthS)"
         }
-
-        shouldShowArtwork = SystemPreferences.isContentImagePropertyAvailable && preferences.showAlbumArt
+        
+        let name = track.name ?? unknownTrack
+        let artist = track.artist ?? unknownArtist
+        let album = track.album ?? unknownAlbum
+ 
+        title = name
+        subtitle = showSongProgress ? "\(artist) - \(album)" : artist
+        body = showSongProgress ? progress(for: track) : album
         artworkURL = track.artworkURL
-        needsNotificationSound = preferences.notificationsSound
     }
+}
 
-    private static func progress(for track: Track) -> String {
-        guard
-            let position = SpotifyInteractor().playerPosition,
-            let duration = track.duration else {
-                return "00:00/00:00"
-        }
-
-        let percentage = position / (Double(duration) / 1000.0)
-
-        let progressDone = "▪︎"
-        let progressNotDone = "⁃"
-        let progressMax = 14
-        let currentProgress = Int(Double(progressMax) * percentage)
-
-        let progressString = String(repeating: progressDone, count: currentProgress) + String(repeating: progressNotDone, count: progressMax - currentProgress)
-
-        let now = convert(seconds: Int(position))
-        let length = convert(seconds: duration / 1000)
-
-        let nowS = "\(now.minutes)".withLeadingZeroes + ":" + "\(now.seconds)".withLeadingZeroes
-        let lengthS = "\(length.minutes)".withLeadingZeroes + ":" + "\(length.seconds)".withLeadingZeroes
-
-        return "\(nowS)  \(progressString)  \(lengthS)"
-    }
-
-    private static func convert(seconds: Int) -> (minutes: Int, seconds: Int) {
-        return ((seconds % 3600) / 60, (seconds % 3600) % 60)
+private extension Int {
+    var minutesSeconds: (minutes: Int, seconds: Int) {
+        ((self % 3600) / 60, (self % 3600) % 60)
     }
 }
