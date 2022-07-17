@@ -10,6 +10,10 @@ import Cocoa
 import LaunchAtLogin
 import ScriptingBridge
 
+#if canImport(UserNotifications)
+import UserNotifications
+#endif
+
 extension Notification.Name {
 	static let killLauncher = Notification.Name("kill.launcher.notification")
 }
@@ -55,6 +59,10 @@ extension AppDelegate {
 		setupTargets()
         setupFirstRun()
 		setupShortcuts()
+
+        if #available(OSX 10.14, *) {
+            setupUserNotifications()
+        }
 	}
 	
 	private func setupObservers() {
@@ -126,7 +134,36 @@ extension AppDelegate {
 		guard let shortcut = preferences.shortcut else { return }
 		shortcutsInteractor.register(combo: shortcut)
 	}
-	
+
+    /// Setup user notifications using UserNotifications framework
+    @available(OSX 10.14, *)
+    private func setupUserNotifications() {
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.delegate = self
+
+        // Check notification authorisation first
+        notificationCenter.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
+            if let error = error {
+                print("Notification authorisation was denied: \(error)")
+            }
+        }
+
+        setNotificationCategories()
+    }
+
+    /// Add Skip and Close buttons to the notification
+    @available(OSX 10.14, *)
+    private func setNotificationCategories() {
+        let skip = UNNotificationAction(identifier: NotificationIdentifier.skip, title: "Skip")
+
+        let category = UNNotificationCategory(identifier: NotificationIdentifier.category,
+                                              actions: [skip],
+                                              intentIdentifiers: [],
+                                              options: [])
+
+        UNUserNotificationCenter.current().setNotificationCategories([category])
+    }
+
 	@objc fileprivate func previousSong(){
 		spotifyInteractor.previousTrack()
 	}
@@ -166,6 +203,8 @@ extension AppDelegate {
 			statusStatus.title = "Status: Stopped"
 		case .none:
 			statusStatus.title = "Status: Unavailable"
+        default:
+            break
 		}
 	}
 }
@@ -191,3 +230,24 @@ extension AppDelegate: NSUserNotificationCenterDelegate {
 	}
 }
 
+@available(OSX 10.14, *)
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        // Force notifications to be shown, even if the SpotifyNotify is in the foreground
+        completionHandler([.alert, .sound])
+    }
+
+    /// Handle the action buttons
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        switch response.actionIdentifier {
+        case NotificationIdentifier.skip:
+            notificationsInteractor.handleAction()
+        default:
+            NSWorkspace.shared.launchApplication(SpotifyConstants.applicationName)
+        }
+    }
+}

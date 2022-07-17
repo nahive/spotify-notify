@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0EE94FA32231128A00B0BEA1 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE94FA22231128A00B0BEA1 /* NotificationViewModel.swift */; };
 		4C5764C71C982DC800364AFE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5764C61C982DC800364AFE /* AppDelegate.swift */; };
 		4C5764C91C982DC900364AFE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764C81C982DC900364AFE /* Assets.xcassets */; };
 		4C5764CC1C982DC900364AFE /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764CA1C982DC900364AFE /* MainMenu.xib */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0EE94FA22231128A00B0BEA1 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		4C5764C31C982DC800364AFE /* Notify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5764C61C982DC800364AFE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4C5764C81C982DC900364AFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -50,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0EF142532231503600E8301D /* UserNotifications.framework in Frameworks */,
 				4C926D4F288044010008809E /* Magnet in Frameworks */,
 				4C926D4C288043F40008809E /* KeyHolder in Frameworks */,
 				4C926D522880442F0008809E /* LaunchAtLogin in Frameworks */,
@@ -114,6 +117,7 @@
 		FB0A9A4F203ECAB500721E3A /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0EE94FA22231128A00B0BEA1 /* NotificationViewModel.swift */,
 				4C5764E21C982E1900364AFE /* Track.swift */,
 			);
 			path = Models;
@@ -122,6 +126,7 @@
 		FB400A8E203EFA3800F2D63C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0EF142522231503600E8301D /* UserNotifications.framework */,
 				FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */,
 			);
 			name = Frameworks;
@@ -258,6 +263,7 @@
 				FBCCA5FE203EE057008AD1BF /* Constants.swift in Sources */,
 				4C5764C71C982DC800364AFE /* AppDelegate.swift in Sources */,
 				FBCCA5FB203ED78B008AD1BF /* NotificationsInteractor.swift in Sources */,
+				0EE94FA32231128A00B0BEA1 /* NotificationViewModel.swift in Sources */,
 				FBEF395320455FCC0039536B /* SpotifyInteractor.swift in Sources */,
 				FBF18DE920442BB000FAD80A /* ShortcutsInterector.swift in Sources */,
 				4C5764E31C982E1900364AFE /* Track.swift in Sources */,

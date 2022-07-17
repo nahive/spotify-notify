@@ -35,6 +35,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Access is required in order to retrieve current track information, and to allow control of Spotify from the menu bar.</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2016 Szymon Maślanka. All rights reserved.</string>
 	<key>NSMainNibFile</key>
