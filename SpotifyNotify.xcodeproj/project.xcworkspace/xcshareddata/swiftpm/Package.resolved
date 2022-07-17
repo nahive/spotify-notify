@@ -1,0 +1,41 @@
+{
+  "pins" : [
+    {
+      "identity" : "keyholder",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Clipy/KeyHolder",
+      "state" : {
+        "branch" : "master",
+        "revision" : "66cd7ef7b94a276493ba831992a8c212760d8ab4"
+      }
+    },
+    {
+      "identity" : "launchatlogin",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/LaunchAtLogin",
+      "state" : {
+        "branch" : "main",
+        "revision" : "e8171b3e38a2816f579f58f3dac1522aa39efe41"
+      }
+    },
+    {
+      "identity" : "magnet",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Clipy/Magnet",
+      "state" : {
+        "branch" : "master",
+        "revision" : "3a683b657367464f0ab0f7949fcb0cc4173cbfcd"
+      }
+    },
+    {
+      "identity" : "sauce",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Clipy/Sauce",
+      "state" : {
+        "revision" : "2fcf7e43a242b183fdea3f2275ebec0d773b65f5",
+        "version" : "2.2.0"
+      }
+    }
+  ],
+  "version" : 2
+}

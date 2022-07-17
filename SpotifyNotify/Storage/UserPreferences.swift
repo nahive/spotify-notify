@@ -108,7 +108,7 @@ struct UserPreferences {
 			let keycode = defaults.integer(forKey: Keys.shortcutKeyCode)
 			let modifiers = defaults.integer(forKey: Keys.shortcutModifiers)
 			guard keycode != 0 && modifiers != 0 else { return nil }
-			return KeyCombo(keyCode: keycode, carbonModifiers: modifiers)
+			return KeyCombo(QWERTYKeyCode: keycode, carbonModifiers: modifiers)
 		}
 		set {
 			guard let keyCombo = newValue else {
@@ -117,7 +117,7 @@ struct UserPreferences {
 				return
 			}
 			
-			defaults.set(keyCombo.keyCode, forKey: Keys.shortcutKeyCode)
+			defaults.set(keyCombo.QWERTYKeyCode, forKey: Keys.shortcutKeyCode)
 			defaults.set(keyCombo.modifiers, forKey: Keys.shortcutModifiers)
 			
 		}

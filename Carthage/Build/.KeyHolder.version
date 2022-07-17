@@ -1,9 +1,0 @@
-{
-  "commitish" : "v2.1.0",
-  "Mac" : [
-    {
-      "name" : "KeyHolder",
-      "hash" : "a15acbe9a66a6b19af09f91d962bf342db9821d95804d197e2e6c829aa236c58"
-    }
-  ]
-}

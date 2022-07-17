@@ -229,6 +229,16 @@ final class PreferencesView: NSVisualEffectView {
 }
 
 extension PreferencesView: RecordViewDelegate {
+    func recordView(_ recordView: RecordView, didChangeKeyCombo keyCombo: KeyCombo?) {
+        guard let keyCombo = keyCombo else {
+            recordViewDidClearShortcut(recordView)
+            return
+        }
+        
+        shortcutsInteractor.register(combo: keyCombo)
+        preferences.shortcut = keyCombo
+    }
+    
 	func recordViewShouldBeginRecording(_ recordView: RecordView) -> Bool {
 		return true
 	}
@@ -240,11 +250,6 @@ extension PreferencesView: RecordViewDelegate {
 	func recordViewDidClearShortcut(_ recordView: RecordView) {
 		shortcutsInteractor.unregister()
 		preferences.shortcut = nil
-	}
-	
-	func recordView(_ recordView: RecordView, didChangeKeyCombo keyCombo: KeyCombo) {
-		shortcutsInteractor.register(combo: keyCombo)
-		preferences.shortcut = keyCombo
 	}
 	
 	func recordViewDidEndRecording(_ recordView: RecordView) {
