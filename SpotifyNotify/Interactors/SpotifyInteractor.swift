@@ -17,6 +17,7 @@ final class SpotifyInteractor {
 	var currentTrack: Track? { return spotify?.currentTrack?.track }
 	var soundVolume: Int? { return spotify?.soundVolume }
 	var playerState: SpotifyEPlS? { return spotify?.playerState }
+    var isPlaying: Bool { return playerState == .unknown || playerState == .playing }
 	var playerPosition: Double? { return spotify?.playerPosition }
 	
 	func nextTrack() {

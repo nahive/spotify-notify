@@ -22,7 +22,7 @@ enum StatusBarIcon: Int {
 
 struct UserPreferences {
 	private struct Keys {
-        static let isNotFirstRun = "first.run.key"
+        static let appAlreadySetup = "already.setup.key"
         
 		static let notificationsEnabled = "notifications.enabled.key"
 		static let notificationsPlayPause = "notifications.playpause.key"
@@ -33,7 +33,6 @@ struct UserPreferences {
 		static let startOnLogin = "startonlogin.key"
 		static let showAlbumArt = "showalbumart.key"
 		static let roundAlbumArt = "roundalbumart.key"
-		static let showSpotifyIcon = "spotifyicon.key"
         static let showSongProgress = "songprogress.key"
 		
 		static let menuIcon = "menuicon.key"
@@ -43,9 +42,9 @@ struct UserPreferences {
 	
 	private let defaults = UserDefaults.standard
     
-    var isNotFirstRun: Bool {
-        get { return defaults.bool(forKey: Keys.isNotFirstRun) }
-        set { defaults.set(newValue, forKey: Keys.isNotFirstRun) }
+    var appAlreadySetup: Bool {
+        get { return defaults.bool(forKey: Keys.appAlreadySetup) }
+        set { defaults.set(newValue, forKey: Keys.appAlreadySetup) }
     }
 	
 	var notificationsEnabled: Bool {
@@ -88,11 +87,6 @@ struct UserPreferences {
 		set { defaults.set(newValue, forKey: Keys.roundAlbumArt) }
 	}
 	
-	var showSpotifyIcon: Bool {
-		get { return defaults.bool(forKey: Keys.showSpotifyIcon) }
-		set { defaults.set(newValue, forKey: Keys.showSpotifyIcon) }
-	}
-	
     var showSongProgress: Bool {
         get { return defaults.bool(forKey: Keys.showSongProgress) }
         set { defaults.set(newValue, forKey: Keys.showSongProgress) }
@@ -108,7 +102,7 @@ struct UserPreferences {
 			let keycode = defaults.integer(forKey: Keys.shortcutKeyCode)
 			let modifiers = defaults.integer(forKey: Keys.shortcutModifiers)
 			guard keycode != 0 && modifiers != 0 else { return nil }
-			return KeyCombo(keyCode: keycode, carbonModifiers: modifiers)
+			return KeyCombo(QWERTYKeyCode: keycode, carbonModifiers: modifiers)
 		}
 		set {
 			guard let keyCombo = newValue else {
@@ -117,7 +111,7 @@ struct UserPreferences {
 				return
 			}
 			
-			defaults.set(keyCombo.keyCode, forKey: Keys.shortcutKeyCode)
+			defaults.set(keyCombo.QWERTYKeyCode, forKey: Keys.shortcutKeyCode)
 			defaults.set(keyCombo.modifiers, forKey: Keys.shortcutModifiers)
 			
 		}

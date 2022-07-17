@@ -9,6 +9,7 @@
 import Cocoa
 import LaunchAtLogin
 import ScriptingBridge
+import UserNotifications
 
 extension Notification.Name {
 	static let killLauncher = Notification.Name("kill.launcher.notification")
@@ -55,6 +56,7 @@ extension AppDelegate {
 		setupTargets()
         setupFirstRun()
 		setupShortcuts()
+        setupUserNotifications()
 	}
 	
 	private func setupObservers() {
@@ -75,19 +77,16 @@ extension AppDelegate {
 	}
 	
 	@objc private func setupMenuBarIcon(){
+        statusBar = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        statusBar.menu = statusMenu
+        statusBar.button?.cell?.isHighlighted = true
+        statusBar.button?.image = #imageLiteral(resourceName: "IconStatusBarColor")
+        
 		switch preferences.menuIcon {
 		case .default:
-			statusBar = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-			statusBar.image = #imageLiteral(resourceName: "IconStatusBarColor")
-			statusBar.menu = statusMenu
-			statusBar.image?.isTemplate = false
-			statusBar.highlightMode = true
+            statusBar.button?.image?.isTemplate = false
 		case .monochromatic:
-			statusBar = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-			statusBar.image =  #imageLiteral(resourceName: "IconStatusBarBlack")
-			statusBar.menu = statusMenu
-			statusBar.image?.isTemplate = true
-			statusBar.highlightMode = true
+            statusBar.button?.image?.isTemplate = true
 		case .none:
 			statusBar = nil
 		}
@@ -106,27 +105,55 @@ extension AppDelegate {
 	}
     
     private func setupFirstRun() {
-        if !preferences.isNotFirstRun {
-            preferences.isNotFirstRun = true
-            preferences.notificationsEnabled = true
-            preferences.notificationsPlayPause = true
-            preferences.notificationsSound = false
-            preferences.notificationsDisableOnFocus = true
-            preferences.notificationsLength = 5
-            preferences.startOnLogin = false
-            preferences.showAlbumArt = true
-            preferences.roundAlbumArt = false
-            preferences.showSpotifyIcon = true
-            preferences.showSongProgress = false
-            preferences.menuIcon = .default
-        }
+        guard !preferences.appAlreadySetup else { return }
+        
+        preferences.appAlreadySetup = true
+        preferences.notificationsEnabled = true
+        preferences.notificationsPlayPause = true
+        preferences.notificationsSound = false
+        preferences.notificationsDisableOnFocus = true
+        preferences.notificationsLength = 5
+        preferences.startOnLogin = false
+        preferences.showAlbumArt = true
+        preferences.roundAlbumArt = false
+        preferences.showSongProgress = false
+        preferences.menuIcon = .default
     }
 	
 	fileprivate func setupShortcuts() {
 		guard let shortcut = preferences.shortcut else { return }
 		shortcutsInteractor.register(combo: shortcut)
 	}
-	
+
+    /// Setup user notifications using UserNotifications framework
+    @available(OSX 10.14, *)
+    private func setupUserNotifications() {
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.delegate = self
+
+        // Check notification authorisation first
+        notificationCenter.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
+            if let error = error {
+                print("Notification authorisation was denied: \(error)")
+            }
+        }
+
+        setNotificationCategories()
+    }
+
+    /// Add Skip and Close buttons to the notification
+    @available(OSX 10.14, *)
+    private func setNotificationCategories() {
+        let skip = UNNotificationAction(identifier: NotificationIdentifier.skip, title: "Skip")
+
+        let category = UNNotificationCategory(identifier: NotificationIdentifier.category,
+                                              actions: [skip],
+                                              intentIdentifiers: [],
+                                              options: [])
+
+        UNUserNotificationCenter.current().setNotificationCategories([category])
+    }
+
 	@objc fileprivate func previousSong(){
 		spotifyInteractor.previousTrack()
 	}
@@ -152,12 +179,14 @@ extension AppDelegate {
 		updateStatus()
 	}
 	
-	@objc func shortcutKeyTapped() {
+	func shortcutKeyTapped() {
 		notificationsInteractor.showNotification()
 	}
 	
 	private func updateStatus() {
 		switch spotifyInteractor.playerState {
+        case .unknown?:
+            statusStatus.title = "Status: Unknown"
 		case .playing?:
 			statusStatus.title = "Status: Playing"
 		case .paused?:
@@ -166,11 +195,13 @@ extension AppDelegate {
 			statusStatus.title = "Status: Stopped"
 		case .none:
 			statusStatus.title = "Status: Unavailable"
+        default:
+            break
 		}
 	}
 }
 
-// MARK: notification delegates
+// MARK: notification NSUserNotificationCenterDelegate
 extension AppDelegate: NSUserNotificationCenterDelegate {
 	func userNotificationCenter(_ center: NSUserNotificationCenter, didDeliver notification: NSUserNotification) {
 		// nothing
@@ -191,3 +222,24 @@ extension AppDelegate: NSUserNotificationCenterDelegate {
 	}
 }
 
+// MARK: UNUserNotificationCenterDelegate
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        // Force notifications to be shown, even if the SpotifyNotify is in the foreground
+        completionHandler([.alert, .sound])
+    }
+
+    /// Handle the action buttons
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        switch response.actionIdentifier {
+        case NotificationIdentifier.skip:
+            notificationsInteractor.handleAction()
+        default:
+            NSWorkspace.shared.launchApplication(SpotifyConstants.applicationName)
+        }
+    }
+}

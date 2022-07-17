@@ -13,8 +13,8 @@ import KeyHolder
 final class ShortcutsInteractor {
 	func register(combo: KeyCombo) {
 		let key = HotKey(identifier: "testKey", keyCombo: combo,
-						 target: NSApplication.shared.delegate,
-						 action: #selector(AppDelegate.shortcutKeyTapped))
+						 target: self,
+						 action: #selector(shortcutKeyTapped))
 		let result = HotKeyCenter.shared.register(with: key)
 		
 		print("registered key with result: \(result)")
@@ -23,4 +23,8 @@ final class ShortcutsInteractor {
 	func unregister() {
 		HotKeyCenter.shared.unregisterAll()
 	}
+    
+    @objc private func shortcutKeyTapped() {
+        (NSApplication.shared.delegate as? AppDelegate)?.shortcutKeyTapped()
+    }
 }

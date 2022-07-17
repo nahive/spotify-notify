@@ -3,50 +3,31 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C2FABAA204C112600354C1B /* LaunchAtLogin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2FABA9204C112600354C1B /* LaunchAtLogin.framework */; };
-		4C2FABAB204C112600354C1B /* LaunchAtLogin.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2FABA9204C112600354C1B /* LaunchAtLogin.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0EE94FA32231128A00B0BEA1 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE94FA22231128A00B0BEA1 /* NotificationViewModel.swift */; };
 		4C5764C71C982DC800364AFE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5764C61C982DC800364AFE /* AppDelegate.swift */; };
 		4C5764C91C982DC900364AFE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764C81C982DC900364AFE /* Assets.xcassets */; };
 		4C5764CC1C982DC900364AFE /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764CA1C982DC900364AFE /* MainMenu.xib */; };
 		4C5764E31C982E1900364AFE /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5764E21C982E1900364AFE /* Track.swift */; };
 		4C858885203F218800ED1692 /* Spotify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C858884203F218800ED1692 /* Spotify.swift */; };
+		4C926D4C288043F40008809E /* KeyHolder in Frameworks */ = {isa = PBXBuildFile; productRef = 4C926D4B288043F40008809E /* KeyHolder */; };
+		4C926D4F288044010008809E /* Magnet in Frameworks */ = {isa = PBXBuildFile; productRef = 4C926D4E288044010008809E /* Magnet */; };
+		4C926D522880442F0008809E /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 4C926D512880442F0008809E /* LaunchAtLogin */; };
 		FB0A9A4E203EC9BA00721E3A /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB0A9A4D203EC9BA00721E3A /* PreferencesView.swift */; };
 		FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */; };
 		FB6B9D0A203EC22D0062702B /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB6B9D09203EC22D0062702B /* UserPreferences.swift */; };
-		FB6B9D0C203EC24F0062702B /* SystemPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB6B9D0B203EC24F0062702B /* SystemPreferences.swift */; };
 		FBCCA5FB203ED78B008AD1BF /* NotificationsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCCA5FA203ED78B008AD1BF /* NotificationsInteractor.swift */; };
 		FBCCA5FE203EE057008AD1BF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCCA5FD203EE057008AD1BF /* Constants.swift */; };
 		FBCCA600203EE195008AD1BF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCCA5FF203EE195008AD1BF /* Extensions.swift */; };
 		FBEF395320455FCC0039536B /* SpotifyInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEF395220455FCC0039536B /* SpotifyInteractor.swift */; };
-		FBF18DE320442A7D00FAD80A /* Magnet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF18DE120442A7D00FAD80A /* Magnet.framework */; };
-		FBF18DE420442A7D00FAD80A /* Magnet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FBF18DE120442A7D00FAD80A /* Magnet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		FBF18DE520442A7D00FAD80A /* KeyHolder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF18DE220442A7D00FAD80A /* KeyHolder.framework */; };
-		FBF18DE620442A7D00FAD80A /* KeyHolder.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FBF18DE220442A7D00FAD80A /* KeyHolder.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FBF18DE920442BB000FAD80A /* ShortcutsInterector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF18DE820442BB000FAD80A /* ShortcutsInterector.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		FBF18DE720442A7D00FAD80A /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				FBF18DE620442A7D00FAD80A /* KeyHolder.framework in Embed Frameworks */,
-				FBF18DE420442A7D00FAD80A /* Magnet.framework in Embed Frameworks */,
-				4C2FABAB204C112600354C1B /* LaunchAtLogin.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		4C2FABA9204C112600354C1B /* LaunchAtLogin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LaunchAtLogin.framework; path = Carthage/Build/Mac/LaunchAtLogin.framework; sourceTree = "<group>"; };
+		0EE94FA22231128A00B0BEA1 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		4C5764C31C982DC800364AFE /* Notify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5764C61C982DC800364AFE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4C5764C81C982DC900364AFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -57,13 +38,10 @@
 		FB0A9A4D203EC9BA00721E3A /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 		FB6B9D09203EC22D0062702B /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
-		FB6B9D0B203EC24F0062702B /* SystemPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPreferences.swift; sourceTree = "<group>"; };
 		FBCCA5FA203ED78B008AD1BF /* NotificationsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsInteractor.swift; sourceTree = "<group>"; };
 		FBCCA5FD203EE057008AD1BF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		FBCCA5FF203EE195008AD1BF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FBEF395220455FCC0039536B /* SpotifyInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyInteractor.swift; sourceTree = "<group>"; };
-		FBF18DE120442A7D00FAD80A /* Magnet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Magnet.framework; path = Carthage/Build/Mac/Magnet.framework; sourceTree = "<group>"; };
-		FBF18DE220442A7D00FAD80A /* KeyHolder.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KeyHolder.framework; path = Carthage/Build/Mac/KeyHolder.framework; sourceTree = "<group>"; };
 		FBF18DE820442BB000FAD80A /* ShortcutsInterector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsInterector.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -72,9 +50,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C2FABAA204C112600354C1B /* LaunchAtLogin.framework in Frameworks */,
-				FBF18DE520442A7D00FAD80A /* KeyHolder.framework in Frameworks */,
-				FBF18DE320442A7D00FAD80A /* Magnet.framework in Frameworks */,
+				4C926D4F288044010008809E /* Magnet in Frameworks */,
+				4C926D4C288043F40008809E /* KeyHolder in Frameworks */,
+				4C926D522880442F0008809E /* LaunchAtLogin in Frameworks */,
 				FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,6 +114,7 @@
 		FB0A9A4F203ECAB500721E3A /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0EE94FA22231128A00B0BEA1 /* NotificationViewModel.swift */,
 				4C5764E21C982E1900364AFE /* Track.swift */,
 			);
 			path = Models;
@@ -144,9 +123,6 @@
 		FB400A8E203EFA3800F2D63C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C2FABA9204C112600354C1B /* LaunchAtLogin.framework */,
-				FBF18DE220442A7D00FAD80A /* KeyHolder.framework */,
-				FBF18DE120442A7D00FAD80A /* Magnet.framework */,
 				FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */,
 			);
 			name = Frameworks;
@@ -181,7 +157,6 @@
 		FBCCA5FC203ED78F008AD1BF /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				FB6B9D0B203EC24F0062702B /* SystemPreferences.swift */,
 				FB6B9D09203EC22D0062702B /* UserPreferences.swift */,
 			);
 			path = Storage;
@@ -197,14 +172,17 @@
 				4C5764BF1C982DC800364AFE /* Sources */,
 				4C5764C01C982DC800364AFE /* Frameworks */,
 				4C5764C11C982DC800364AFE /* Resources */,
-				FBF18DE720442A7D00FAD80A /* Embed Frameworks */,
-				4C2FABAC204C113300354C1B /* Launch At Login */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = SpotifyNotify;
+			packageProductDependencies = (
+				4C926D4B288043F40008809E /* KeyHolder */,
+				4C926D4E288044010008809E /* Magnet */,
+				4C926D512880442F0008809E /* LaunchAtLogin */,
+			);
 			productName = NotifySpotify;
 			productReference = 4C5764C31C982DC800364AFE /* Notify.app */;
 			productType = "com.apple.product-type.application";
@@ -216,7 +194,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1400;
 				ORGANIZATIONNAME = "Szymon Maślanka";
 				TargetAttributes = {
 					4C5764C21C982DC800364AFE = {
@@ -234,13 +212,18 @@
 			};
 			buildConfigurationList = 4C5764BE1C982DC800364AFE /* Build configuration list for PBXProject "SpotifyNotify" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
 			mainGroup = 4C5764BA1C982DC800364AFE;
+			packageReferences = (
+				4C926D4A288043F40008809E /* XCRemoteSwiftPackageReference "KeyHolder" */,
+				4C926D4D288044010008809E /* XCRemoteSwiftPackageReference "Magnet" */,
+				4C926D502880442F0008809E /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
+			);
 			productRefGroup = 4C5764C41C982DC800364AFE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -262,23 +245,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		4C2FABAC204C113300354C1B /* Launch At Login */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Launch At Login";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "./Carthage/Build/Mac/LaunchAtLogin.framework/Resources/copy-helper.sh";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		4C5764BF1C982DC800364AFE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -288,10 +254,10 @@
 				FBCCA600203EE195008AD1BF /* Extensions.swift in Sources */,
 				FB0A9A4E203EC9BA00721E3A /* PreferencesView.swift in Sources */,
 				4C858885203F218800ED1692 /* Spotify.swift in Sources */,
-				FB6B9D0C203EC24F0062702B /* SystemPreferences.swift in Sources */,
 				FBCCA5FE203EE057008AD1BF /* Constants.swift in Sources */,
 				4C5764C71C982DC800364AFE /* AppDelegate.swift in Sources */,
 				FBCCA5FB203ED78B008AD1BF /* NotificationsInteractor.swift in Sources */,
+				0EE94FA32231128A00B0BEA1 /* NotificationViewModel.swift in Sources */,
 				FBEF395320455FCC0039536B /* SpotifyInteractor.swift in Sources */,
 				FBF18DE920442BB000FAD80A /* ShortcutsInterector.swift in Sources */,
 				4C5764E31C982E1900364AFE /* Track.swift in Sources */,
@@ -317,6 +283,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -336,6 +303,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -343,6 +311,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -360,7 +329,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -373,6 +342,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -392,6 +362,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -399,6 +370,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -410,10 +382,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
@@ -423,22 +396,27 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SpotifyNotify/Other/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				INFOPLIST_KEY_CFBundleDisplayName = "Spotify Notify";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = Notify;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -447,21 +425,26 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SpotifyNotify/Other/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				INFOPLIST_KEY_CFBundleDisplayName = "Spotify Notify";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = Notify;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -487,6 +470,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4C926D4A288043F40008809E /* XCRemoteSwiftPackageReference "KeyHolder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Clipy/KeyHolder";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		4C926D4D288044010008809E /* XCRemoteSwiftPackageReference "Magnet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Clipy/Magnet";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		4C926D502880442F0008809E /* XCRemoteSwiftPackageReference "LaunchAtLogin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4C926D4B288043F40008809E /* KeyHolder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4C926D4A288043F40008809E /* XCRemoteSwiftPackageReference "KeyHolder" */;
+			productName = KeyHolder;
+		};
+		4C926D4E288044010008809E /* Magnet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4C926D4D288044010008809E /* XCRemoteSwiftPackageReference "Magnet" */;
+			productName = Magnet;
+		};
+		4C926D512880442F0008809E /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4C926D502880442F0008809E /* XCRemoteSwiftPackageReference "LaunchAtLogin" */;
+			productName = LaunchAtLogin;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4C5764BB1C982DC800364AFE /* Project object */;
 }

@@ -1,9 +1,0 @@
-{
-  "commitish" : "v2.1.0",
-  "Mac" : [
-    {
-      "name" : "LaunchAtLogin",
-      "hash" : "69b866794108558659fa8008111ddb8af278ff468bc49405c95b099e080d50ca"
-    }
-  ]
-}
