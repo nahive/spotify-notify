@@ -1,71 +1,66 @@
+# Created by https://www.toptal.com/developers/gitignore/api/xcode
+# Edit at https://www.toptal.com/developers/gitignore?templates=xcode
+
+### Xcode ###
 # Xcode
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
-## Build generated
+## User settings
+### プロジェクトのカスタムschemeが保存されるディレクトリ
+xcuserdata/
+
+## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
+### gitなどのVCSに関するメタデータが含まれる。
+### あるキーの値が開発機ごとのVCSのユーザーネームに値が切り替わったりするので、複数人で開発をする場合コミットに含めるとコンフリクトする。
+### https://stackoverflow.com/questions/18340453/should-xccheckout-files-in-xcode5-be-ignored-under-vcs#comment29617170_19260712
+*.xccheckout
+### 詳細不明だが上記のファイルと同様にVCSに関する設定値が含まれている
+### https://stackoverflow.com/questions/31584297/xcode-7-ignore-xcscmblueprint-in-repository
+*.xcscmblueprint
+
+## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
+### Xcodeのビルドファイル
+### https://gist.github.com/adamgit/3786883
 build/
 DerivedData/
 
-## Various settings
-*.pbxuser
-!default.pbxuser
-*.mode1v3
-!default.mode1v3
-*.mode2v3
-!default.mode2v3
-*.perspectivev3
-!default.perspectivev3
-xcuserdata/
-
-## Other
+### 手動で廃止（deprecate）したクラスのファイルがここへ移動する（同じ名前のクラスを定義しようとしたときなど）
+### http://stackoverflow.com/questions/1153211/whats-that-classes-1-moved-aside-directory-in-my-classes-directory
 *.moved-aside
-*.xccheckout
-*.xcscmblueprint
 
-## Obj-C/Swift specific
-*.hmap
-*.ipa
-*.dSYM.zip
-*.dSYM
+### Xcodeのプライベート設定（ウィンドウサイズ、ブックマーク、ブレイクポイントなど）
+### .pbxuser:       http://lists.apple.com/archives/xcode-users/2004/Jan/msg00193.html
+### .mode1v3:       http://lists.apple.com/archives/xcode-users/2007/Oct/msg00465.html
+### .mode2v3:       http://lists.apple.com/archives/xcode-users/2007/Oct/msg00465.html
+### .perspectivev3: http://stackoverflow.com/questions/5223297/xcode-projects-what-is-a-perspectivev3-file
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+### 上記4項目のデフォルト設定ファイル。これらは除外せずに追加（除外の除外）をする。
+!default.pbxuser
+!default.mode1v3
+!default.mode2v3
+!default.perspectivev3
 
-## Playgrounds
-timeline.xctimeline
-playground.xcworkspace
+### Xcode Patch ###
+### プロジェクトファイルのパッケージ（ディレクトリ）の全体を除外し、必要なものだけ追加（除外からの除外）をしていきます
+*.xcodeproj/*
+### プロジェクトの構成情報を格納するファイル
+!*.xcodeproj/project.pbxproj
+### XcodeのプロジェクトのビルドSchemeを格納するファイル
+!*.xcodeproj/xcshareddata/
+### プロジェクトのワークスペースのデータを格納するXMLファイル
+!*.xcworkspace/contents.xcworkspacedata
 
-# Swift Package Manager
-#
-# Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
-# Packages/
-# Package.pins
-# Package.resolved
-.build/
+### 「File > Workspace Settings」で設定できるワークスペースの設定値。
+**/xcshareddata/WorkspaceSettings.xcsettings
 
-# CocoaPods
-#
-# We recommend against adding the Pods directory to your .gitignore. However
-# you should judge for yourself, the pros and cons are mentioned at:
-# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
-#
-# Pods/
+## Gcc Patch
+### コードカバレッジの計測を有効化（GCC_GENERATE_TEST_COVERAGE_FILES = YES）していると生成される。
+### 他のケースでも生成されるかもしれないが分からなかった
+### https://developer.apple.com/library/archive/qa/qa1514/_index.html
+/*.gcno
 
-# Carthage
-#
-# Add this line if you want to avoid checking in source code from Carthage dependencies.
-# Carthage/Checkouts
-
-Carthage/Build
-
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
-# screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/#source-control
-
-fastlane/report.xml
-fastlane/Preview.html
-fastlane/screenshots/**/*.png
-fastlane/test_output
-
-.DS_Store
 .DS_Store
