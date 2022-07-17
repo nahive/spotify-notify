@@ -79,14 +79,14 @@ extension AppDelegate {
 	@objc private func setupMenuBarIcon(){
         statusBar = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         statusBar.menu = statusMenu
-        statusBar.button?.image?.isTemplate = false
         statusBar.button?.cell?.isHighlighted = true
+        statusBar.button?.image = #imageLiteral(resourceName: "IconStatusBarColor")
         
 		switch preferences.menuIcon {
 		case .default:
-            statusBar.button?.image = #imageLiteral(resourceName: "IconStatusBarColor")
+            statusBar.button?.image?.isTemplate = false
 		case .monochromatic:
-            statusBar.button?.image =  #imageLiteral(resourceName: "IconStatusBarBlack")
+            statusBar.button?.image?.isTemplate = true
 		case .none:
 			statusBar = nil
 		}
