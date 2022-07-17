@@ -1,8 +1,15 @@
 
-<p align="center"><img src="https://raw.githubusercontent.com/nahive/spotify-notify/feature/rewrite-to-new-standards/logo.png" alt="Spotify Notify"/></p>
-<p align="center"><img src="https://raw.githubusercontent.com/nahive/spotify-notify/feature/rewrite-to-new-standards/p1.png" alt="normal dark mode"/></p>
-<p align="center"><img src="https://raw.githubusercontent.com/nahive/spotify-notify/feature/rewrite-to-new-standards/p2.png" alt="normal light mode"/></p>
-<p align="center"><img src="https://raw.githubusercontent.com/nahive/spotify-notify/feature/rewrite-to-new-standards/p3.png" alt="extended dark mode"/></p>
+<p align="center">
+<img src="https://raw.githubusercontent.com/nahive/spotify-notify/feature/rewrite-to-new-standards/logo.png" alt="Spotify Notify" width="200"/>
+</p>
+<p align="center">
+<img src="https://raw.githubusercontent.com/nahive/spotify-notify/feature/rewrite-to-new-standards/p1.png" alt="normal dark mode" width="300"/>
+<img src="https://raw.githubusercontent.com/nahive/spotify-notify/feature/rewrite-to-new-standards/p2.png" alt="normal light mode" width="300"/>
+</p>
+<p align="center">
+<img src="https://raw.githubusercontent.com/nahive/spotify-notify/feature/rewrite-to-new-standards/p3.png" alt="extended dark mode" width="300"/>
+<img src="https://raw.githubusercontent.com/nahive/spotify-notify/feature/rewrite-to-new-standards/p4.png" alt="extended light mode" width="300"/>
+</p>
 
 # Spotify Notify
 ![Build Version](https://img.shields.io/github/release/nahive/spotify-notify.svg)
