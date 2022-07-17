@@ -19,11 +19,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.2.3</string>
+	<string>0.3.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>220</string>
+	<string>300</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.utilities</string>
 	<key>LSMinimumSystemVersion</key>
@@ -38,7 +38,7 @@
 	<key>NSAppleEventsUsageDescription</key>
 	<string>Access is required in order to retrieve current track information, and to allow control of Spotify from the menu bar.</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2016 Szymon Maślanka. All rights reserved.</string>
+	<string>Copyright © 2022 Szymon Maślanka. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
