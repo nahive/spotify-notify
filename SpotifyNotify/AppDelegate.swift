@@ -116,7 +116,6 @@ extension AppDelegate {
         preferences.startOnLogin = false
         preferences.showAlbumArt = true
         preferences.roundAlbumArt = false
-        preferences.showSpotifyIcon = true
         preferences.showSongProgress = false
         preferences.menuIcon = .default
     }
