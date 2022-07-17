@@ -30,12 +30,10 @@ struct NotificationViewModel {
 
             let percentage = songProgress / (Double(duration) / 1000.0)
 
-            let progressDone = "▪︎"
-            let progressNotDone = "⁃"
             let progressMax = 14
             let currentProgress = Int(Double(progressMax) * percentage)
 
-            let progressString = String(repeating: progressDone, count: currentProgress) + String(repeating: progressNotDone, count: progressMax - currentProgress)
+            let progressString = "▪︎".repeated(currentProgress) +  "⁃".repeated(progressMax - currentProgress)
 
             let now = Int(songProgress).minutesSeconds
             let length = (duration / 1000).minutesSeconds
@@ -60,5 +58,11 @@ struct NotificationViewModel {
 private extension Int {
     var minutesSeconds: (minutes: Int, seconds: Int) {
         ((self % 3600) / 60, (self % 3600) % 60)
+    }
+}
+
+private extension String {
+    func repeated(_ count: Int) -> String {
+        String(repeating: self, count: count)
     }
 }
