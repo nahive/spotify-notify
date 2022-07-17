@@ -22,7 +22,7 @@ enum StatusBarIcon: Int {
 
 struct UserPreferences {
 	private struct Keys {
-        static let isNotFirstRun = "first.run.key"
+        static let appAlreadySetup = "already.setup.key"
         
 		static let notificationsEnabled = "notifications.enabled.key"
 		static let notificationsPlayPause = "notifications.playpause.key"
@@ -33,7 +33,6 @@ struct UserPreferences {
 		static let startOnLogin = "startonlogin.key"
 		static let showAlbumArt = "showalbumart.key"
 		static let roundAlbumArt = "roundalbumart.key"
-		static let showSpotifyIcon = "spotifyicon.key"
         static let showSongProgress = "songprogress.key"
 		
 		static let menuIcon = "menuicon.key"
@@ -43,9 +42,9 @@ struct UserPreferences {
 	
 	private let defaults = UserDefaults.standard
     
-    var isNotFirstRun: Bool {
-        get { return defaults.bool(forKey: Keys.isNotFirstRun) }
-        set { defaults.set(newValue, forKey: Keys.isNotFirstRun) }
+    var appAlreadySetup: Bool {
+        get { return defaults.bool(forKey: Keys.appAlreadySetup) }
+        set { defaults.set(newValue, forKey: Keys.appAlreadySetup) }
     }
 	
 	var notificationsEnabled: Bool {
@@ -86,11 +85,6 @@ struct UserPreferences {
 	var roundAlbumArt: Bool {
 		get { return defaults.bool(forKey: Keys.roundAlbumArt) }
 		set { defaults.set(newValue, forKey: Keys.roundAlbumArt) }
-	}
-	
-	var showSpotifyIcon: Bool {
-		get { return defaults.bool(forKey: Keys.showSpotifyIcon) }
-		set { defaults.set(newValue, forKey: Keys.showSpotifyIcon) }
 	}
 	
     var showSongProgress: Bool {

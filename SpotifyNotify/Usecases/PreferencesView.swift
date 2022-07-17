@@ -26,7 +26,6 @@ final class PreferencesView: NSVisualEffectView {
 	@IBOutlet weak var startOnLoginCheck: NSButton!
 	@IBOutlet weak var showAlbumArtCheck: NSButton!
 	@IBOutlet weak var roundAlbumArtCheck: NSButton!
-	@IBOutlet weak var showSpotifyIconCheck: NSButton!
     @IBOutlet weak var showSongProgressCheck: NSButton!
     
     @IBOutlet weak var notificationLengthField: NSTextField!
@@ -51,17 +50,9 @@ final class PreferencesView: NSVisualEffectView {
 	
 	override func viewWillDraw() {
 		super.viewWillDraw()
-		checkAvailability()
 		setup()
         checkCompability()
 		setupTargets()
-	}
-	
-	private func checkAvailability() {
-		if !SystemPreferences.isContentImagePropertyAvailable {
-			showAlbumArtCheck.isEnabled = false
-			roundAlbumArtCheck.isEnabled = false
-		}
 	}
     
     private func checkCompability() {
@@ -69,7 +60,6 @@ final class PreferencesView: NSVisualEffectView {
         notificationsSoundCheck.isEnabled = preferences.notificationsEnabled
         notificationsSpotifyFocusCheck.isEnabled = preferences.notificationsEnabled
         showAlbumArtCheck.isEnabled = preferences.notificationsEnabled
-        showSpotifyIconCheck.isEnabled = preferences.notificationsEnabled
         roundAlbumArtCheck.isEnabled = preferences.notificationsEnabled && preferences.showAlbumArt
         showSongProgressCheck.isEnabled = preferences.notificationsEnabled
         menuIconPopUpButton.isEnabled = preferences.menuIcon != .none
@@ -84,7 +74,6 @@ final class PreferencesView: NSVisualEffectView {
 		startOnLoginCheck.isSelected = preferences.startOnLogin
 		showAlbumArtCheck.isSelected = preferences.showAlbumArt
 		roundAlbumArtCheck.isSelected = preferences.roundAlbumArt
-		showSpotifyIconCheck.isSelected = preferences.showSpotifyIcon
         showSongProgressCheck.isSelected = preferences.showSongProgress
 		
         notificationLengthField.doubleValue = Double(preferences.notificationsLength)
@@ -112,8 +101,6 @@ final class PreferencesView: NSVisualEffectView {
 		showAlbumArtCheck.action = #selector(showAlbumArtCheckTapped(sender:))
 		roundAlbumArtCheck.target = self
 		roundAlbumArtCheck.action = #selector(roundAlbumArtCheckTapped(sender:))
-		showSpotifyIconCheck.target = self
-		showSpotifyIconCheck.action = #selector(showSpotifyIconCheckTapped(sender:))
         showSongProgressCheck.target = self
         showSongProgressCheck.action = #selector(showSongProgressCheckTapped(sender:))
         
@@ -166,10 +153,6 @@ final class PreferencesView: NSVisualEffectView {
 	
 	@objc func roundAlbumArtCheckTapped(sender: NSButton) {
 		preferences.roundAlbumArt = sender.isSelected
-	}
-	
-	@objc func showSpotifyIconCheckTapped(sender: NSButton) {
-		preferences.showSpotifyIcon = sender.isSelected
 	}
     
     @objc func showSongProgressCheckTapped(sender: NSButton) {

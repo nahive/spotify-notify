@@ -9,10 +9,7 @@
 import Cocoa
 import LaunchAtLogin
 import ScriptingBridge
-
-#if canImport(UserNotifications)
 import UserNotifications
-#endif
 
 extension Notification.Name {
 	static let killLauncher = Notification.Name("kill.launcher.notification")
@@ -59,10 +56,7 @@ extension AppDelegate {
 		setupTargets()
         setupFirstRun()
 		setupShortcuts()
-
-        if #available(OSX 10.14, *) {
-            setupUserNotifications()
-        }
+        setupUserNotifications()
 	}
 	
 	private func setupObservers() {
@@ -83,19 +77,16 @@ extension AppDelegate {
 	}
 	
 	@objc private func setupMenuBarIcon(){
+        statusBar = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        statusBar.menu = statusMenu
+        statusBar.button?.image?.isTemplate = false
+        statusBar.button?.cell?.isHighlighted = true
+        
 		switch preferences.menuIcon {
 		case .default:
-			statusBar = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-			statusBar.image = #imageLiteral(resourceName: "IconStatusBarColor")
-			statusBar.menu = statusMenu
-			statusBar.image?.isTemplate = false
-			statusBar.highlightMode = true
+            statusBar.button?.image = #imageLiteral(resourceName: "IconStatusBarColor")
 		case .monochromatic:
-			statusBar = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-			statusBar.image =  #imageLiteral(resourceName: "IconStatusBarBlack")
-			statusBar.menu = statusMenu
-			statusBar.image?.isTemplate = true
-			statusBar.highlightMode = true
+            statusBar.button?.image =  #imageLiteral(resourceName: "IconStatusBarBlack")
 		case .none:
 			statusBar = nil
 		}
@@ -114,20 +105,20 @@ extension AppDelegate {
 	}
     
     private func setupFirstRun() {
-        if !preferences.isNotFirstRun {
-            preferences.isNotFirstRun = true
-            preferences.notificationsEnabled = true
-            preferences.notificationsPlayPause = true
-            preferences.notificationsSound = false
-            preferences.notificationsDisableOnFocus = true
-            preferences.notificationsLength = 5
-            preferences.startOnLogin = false
-            preferences.showAlbumArt = true
-            preferences.roundAlbumArt = false
-            preferences.showSpotifyIcon = true
-            preferences.showSongProgress = false
-            preferences.menuIcon = .default
-        }
+        guard !preferences.appAlreadySetup else { return }
+        
+        preferences.appAlreadySetup = true
+        preferences.notificationsEnabled = true
+        preferences.notificationsPlayPause = true
+        preferences.notificationsSound = false
+        preferences.notificationsDisableOnFocus = true
+        preferences.notificationsLength = 5
+        preferences.startOnLogin = false
+        preferences.showAlbumArt = true
+        preferences.roundAlbumArt = false
+        preferences.showSpotifyIcon = true
+        preferences.showSongProgress = false
+        preferences.menuIcon = .default
     }
 	
 	fileprivate func setupShortcuts() {
@@ -233,7 +224,6 @@ extension AppDelegate: NSUserNotificationCenterDelegate {
 }
 
 // MARK: UNUserNotificationCenterDelegate
-@available(OSX 10.14, *)
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,

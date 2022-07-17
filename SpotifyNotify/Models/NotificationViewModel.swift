@@ -21,16 +21,14 @@ struct NotificationViewModel {
     private let unknownAlbum = "Unknown Album"
     private let unknownTrack = "Unknown Track"
 
-    init(track: Track, showSongProgress: Bool) {
+    init(track: Track, showSongProgress: Bool, songProgress: Double?) {
         
         func progress(for track: Track) -> String {
-            guard
-                let position = SpotifyInteractor().playerPosition,
-                let duration = track.duration else {
+            guard let songProgress = songProgress, let duration = track.duration else {
                     return "00:00/00:00"
             }
 
-            let percentage = position / (Double(duration) / 1000.0)
+            let percentage = songProgress / (Double(duration) / 1000.0)
 
             let progressDone = "▪︎"
             let progressNotDone = "⁃"
@@ -39,7 +37,7 @@ struct NotificationViewModel {
 
             let progressString = String(repeating: progressDone, count: currentProgress) + String(repeating: progressNotDone, count: progressMax - currentProgress)
 
-            let now = Int(position).minutesSeconds
+            let now = Int(songProgress).minutesSeconds
             let length = (duration / 1000).minutesSeconds
 
             let nowS = "\(now.minutes)".withLeadingZeroes + ":" + "\(now.seconds)".withLeadingZeroes
