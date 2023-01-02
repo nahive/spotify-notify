@@ -33,7 +33,7 @@ struct NotificationViewModel {
             let progressMax = 14
             let currentProgress = Int(Double(progressMax) * percentage)
 
-            let progressString = "▪︎".repeated(currentProgress) +  "⁃".repeated(progressMax - currentProgress)
+            let progressString = "⁃".repeated(currentProgress) +  "-".repeated(progressMax - currentProgress)
 
             let now = Int(songProgress).minutesSeconds
             let length = (duration / 1000).minutesSeconds
