@@ -51,7 +51,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Check notification authorisation first
         notificationCenter.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
             if let error = error {
-                print("Notification authorisation was denied: \(error)")
+                System.logger.warning("Notification authorisation was denied: \(error)")
             }
         }
 

@@ -18,7 +18,7 @@ struct Track {
     
     init?(id: String?, name: String?, album: String?, artist: String?, artworkURL: URL?, duration: Int?) {
         guard let id, let name, let artist else {
-            print("not a valid track")
+            System.logger.error("not a valid track")
             return nil
         }
         self.id = id

@@ -33,13 +33,13 @@ final class NotificationsInteractor: ObservableObject {
     func showNotification() {
         // return if notifications are disabled
         guard defaultsInteractor.areNotificationsEnabled else {
-            print("⚠ notification disabled")
+            System.logger.warning("⚠ notification disabled")
             return
         }
         
         // return if notifications are disabled when in focus
         if spotifyInteractor.isFrontmost, defaultsInteractor.shouldDisableNotificationsOnFocus {
-            print("⚠ spotify is frontmost")
+            System.logger.info("⚠ spotify is frontmost")
             return
         }
         
@@ -48,18 +48,18 @@ final class NotificationsInteractor: ObservableObject {
     
         // return if previous track is same as previous => play/pause and if it's disabled
         guard currentTrack != previousTrack || defaultsInteractor.shouldShowNotificationOnPlayPause else {
-            print("⚠ spotify is changing from play/pause")
+            System.logger.info("⚠ spotify is changing from play/pause")
             return
         }
         
         guard spotifyInteractor.currentState == .playing else {
-            print("⚠ spotify is not playing")
+            System.logger.info("⚠ spotify is not playing")
             return
         }
 
         // return if current track is nil
         guard let currentTrack = currentTrack else {
-            print("⚠ spotify has no track available")
+            System.logger.info("⚠ spotify has no track available")
             return
         }
 
