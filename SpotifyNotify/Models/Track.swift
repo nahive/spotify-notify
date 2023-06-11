@@ -1,35 +1,43 @@
 //
 //  Track.swift
-//  NotifySpotify
+//  SpotifyNotify
 //
-//  Created by Szymon Maślanka on 15/03/16.
-//  Copyright © 2016 Szymon Maślanka. All rights reserved.
+//  Created by Szymon Maślanka on 2023/06/11.
+//  Copyright © 2023 Szymon Maślanka. All rights reserved.
 //
 
 import Foundation
 
-extension SpotifyTrack {
-	var track: Track {
-		return Track(id: id?(),
-					 name: name,
-					 album: album,
-					 artist: artist,
-					 artworkURL: artworkUrl?.url,
-					 duration: duration)
-	}
-}
-
 struct Track {
-	let id: String?
-	let name: String?
-	let album: String?
-	let artist: String?
-	let artworkURL: URL?
-	let duration: Int?
+    let id: String
+    let name: String
+    let album: String?
+    let artist: String
+    let artworkURL: URL?
+    let duration: Int?
+    
+    init?(id: String?, name: String?, album: String?, artist: String?, artworkURL: URL?, duration: Int?) {
+        guard let id, let name, let artist else {
+            print("not a valid track")
+            return nil
+        }
+        self.id = id
+        self.name = name
+        self.album = album
+        self.artist = artist
+        self.artworkURL = artworkURL
+        self.duration = duration
+    }
 }
 
 extension Track: Equatable {
-	static func ==(lhs: Track, rhs: Track) -> Bool {
-		return lhs.id == rhs.id
-	}
+    static func ==(lhs: Track, rhs: Track) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
+extension SpotifyTrack {
+    var asTrack: Track? {
+        .init(id: id?(), name: name, album: album, artist: artist, artworkURL: artworkUrl?.asURL, duration: duration)
+    }
 }

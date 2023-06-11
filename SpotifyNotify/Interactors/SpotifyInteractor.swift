@@ -2,41 +2,87 @@
 //  SpotifyInteractor.swift
 //  SpotifyNotify
 //
-//  Created by Szymon Maślanka on 27/02/2018.
-//  Copyright © 2018 Szymon Maślanka. All rights reserved.
+//  Created by Szymon Maślanka on 2023/06/11.
+//  Copyright © 2023 Szymon Maślanka. All rights reserved.
 //
 
-import AppKit
+import Foundation
 import ScriptingBridge
+import AppKit
+import Combine
 
-final class SpotifyInteractor {    
-	private let spotify: SpotifyApplication? = SBApplication(bundleIdentifier: SpotifyConstants.bundleIdentifier)
-	
-	var isFrontmost: Bool { return NSWorkspace.shared.frontmostApplication?.bundleIdentifier == SpotifyConstants.bundleIdentifier }
-	
-	var currentTrack: Track? { return spotify?.currentTrack?.track }
-	var soundVolume: Int? { return spotify?.soundVolume }
-	var playerState: SpotifyEPlS? { return spotify?.playerState }
-    var isPlaying: Bool { return playerState == .unknown || playerState == .playing }
-	var playerPosition: Double? { return spotify?.playerPosition }
-	
-	func nextTrack() {
-		spotify?.nextTrack?()
-	}
-	
-	func previousTrack() {
-		spotify?.previousTrack?()
-	}
-	
-	func playPause() {
-		spotify?.playpause?()
-	}
-	
-	func play() {
-		spotify?.play?()
-	}
-	
-	func pause() {
-		spotify?.pause?()
-	}
+enum SpotifyPlayerState {
+    case stopped, paused, playing, unknown
+}
+
+extension SpotifyEPlS {
+    var asPlayerState: SpotifyPlayerState {
+        switch self {
+        case .paused:
+            .paused
+        case .playing:
+            .playing
+        case .stopped:
+            .stopped
+        default:
+            .unknown
+        }
+    }
+}
+
+final class SpotifyInteractor: ObservableObject {
+    enum Const {
+        static let spotifyAppName = "Spotify"
+        static let spotifyBundleId = "com.spotify.client"
+        static let notificationPlaybackChange = spotifyBundleId + ".PlaybackStateChanged"
+    }
+    
+    private let spotifyBridge: SpotifyApplication? = SBApplication(bundleIdentifier: Const.spotifyBundleId)
+    
+    var currentTrack: Track? {
+        spotifyBridge?.currentTrack?.asTrack
+    }
+    
+    @Published var currentState: SpotifyPlayerState
+    
+    var currentProgress: Double {
+        spotifyBridge?.playerPosition ?? 0
+    }
+    
+    var isFrontmost: Bool {
+        NSWorkspace.shared.frontmostApplication?.bundleIdentifier == Const.spotifyBundleId
+    }
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    init() {
+        currentState = spotifyBridge?.playerState?.asPlayerState ?? .unknown
+        
+        DistributedNotificationCenter.default().publisher(for: .init(Const.notificationPlaybackChange))
+            .sink(receiveValue: { [weak self] _ in
+                guard let self else { return }
+                self.currentState = self.spotifyBridge?.playerState?.asPlayerState ?? .unknown
+            })
+            .store(in: &cancellables)
+    }
+    
+    func nextTrack() {
+        spotifyBridge?.nextTrack?()
+    }
+    
+    func previousTrack() {
+        spotifyBridge?.previousTrack?()
+    }
+    
+    func playPause() {
+        spotifyBridge?.playpause?()
+    }
+    
+    func play() {
+        spotifyBridge?.play?()
+    }
+    
+    func pause() {
+        spotifyBridge?.pause?()
+    }
 }

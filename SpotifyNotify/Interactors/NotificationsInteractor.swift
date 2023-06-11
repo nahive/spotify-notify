@@ -1,52 +1,60 @@
+//
 //  NotificationsInteractor.swift
 //  SpotifyNotify
 //
-//  Created by 先生 on 22/02/2018.
-//  Copyright © 2018 Szymon Maślanka. All rights reserved.
+//  Created by Szymon Maślanka on 2023/06/11.
+//  Copyright © 2023 Szymon Maślanka. All rights reserved.
 //
 
-import Cocoa
-import ScriptingBridge
-
-#if canImport(UserNotifications)
+import Foundation
+import Combine
 import UserNotifications
-#endif
+import AppKit
 
-final class NotificationsInteractor {
-	
-	private let preferences = UserPreferences()
-	private let spotifyInteractor = SpotifyInteractor()
-	
-	private var previousTrack: Track?
-	private var currentTrack: Track?
+final class NotificationsInteractor: ObservableObject {
+    let defaultsInteractor: DefaultsInteractor = .init()
+    let spotifyInteractor: SpotifyInteractor = .init()
     
-    func showNotification() {
-        
-		// return if notifications are disabled
-		guard preferences.notificationsEnabled else {
+    private var previousTrack: Track?
+    private var currentTrack: Track?
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    init() {
+        spotifyInteractor.$currentState
+            .sink(receiveValue: { [weak self] _ in
+                guard let self else { return }
+                self.showNotification()
+            })
+            .store(in: &cancellables)
+    }
+    
+    private func showNotification() {
+        // return if notifications are disabled
+        guard defaultsInteractor.areNotificationsEnabled else {
             print("⚠ notification disabled")
             return
         }
-		
-		// return if notifications are disabled when in focus
-		if spotifyInteractor.isFrontmost && preferences.notificationsDisableOnFocus {
+        
+        // return if notifications are disabled when in focus
+        if spotifyInteractor.isFrontmost, defaultsInteractor.shouldDisableNotificationsOnFocus {
             print("⚠ spotify is frontmost")
             return
         }
-		
-		previousTrack = currentTrack
-		currentTrack  = spotifyInteractor.currentTrack
-	
-		// return if previous track is same as previous => play/pause and if it's disabled
-		guard currentTrack != previousTrack || preferences.notificationsPlayPause else {
+        
+        previousTrack = currentTrack
+        currentTrack  = spotifyInteractor.currentTrack
+    
+        // return if previous track is same as previous => play/pause and if it's disabled
+        guard currentTrack != previousTrack || defaultsInteractor.shouldShowNotificationOnPlayPause else {
             print("⚠ spotify is changing from play/pause")
-			return
-		}
-		
-        guard spotifyInteractor.isPlaying else {
+            return
+        }
+        
+        guard spotifyInteractor.currentState == .playing else {
             print("⚠ spotify is not playing")
-			return
-		}
+            return
+        }
 
         // return if current track is nil
         guard let currentTrack = currentTrack else {
@@ -55,58 +63,43 @@ final class NotificationsInteractor {
         }
 
         // Create and deliver notifications
-        let viewModel = NotificationViewModel(track: currentTrack,
-                                              showSongProgress: preferences.showSongProgress,
-                                              songProgress: spotifyInteractor.playerPosition)
-        createModernNotification(using: viewModel)
-	}
-
-    /// Called by notification delegate
-    func handleAction() {
-        spotifyInteractor.nextTrack()
+        createNotification(model: .init(track: currentTrack,
+                                        showSongProgress: defaultsInteractor.shouldShowSongProgress,
+                                        songProgress: spotifyInteractor.currentProgress))
     }
-
-    // MARK: - Modern Notfications
-
-    /// Use `UserNotifications` to deliver the notification in macOS 10.14 and above
-    @available(OSX 10.14, *)
-    private func createModernNotification(using viewModel: NotificationViewModel) {
+    
+    private func createNotification(model: Notification) {
         let notification = UNMutableNotificationContent()
 
-        notification.title = viewModel.title
-        notification.subtitle = viewModel.subtitle
-        notification.body = viewModel.body
+        notification.title = model.title
+        notification.subtitle = model.subtitle
+        notification.body = model.body
         notification.categoryIdentifier = NotificationIdentifier.category
 
         // decide whether to add sound
-        if preferences.notificationsSound {
+        if defaultsInteractor.shouldPlayNotificationsSound {
             notification.sound = .default
         }
-
-        if preferences.showAlbumArt {
-            addArtwork(to: notification, using: viewModel)
+        
+        if defaultsInteractor.shouldShowAlbumArt {
+            deliverNotificationWithArtwork(notification: notification, model: model)
         } else {
-            deliverModernNotification(identifier: viewModel.identifier, content: notification)
+            deliverNotification(identifier: model.identifier, notification: notification)
         }
     }
+    
+    private func deliverNotificationWithArtwork(notification: UNMutableNotificationContent, model: Notification) {
+        guard let url = model.artworkURL else { return }
 
-    @available(OSX 10.14, *)
-    private func addArtwork(to notification: UNMutableNotificationContent, using viewModel: NotificationViewModel) {
-        guard preferences.showAlbumArt else { return }
-
-        viewModel.artworkURL?.asyncImage { [weak self] art in
-            // Create a mutable copy of the downloaded artwork
-            var artwork = art
-
-            // If user wants round album art, then round the image
-            if self?.preferences.roundAlbumArt == true {
-                artwork = art?.applyCircularMask()
+        Task {
+            var artwork = try await url.asyncImage
+            
+            if defaultsInteractor.shouldRoundAlbumArt {
+                artwork = artwork.withCircularMask
             }
-
-            // Save the artwork to the temporary directory
-            guard let url = artwork?.saveToTemporaryDirectory(withName: "artwork") else { return }
-
-            // Add the attachment to the notification
+            
+            guard let url = artwork.saveToTemporaryDirectory(withName: "artwork") else { return }
+            
             do {
                 let attachment = try UNNotificationAttachment(identifier: "artwork", url: url)
                 notification.attachments = [attachment]
@@ -114,18 +107,16 @@ final class NotificationsInteractor {
                 print("Error creating attachment: " + error.localizedDescription)
             }
 
-            // remove previous notification and replace it with one with image
-            DispatchQueue.main.async {
-                self?.deliverModernNotification(identifier: viewModel.identifier, content: notification)
+            DispatchQueue.main.async { [weak self] in
+                self?.deliverNotification(identifier: model.identifier, notification: notification)
             }
         }
-    }
 
-    /// Deliver notifications using `UNUserNotificationCenter`
-    @available(OSX 10.14, *)
-    private func deliverModernNotification(identifier: String, content: UNMutableNotificationContent) {
+    }
+    
+    private func deliverNotification(identifier: String, notification: UNMutableNotificationContent) {
         // Create a request
-        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: nil)
+        let request = UNNotificationRequest(identifier: identifier, content: notification, trigger: nil)
 
         let notificationCenter = UNUserNotificationCenter.current()
 
@@ -136,8 +127,77 @@ final class NotificationsInteractor {
         notificationCenter.add(request)
 
         // remove after userset number of seconds if not taken action
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(preferences.notificationsLength)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(defaultsInteractor.notificationLength)) {
             notificationCenter.removeAllDeliveredNotifications()
         }
+    }
+}
+
+enum ImageError: Error {
+    case notAnImage
+}
+
+private extension URL {
+    var image: NSImage? {
+        guard let data = try? Data(contentsOf: self) else { return nil }
+        return NSImage(data: data)
+    }
+    
+    var asyncImage: NSImage {
+        get async throws {
+            let (data, _) = try await URLSession.shared.data(from: self)
+            guard let image = NSImage(data: data) else {
+                throw ImageError.notAnImage
+            }
+            return image
+        }
+    }
+}
+
+
+private extension NSImage {
+    enum Const {
+        static let bundleId = "io.nahive.SpotifyNotify"
+    }
+    
+    /// Save an NSImage to a temporary directory
+    ///
+    /// - Parameter name: The file name, to use
+    /// - Returns: A URL if saving is successful, or nil if there was an error
+    func saveToTemporaryDirectory(withName name: String) -> URL? {
+        guard let data = tiffRepresentation else { return nil }
+
+        let fileManager = FileManager.default
+        let tempURL = URL(fileURLWithPath: NSTemporaryDirectory())
+        let bundleURL = tempURL.appendingPathComponent(Const.bundleId, isDirectory: true)
+
+        do {
+            try fileManager.createDirectory(at: bundleURL, withIntermediateDirectories: true)
+            let fileURL = bundleURL.appendingPathComponent(name + ".png")
+
+            try NSBitmapImageRep(data: data)?
+                .representation(using: .png, properties: [:])?
+                .write(to: fileURL)
+
+            return fileURL
+        } catch {
+            print("Error: " + error.localizedDescription)
+        }
+
+        return nil
+    }
+    
+    // Apply circular mask
+    var withCircularMask: NSImage {
+        let image = NSImage(size: size)
+        image.lockFocus()
+
+        NSGraphicsContext.current?.imageInterpolation = .high
+        let frame = NSRect(origin: .zero, size: size)
+        NSBezierPath(ovalIn: frame).addClip()
+        draw(at: .zero, from: frame, operation: .sourceOver, fraction: 1)
+
+        image.unlockFocus()
+        return image
     }
 }

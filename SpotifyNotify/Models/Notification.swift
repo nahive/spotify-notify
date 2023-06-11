@@ -2,14 +2,19 @@
 //  Notification.swift
 //  SpotifyNotify
 //
-//  Created by Paul Williamson on 07/03/2019.
-//  Copyright © 2019 Szymon Maślanka. All rights reserved.
+//  Created by Szymon Maślanka on 2023/06/11.
+//  Copyright © 2023 Szymon Maślanka. All rights reserved.
 //
 
 import Foundation
 
+enum NotificationIdentifier {
+    static let skip = "notification.skip"
+    static let category = "notification.category"
+}
+
 /// A notification view model for setting up a notification
-struct NotificationViewModel {
+struct Notification {
     let identifier = NSUUID().uuidString
     let title: String
     let subtitle: String
@@ -17,9 +22,7 @@ struct NotificationViewModel {
     let artworkURL: URL?
 
     /// Defaults to show if, for any reason, Spotify returns nil
-    private let unknownArtist = "Unknown Artist"
     private let unknownAlbum = "Unknown Album"
-    private let unknownTrack = "Unknown Track"
 
     init(track: Track, showSongProgress: Bool, songProgress: Double?) {
         
@@ -44,8 +47,8 @@ struct NotificationViewModel {
             return "\(nowS)  \(progressString)  \(lengthS)"
         }
         
-        let name = track.name ?? unknownTrack
-        let artist = track.artist ?? unknownArtist
+        let name = track.name
+        let artist = track.artist
         let album = track.album ?? unknownAlbum
  
         title = name
