@@ -22,6 +22,7 @@ final class NotificationsInteractor: ObservableObject {
     
     init() {
         spotifyInteractor.$currentState
+            .dropFirst()
             .sink(receiveValue: { [weak self] _ in
                 guard let self else { return }
                 self.showNotification()
@@ -68,7 +69,7 @@ final class NotificationsInteractor: ObservableObject {
                                         songProgress: spotifyInteractor.currentProgress))
     }
     
-    private func createNotification(model: Notification) {
+    private func createNotification(model: SpotifyNotification) {
         let notification = UNMutableNotificationContent()
 
         notification.title = model.title
@@ -88,7 +89,7 @@ final class NotificationsInteractor: ObservableObject {
         }
     }
     
-    private func deliverNotificationWithArtwork(notification: UNMutableNotificationContent, model: Notification) {
+    private func deliverNotificationWithArtwork(notification: UNMutableNotificationContent, model: SpotifyNotification) {
         guard let url = model.artworkURL else { return }
 
         Task {

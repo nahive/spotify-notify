@@ -14,7 +14,7 @@ enum NotificationIdentifier {
 }
 
 /// A notification view model for setting up a notification
-struct Notification {
+struct SpotifyNotification {
     let identifier = NSUUID().uuidString
     let title: String
     let subtitle: String

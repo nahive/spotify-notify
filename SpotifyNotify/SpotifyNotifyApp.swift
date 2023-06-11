@@ -18,7 +18,7 @@ struct SpotifyNotifyApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
-        MenuBarExtra("SpotifyNotify", image: defaultsInteractor.isMenuIconColored ? "IconStatusBarColor" : "IconStatusBar") {
+        MenuBarExtra("SpotifyNotify", image: defaultsInteractor.isMenuIconColored ? "IconStatusBarColor" : "IconStatusBarMonochrome") {
             MenuView()
                 .environmentObject(spotifyInteractor)
                 .environmentObject(notificationsInteractor)
@@ -82,7 +82,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         case NotificationIdentifier.skip:
             SpotifyInteractor().nextTrack()
         default:
-            NSWorkspace.shared.launchApplication("Spotify")
+            AppOpener.openSpotify()
         }
     }
 }

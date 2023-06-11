@@ -35,7 +35,7 @@ struct MenuView: View {
             }
             Divider()
             Button("Open Spotify") {
-                NSWorkspace.shared.launchApplication("Spotify")
+                AppOpener.openSpotify()
             }
             Divider()
             if #available(macOS 14.0, *) {
