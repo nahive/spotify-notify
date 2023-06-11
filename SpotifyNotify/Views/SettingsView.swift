@@ -7,6 +7,9 @@
 //
 
 import SwiftUI
+import KeyHolder
+import Magnet
+import LaunchAtLogin
 
 struct SettingsView: View {
     
@@ -25,16 +28,15 @@ struct SettingsView: View {
                 .fixedSize()
                 .padding()
             VStack(alignment: .leading) {
-                Toggle(isOn: $defaultsInteractor.shouldStartOnLogin) {
-                    Text("Launch on startup")
-                }
+                LaunchAtLogin.Toggle("Launch on startup")
                 Toggle(isOn: $defaultsInteractor.isMenuIconColored) {
                     Text("Show colored menu bar icon")
                 }
+                Divider()
+                    .padding()
                 Toggle(isOn: $defaultsInteractor.areNotificationsEnabled) {
                     Text("Enable notifications")
                 }
-                Divider()
                 VStack(alignment: .leading) {
                     Toggle(isOn: $defaultsInteractor.shouldShowNotificationOnPlayPause) {
                         Text("Notify on play/pause")
@@ -59,6 +61,13 @@ struct SettingsView: View {
                 }
                 .padding(.leading)
                 .disabled(!defaultsInteractor.areNotificationsEnabled)
+                Divider()
+                    .padding()
+                VStack(alignment: .leading){
+                    Text("Show notification on shortcut")
+                    ShortcutView(keyCombo: $defaultsInteractor.shortcut)
+                        .frame(minHeight: 30)
+                }.padding(.horizontal)
             }
             .padding()
             HStack {
@@ -79,6 +88,56 @@ struct SettingsView: View {
                 .font(.system(size: 10))
         }
         .frame(minWidth: 350, maxWidth: 350)
+    }
+}
+
+struct ShortcutView: NSViewRepresentable {
+    typealias NSViewType = RecordView
+    
+    @Binding private var keyCombo: KeyCombo?
+    
+    init(keyCombo: Binding<KeyCombo?>) {
+        self._keyCombo = keyCombo
+    }
+    
+    func makeNSView(context: Context) -> RecordView {
+        let view = RecordView(frame: .zero)
+        view.tintColor = .gray
+        view.cornerRadius = 5
+        view.delegate = context.coordinator
+        return view
+    }
+    
+    func updateNSView(_ recordView: RecordView, context: Context) {
+        recordView.keyCombo = keyCombo
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
+    
+    class Coordinator: NSObject, RecordViewDelegate {
+        var parent: ShortcutView
+        
+        init(parent: ShortcutView) {
+            self.parent = parent
+        }
+        
+        func recordView(_ recordView: RecordView, didChangeKeyCombo keyCombo: KeyCombo?) {
+            self.parent.keyCombo = keyCombo
+        }
+        
+        func recordViewShouldBeginRecording(_ recordView: RecordView) -> Bool {
+            true
+        }
+        
+        func recordView(_ recordView: RecordView, canRecordKeyCombo keyCombo: KeyCombo) -> Bool {
+            true
+        }
+        
+        func recordViewDidEndRecording(_ recordView: RecordView) {
+            // nothing
+        }
     }
 }
 

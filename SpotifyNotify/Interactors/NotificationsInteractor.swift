@@ -29,7 +29,7 @@ final class NotificationsInteractor: ObservableObject {
             .store(in: &cancellables)
     }
     
-    private func showNotification() {
+    func showNotification() {
         // return if notifications are disabled
         guard defaultsInteractor.areNotificationsEnabled else {
             print("⚠ notification disabled")

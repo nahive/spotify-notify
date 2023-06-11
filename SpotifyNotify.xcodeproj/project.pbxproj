@@ -11,7 +11,6 @@
 		4C858885203F218800ED1692 /* SpotifyBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C858884203F218800ED1692 /* SpotifyBridge.swift */; };
 		4C926D4C288043F40008809E /* KeyHolder in Frameworks */ = {isa = PBXBuildFile; productRef = 4C926D4B288043F40008809E /* KeyHolder */; };
 		4C926D4F288044010008809E /* Magnet in Frameworks */ = {isa = PBXBuildFile; productRef = 4C926D4E288044010008809E /* Magnet */; };
-		4C926D522880442F0008809E /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 4C926D512880442F0008809E /* LaunchAtLogin */; };
 		4CDE08A62A35AB9B009609E7 /* SpotifyNotifyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08A52A35AB9B009609E7 /* SpotifyNotifyApp.swift */; };
 		4CDE08AA2A35AEF6009609E7 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08A92A35AEF6009609E7 /* MenuView.swift */; };
 		4CDE08AD2A35B34D009609E7 /* SpotifyInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08AC2A35B34D009609E7 /* SpotifyInteractor.swift */; };
@@ -21,6 +20,7 @@
 		4CDE08B92A35C238009609E7 /* DefaultsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08B82A35C238009609E7 /* DefaultsInteractor.swift */; };
 		4CDE08BD2A35CAAE009609E7 /* NotificationsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08BC2A35CAAE009609E7 /* NotificationsInteractor.swift */; };
 		4CDE08BF2A35CC68009609E7 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08BE2A35CC68009609E7 /* Notification.swift */; };
+		4CDE08C42A35F53B009609E7 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 4CDE08C32A35F53B009609E7 /* LaunchAtLogin */; };
 		FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */; };
 /* End PBXBuildFile section */
 
@@ -48,7 +48,7 @@
 			files = (
 				4C926D4F288044010008809E /* Magnet in Frameworks */,
 				4C926D4C288043F40008809E /* KeyHolder in Frameworks */,
-				4C926D522880442F0008809E /* LaunchAtLogin in Frameworks */,
+				4CDE08C42A35F53B009609E7 /* LaunchAtLogin in Frameworks */,
 				FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -175,7 +175,7 @@
 			packageProductDependencies = (
 				4C926D4B288043F40008809E /* KeyHolder */,
 				4C926D4E288044010008809E /* Magnet */,
-				4C926D512880442F0008809E /* LaunchAtLogin */,
+				4CDE08C32A35F53B009609E7 /* LaunchAtLogin */,
 			);
 			productName = NotifySpotify;
 			productReference = 4C5764C31C982DC800364AFE /* Notify.app */;
@@ -187,8 +187,9 @@
 		4C5764BB1C982DC800364AFE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 1400;
+				LastUpgradeCheck = 1500;
 				ORGANIZATIONNAME = "Szymon Maślanka";
 				TargetAttributes = {
 					4C5764C21C982DC800364AFE = {
@@ -214,7 +215,7 @@
 			packageReferences = (
 				4C926D4A288043F40008809E /* XCRemoteSwiftPackageReference "KeyHolder" */,
 				4C926D4D288044010008809E /* XCRemoteSwiftPackageReference "Magnet" */,
-				4C926D502880442F0008809E /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
+				4CDE08C22A35F53B009609E7 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
 			);
 			productRefGroup = 4C5764C41C982DC800364AFE /* Products */;
 			projectDirPath = "";
@@ -261,6 +262,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -293,6 +295,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -321,6 +324,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -353,6 +357,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -382,6 +387,7 @@
 				CURRENT_PROJECT_VERSION = 300;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = LK98J2HBA6;
+				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SpotifyNotify/Other/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Spotify Notify";
@@ -411,6 +417,7 @@
 				CURRENT_PROJECT_VERSION = 300;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = LK98J2HBA6;
+				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SpotifyNotify/Other/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Spotify Notify";
@@ -468,9 +475,9 @@
 				kind = branch;
 			};
 		};
-		4C926D502880442F0008809E /* XCRemoteSwiftPackageReference "LaunchAtLogin" */ = {
+		4CDE08C22A35F53B009609E7 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin";
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin-Modern";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -489,9 +496,9 @@
 			package = 4C926D4D288044010008809E /* XCRemoteSwiftPackageReference "Magnet" */;
 			productName = Magnet;
 		};
-		4C926D512880442F0008809E /* LaunchAtLogin */ = {
+		4CDE08C32A35F53B009609E7 /* LaunchAtLogin */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4C926D502880442F0008809E /* XCRemoteSwiftPackageReference "LaunchAtLogin" */;
+			package = 4CDE08C22A35F53B009609E7 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */;
 			productName = LaunchAtLogin;
 		};
 /* End XCSwiftPackageProductDependency section */

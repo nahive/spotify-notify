@@ -18,9 +18,10 @@ struct SpotifyNotifyApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
-        MenuBarExtra("SpotifyNotify", image: "IconStatusBarColor") {
+        MenuBarExtra("SpotifyNotify", image: defaultsInteractor.isMenuIconColored ? "IconStatusBarColor" : "IconStatusBar") {
             MenuView()
                 .environmentObject(spotifyInteractor)
+                .environmentObject(notificationsInteractor)
         }
         Settings {
             SettingsView()

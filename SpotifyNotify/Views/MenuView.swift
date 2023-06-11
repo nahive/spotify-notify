@@ -12,20 +12,30 @@ import AppKit
 struct MenuView: View {
     
     @EnvironmentObject var spotifyInteractor: SpotifyInteractor
+    @EnvironmentObject var notificationsInteractor: NotificationsInteractor
     
     var body: some View {
         VStack {
             Button("Status: \(spotifyInteractor.currentState.localized)") {}
                 .disabled(true)
             Divider()
-            Button("Previous Song") {
-                spotifyInteractor.previousTrack()
+            Group {
+                Button("Show notification") {
+                    notificationsInteractor.showNotification()
+                }
+                Button("Previous Song") {
+                    spotifyInteractor.previousTrack()
+                }
+                Button("Play/Pause") {
+                    spotifyInteractor.playPause()
+                }
+                Button("Next Song") {
+                    spotifyInteractor.nextTrack()
+                }
             }
-            Button("Play/Pause") {
-                spotifyInteractor.playPause()
-            }
-            Button("Next Song") {
-                spotifyInteractor.nextTrack()
+            Divider()
+            Button("Open Spotify") {
+                NSWorkspace.shared.launchApplication("Spotify")
             }
             Divider()
             if #available(macOS 14.0, *) {
