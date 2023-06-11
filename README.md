@@ -18,6 +18,13 @@
 
 ## [Download latest release here](https://github.com/nahive/spotify-notify/releases)
 
+## Install via Homebrew
+
+```
+brew tap nahive/homebrew-spotify-notify
+brew install --cask spotify-notify
+```
+
 ## Features
 
 - [x] Notification sounds (toggle)
@@ -31,7 +38,7 @@
 - [x] Ability to skip song from notification ✨
 - [x] Options to control Spotify from menu bar ✨
 - [ ] Customizable options in notification
-- [ ] Add support for iTunes
+- [ ] Add localizations
 
 ## Notes
 
