@@ -31,7 +31,7 @@
 - [x] Ability to skip song from notification ✨
 - [x] Options to control Spotify from menu bar ✨
 - [ ] Customizable options in notification
-- [ ] Add support for iTunes
+- [ ] Add localizations
 
 ## Notes
 
