@@ -61,28 +61,34 @@ final class SpotifyInteractor: ObservableObject {
         DistributedNotificationCenter.default().publisher(for: .init(Const.notificationPlaybackChange))
             .sink(receiveValue: { [weak self] _ in
                 guard let self else { return }
+                System.logger.info("Received Spotify state change")
                 self.currentState = self.spotifyBridge?.playerState?.asPlayerState ?? .unknown
             })
             .store(in: &cancellables)
     }
     
     func nextTrack() {
+        System.logger.info("Next track")
         spotifyBridge?.nextTrack?()
     }
     
     func previousTrack() {
+        System.logger.info("Prev track")
         spotifyBridge?.previousTrack?()
     }
     
     func playPause() {
+        System.logger.info("Play/pause")
         spotifyBridge?.playpause?()
     }
     
     func play() {
+        System.logger.info("Play")
         spotifyBridge?.play?()
     }
     
     func pause() {
+        System.logger.info("Pause")
         spotifyBridge?.pause?()
     }
 }

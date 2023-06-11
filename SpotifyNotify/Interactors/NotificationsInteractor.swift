@@ -31,6 +31,8 @@ final class NotificationsInteractor: ObservableObject {
     }
     
     func showNotification() {
+        System.logger.info("Starting notification flow")
+        
         // return if notifications are disabled
         guard defaultsInteractor.areNotificationsEnabled else {
             System.logger.warning("⚠ notification disabled")
@@ -70,6 +72,8 @@ final class NotificationsInteractor: ObservableObject {
     }
     
     private func createNotification(model: SpotifyNotification) {
+        System.logger.info("Creating notification")
+        
         let notification = UNMutableNotificationContent()
 
         notification.title = model.title
@@ -83,14 +87,24 @@ final class NotificationsInteractor: ObservableObject {
         }
         
         if defaultsInteractor.shouldShowAlbumArt {
+            System.logger.info("Creating notification with artwork")
             deliverNotificationWithArtwork(notification: notification, model: model)
         } else {
-            deliverNotification(identifier: model.identifier, notification: notification)
+            System.logger.info("Creating notification without artwork")
+            DispatchQueue.main.async { [weak self] in
+                self?.deliverNotification(identifier: model.identifier, notification: notification)
+            }
         }
     }
     
     private func deliverNotificationWithArtwork(notification: UNMutableNotificationContent, model: SpotifyNotification) {
-        guard let url = model.artworkURL else { return }
+        guard let url = model.artworkURL else {
+            System.logger.info("Creating notification with artwork failed, resolving to normal")
+            DispatchQueue.main.async { [weak self] in
+                self?.deliverNotification(identifier: model.identifier, notification: notification)
+            }
+            return
+        }
 
         Task {
             var artwork = try await url.asyncImage
