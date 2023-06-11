@@ -14,6 +14,7 @@ import LaunchAtLogin
 final class DefaultsInteractor: ObservableObject {
     enum Key {
         static let notificationsEnabled = "notifications.enabled.key"
+        static let notificationsKeep = "notifications.keep.key"
         static let notificationsPlayPause = "notifications.playpause.key"
         static let notificationsSound = "notifications.sound.key"
         static let notificationsDisableOnFocus = "notifications.focus.key"
@@ -31,6 +32,7 @@ final class DefaultsInteractor: ObservableObject {
     }
     
     @AppStorage(Key.notificationsEnabled) var areNotificationsEnabled = true
+    @AppStorage(Key.notificationsKeep) var shouldKeepNotificationsOnScreen = false
     @AppStorage(Key.notificationsPlayPause) var shouldShowNotificationOnPlayPause = true
     @AppStorage(Key.notificationsSound) var shouldPlayNotificationsSound = false
     @AppStorage(Key.notificationsDisableOnFocus) var shouldDisableNotificationsOnFocus = true

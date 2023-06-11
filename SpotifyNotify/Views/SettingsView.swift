@@ -38,6 +38,9 @@ struct SettingsView: View {
                     Text("Enable notifications")
                 }
                 VStack(alignment: .leading) {
+                    Toggle(isOn: $defaultsInteractor.shouldKeepNotificationsOnScreen) {
+                        Text("Keep notifications on screen (swipe right to hide)")
+                    }
                     Toggle(isOn: $defaultsInteractor.shouldShowNotificationOnPlayPause) {
                         Text("Notify on play/pause")
                     }

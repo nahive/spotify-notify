@@ -121,15 +121,14 @@ final class NotificationsInteractor: ObservableObject {
 
         let notificationCenter = UNUserNotificationCenter.current()
 
-        // Remove delivered notifications
-        notificationCenter.removeAllDeliveredNotifications()
-
         // Deliver current notification
         notificationCenter.add(request)
 
         // remove after userset number of seconds if not taken action
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(defaultsInteractor.notificationLength)) {
-            notificationCenter.removeAllDeliveredNotifications()
+        if !defaultsInteractor.shouldKeepNotificationsOnScreen {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(defaultsInteractor.notificationLength)) {
+                notificationCenter.removeAllDeliveredNotifications()
+            }
         }
     }
 }
