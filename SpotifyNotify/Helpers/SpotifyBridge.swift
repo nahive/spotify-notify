@@ -1,3 +1,5 @@
+// from https://gist.github.com/gf3/d622d927496d50c6108fd6ea36619bdf
+
 import AppKit
 import ScriptingBridge
 
