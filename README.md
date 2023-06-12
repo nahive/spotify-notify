@@ -21,8 +21,8 @@
 ## Install via Homebrew
 
 ```
-brew tap nahive/homebrew-spotify-notify
-brew install --cask spotify-notify
+brew tap nahive/spotify-notify
+brew install --cask spotify-notify --no-quarantine
 ```
 
 ## Features
