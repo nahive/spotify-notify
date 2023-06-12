@@ -70,7 +70,7 @@ struct SettingsView: View {
                 VStack(alignment: .leading){
                     Text("Show notification on shortcut")
                     ShortcutView(keyCombo: $defaultsInteractor.shortcut)
-                        .frame(minHeight: 30)
+                        .frame(minHeight: 30, maxHeight: 30)
                 }.padding(.horizontal)
             }
             .padding()
@@ -177,7 +177,7 @@ struct ShortcutView: NSViewRepresentable {
 
 struct Settings_Preview: PreviewProvider {
     @StateObject private static var defaultsInteractor = DefaultsInteractor()
-    @StateObject private static var permissionsIteractor = PermissionsInteractor()
+    @StateObject private static var permissionsIteractor = PermissionsInteractor.shared
     
     static var previews: some View {
         SettingsView()

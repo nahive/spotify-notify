@@ -58,7 +58,7 @@ final class DefaultsInteractor: ObservableObject {
             
             if let keyCombo = newValue {
                 let hotKey = HotKey(identifier: "showKey", keyCombo: keyCombo) { key in
-                    NotificationsInteractor().showNotification()
+                    NotificationsInteractor().showNotification(force: true)
                 }
                 HotKeyCenter.shared.register(with: hotKey)
             } else {

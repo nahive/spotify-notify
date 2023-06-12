@@ -30,8 +30,14 @@ final class NotificationsInteractor: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func showNotification() {
+    func showNotification(force: Bool = false) {
         System.logger.info("Starting notification flow")
+        
+        if force, let currentTrack = spotifyInteractor.currentTrack {
+            createNotification(model: .init(track: currentTrack,
+                                            showSongProgress: defaultsInteractor.shouldShowSongProgress,
+                                            songProgress: spotifyInteractor.currentProgress))
+        }
         
         // return if notifications are disabled
         guard defaultsInteractor.areNotificationsEnabled else {

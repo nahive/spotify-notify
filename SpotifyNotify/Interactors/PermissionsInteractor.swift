@@ -12,8 +12,12 @@ import AppKit
 
 final class PermissionsInteractor: NSObject, ObservableObject {
     
+    static let shared = PermissionsInteractor()
+    
     @Published var notificationPermissionEnabled = false
     @Published var automationPermissionEnabled = false
+    
+    private override init() {}
     
     func registerForNotifications() {
         let notificationCenter = UNUserNotificationCenter.current()
@@ -57,7 +61,7 @@ final class PermissionsInteractor: NSObject, ObservableObject {
             System.logger.info("Automation authorisation was granted")
         case OSStatus(errAEEventNotPermitted):
             automationPermissionEnabled = false
-            showAlert(message: "Missing automation permissions", onSettingsTap: openAutomationSettings)
+            showAlert(message: "Missing required automation permissions", onSettingsTap: openAutomationSettings)
             System.logger.warning("Automation authorisation was denied")
         case OSStatus(procNotFound), _:
             System.logger.info("Spotify is not running")
@@ -81,7 +85,7 @@ final class PermissionsInteractor: NSObject, ObservableObject {
     }
     
     func openNotificationsSettings() {
-        NSWorkspace.shared.open("com.apple.preference.notifications".asURL!)
+        NSWorkspace.shared.open("x-apple.systempreferences:com.apple.preference.notifications".asURL!)
     }
     
     func openAutomationSettings() {
