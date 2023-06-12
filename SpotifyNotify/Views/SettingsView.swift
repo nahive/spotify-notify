@@ -19,6 +19,7 @@ struct SettingsView: View {
     }
     
     @EnvironmentObject var defaultsInteractor: DefaultsInteractor
+    @EnvironmentObject var permissionsInteractor: PermissionsInteractor
     
     var body: some View {
         VStack {
@@ -74,6 +75,36 @@ struct SettingsView: View {
             }
             .padding()
             HStack {
+                VStack {
+                    HStack(alignment: .center) {
+                        Circle()
+                            .foregroundStyle(permissionsInteractor.notificationPermissionEnabled ? Color.green : Color.red)
+                            .frame(width: 8)
+                        Text("Notification permisions")
+                    }
+                    if !permissionsInteractor.notificationPermissionEnabled {
+                        Button("Notification settings") {
+                            permissionsInteractor.openNotificationsSettings()
+                        }
+                    }
+                }
+
+                VStack {
+                    HStack(alignment: .center) {
+                        Circle()
+                            .foregroundStyle(permissionsInteractor.automationPermissionEnabled ? Color.green : Color.red)
+                            .frame(width: 8)
+                        Text("Automation permisions")
+                    }
+                    if !permissionsInteractor.automationPermissionEnabled {
+                        Button("Automation settings") {
+                            permissionsInteractor.openAutomationSettings()
+                        }
+                    }
+                }
+            }
+
+            HStack {
                 Button("Source") {
                     NSWorkspace.shared.open(Const.repo)
                 }
@@ -90,7 +121,7 @@ struct SettingsView: View {
                 .foregroundStyle(Color.gray)
                 .font(.system(size: 10))
         }
-        .frame(minWidth: 350, maxWidth: 350)
+        .frame(minWidth: 400, maxWidth: 400)
     }
 }
 
@@ -146,9 +177,11 @@ struct ShortcutView: NSViewRepresentable {
 
 struct Settings_Preview: PreviewProvider {
     @StateObject private static var defaultsInteractor = DefaultsInteractor()
+    @StateObject private static var permissionsIteractor = PermissionsInteractor()
     
     static var previews: some View {
         SettingsView()
             .environmentObject(defaultsInteractor)
+            .environmentObject(permissionsIteractor)
     }
 }

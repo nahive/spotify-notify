@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C3340EE2A3712AF0045B06B /* PermissionsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3340ED2A3712AF0045B06B /* PermissionsInteractor.swift */; };
 		4C5764C91C982DC900364AFE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764C81C982DC900364AFE /* Assets.xcassets */; };
 		4C858885203F218800ED1692 /* SpotifyBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C858884203F218800ED1692 /* SpotifyBridge.swift */; };
 		4C926D4C288043F40008809E /* KeyHolder in Frameworks */ = {isa = PBXBuildFile; productRef = 4C926D4B288043F40008809E /* KeyHolder */; };
@@ -27,6 +28,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4C3340EC2A370EE90045B06B /* SpotifyNotify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SpotifyNotify.entitlements; sourceTree = "<group>"; };
+		4C3340ED2A3712AF0045B06B /* PermissionsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsInteractor.swift; sourceTree = "<group>"; };
 		4C5764C31C982DC800364AFE /* Notify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5764C81C982DC900364AFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4C5764CD1C982DC900364AFE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -80,6 +83,7 @@
 		4C5764C51C982DC800364AFE /* SpotifyNotify */ = {
 			isa = PBXGroup;
 			children = (
+				4C3340EC2A370EE90045B06B /* SpotifyNotify.entitlements */,
 				4CDE08A52A35AB9B009609E7 /* SpotifyNotifyApp.swift */,
 				4CDE08B12A35B3C3009609E7 /* Extensions */,
 				4CDE08AE2A35B393009609E7 /* Models */,
@@ -117,6 +121,7 @@
 				4CDE08AC2A35B34D009609E7 /* SpotifyInteractor.swift */,
 				4CDE08B82A35C238009609E7 /* DefaultsInteractor.swift */,
 				4CDE08BC2A35CAAE009609E7 /* NotificationsInteractor.swift */,
+				4C3340ED2A3712AF0045B06B /* PermissionsInteractor.swift */,
 			);
 			path = Interactors;
 			sourceTree = "<group>";
@@ -260,6 +265,7 @@
 				4CDE08AD2A35B34D009609E7 /* SpotifyInteractor.swift in Sources */,
 				4CDE08B92A35C238009609E7 /* DefaultsInteractor.swift in Sources */,
 				4CDE08B52A35BC9B009609E7 /* SettingsView.swift in Sources */,
+				4C3340EE2A3712AF0045B06B /* PermissionsInteractor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,10 +395,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SpotifyNotify/SpotifyNotify.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 400;
+				CURRENT_PROJECT_VERSION = 480;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = LK98J2HBA6;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -405,7 +412,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 0.4;
+				MARKETING_VERSION = 0.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = Notify;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -419,10 +426,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SpotifyNotify/SpotifyNotify.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 400;
+				CURRENT_PROJECT_VERSION = 480;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = LK98J2HBA6;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -435,7 +443,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 0.4;
+				MARKETING_VERSION = 0.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = Notify;
 				PROVISIONING_PROFILE_SPECIFIER = "";
