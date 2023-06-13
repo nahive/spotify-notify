@@ -17,12 +17,7 @@ struct SpotifyNotifyApp: App {
     @StateObject private var notificationsInteractor = NotificationsInteractor()
     @StateObject private var permissionsInteractor = PermissionsInteractor.shared
     
-    @Environment(\.scenePhase) var scenePhase
-    
-    init() {
-        PermissionsInteractor.shared.registerForNotifications()
-        PermissionsInteractor.shared.registerForControl()
-    }
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
         MenuBarExtra("SpotifyNotify", image: defaultsInteractor.isMenuIconColored ? "IconStatusBarColor" : "IconStatusBarMonochrome") {
@@ -35,5 +30,18 @@ struct SpotifyNotifyApp: App {
                 .environmentObject(defaultsInteractor)
                 .environmentObject(permissionsInteractor)
         }
+    }
+}
+
+class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        PermissionsInteractor.shared.registerForNotifications()
+        PermissionsInteractor.shared.registerForControl()
+    }
+
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        guard !flag else { return true }
+
+        return true
     }
 }

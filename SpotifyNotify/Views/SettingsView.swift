@@ -136,7 +136,6 @@ struct ShortcutView: NSViewRepresentable {
     
     func makeNSView(context: Context) -> RecordView {
         let view = RecordView(frame: .zero)
-        view.tintColor = .gray
         view.cornerRadius = 5
         view.delegate = context.coordinator
         return view
