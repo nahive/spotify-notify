@@ -43,13 +43,13 @@ struct SettingsView: View {
                         Text("Keep notifications on screen (swipe right to hide)")
                     }
                     Toggle(isOn: $defaultsInteractor.shouldShowNotificationOnPlayPause) {
-                        Text("Notify on play/pause")
+                        Text("Display notification on play | pause")
                     }
                     Toggle(isOn: $defaultsInteractor.shouldPlayNotificationsSound) {
                         Text("Play notification sound")
                     }
                     Toggle(isOn: $defaultsInteractor.shouldDisableNotificationsOnFocus) {
-                        Text("Disable notifications when Spotify in focused")
+                        Text("Disable notifications when Spotify is focused")
                     }
                     Toggle(isOn: $defaultsInteractor.shouldShowAlbumArt) {
                         Text("Include album art")
@@ -60,7 +60,7 @@ struct SettingsView: View {
                     .padding(.leading)
                     .disabled(!defaultsInteractor.shouldShowAlbumArt)
                     Toggle(isOn: $defaultsInteractor.shouldShowSongProgress) {
-                        Text("Show song progress")
+                        Text("Display song progress in notification")
                     }
                 }
                 .padding(.leading)
@@ -80,7 +80,7 @@ struct SettingsView: View {
                         Circle()
                             .foregroundStyle(permissionsInteractor.notificationPermissionEnabled ? Color.green : Color.red)
                             .frame(width: 8)
-                        Text("Notification permisions")
+                        Text("Notification permissions")
                     }
                     if !permissionsInteractor.notificationPermissionEnabled {
                         Button("Notification settings") {
@@ -94,7 +94,7 @@ struct SettingsView: View {
                         Circle()
                             .foregroundStyle(permissionsInteractor.automationPermissionEnabled ? Color.green : Color.red)
                             .frame(width: 8)
-                        Text("Automation permisions")
+                        Text("Automation permissions")
                     }
                     if !permissionsInteractor.automationPermissionEnabled {
                         Button("Automation settings") {
