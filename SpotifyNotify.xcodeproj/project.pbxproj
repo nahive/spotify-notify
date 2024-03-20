@@ -411,6 +411,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = Notify;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -440,6 +441,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = Notify;
 				PROVISIONING_PROFILE_SPECIFIER = "";
