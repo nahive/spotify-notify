@@ -49,6 +49,14 @@ final class SpotifyInteractor: ObservableObject {
         spotifyBridge?.playerPosition ?? 0
     }
     
+    var currentProgressPercent: Double {
+        guard let duration = currentTrack?.duration else {
+            return 0.0
+        }
+        let progress = self.currentProgress * 1000
+        return progress / Double(duration)
+    }
+    
     var isFrontmost: Bool {
         NSWorkspace.shared.frontmostApplication?.bundleIdentifier == Const.spotifyBundleId
     }
@@ -90,5 +98,10 @@ final class SpotifyInteractor: ObservableObject {
     func pause() {
         System.logger.info("Pause")
         spotifyBridge?.pause?()
+    }
+    
+    func set(position: Double) {
+        System.logger.info("Set position: \(position)")
+        spotifyBridge?.setPlayerPosition?(position)
     }
 }

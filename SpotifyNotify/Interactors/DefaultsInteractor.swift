@@ -27,6 +27,7 @@ final class DefaultsInteractor: ObservableObject {
         
         static let showMenuIcon = "menuiconshow.key"
         static let menuIconColored = "menuiconcolored.key"
+        static let menuBarShowSong = "menubarshowsong.key"
         static let shortcutKeyCode = "shortcut.keycode.key"
         static let shortcutModifiers = "shortcut.modifiers.key"
     }
@@ -44,6 +45,7 @@ final class DefaultsInteractor: ObservableObject {
     
     @AppStorage(Key.showMenuIcon) var shouldShowMenuIcon = true
     @AppStorage(Key.menuIconColored) var isMenuIconColored = false
+    @AppStorage(Key.menuBarShowSong) var shouldShowSongInMenuBar = false
     @AppStorage(Key.shortcutKeyCode) private var shortcutKeyCode = 0
     @AppStorage(Key.shortcutModifiers) private var shortcutModifier = 0
     
