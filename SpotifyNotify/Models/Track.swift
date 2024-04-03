@@ -34,6 +34,15 @@ extension Track: Equatable {
     static func ==(lhs: Track, rhs: Track) -> Bool {
         return lhs.id == rhs.id
     }
+    
+    static var empty: Self {
+        .init(id: UUID().uuidString,
+              name: "Unknown",
+              album: "Unknown",
+              artist: "Unkown",
+              artworkURL: nil,
+              duration: 0)!
+    }
 }
 
 extension SpotifyTrack {

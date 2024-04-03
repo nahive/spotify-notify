@@ -20,6 +20,7 @@ struct SettingsView: View {
     
     @EnvironmentObject var defaultsInteractor: DefaultsInteractor
     @EnvironmentObject var permissionsInteractor: PermissionsInteractor
+    @EnvironmentObject var notificationsInteractor: NotificationsInteractor
     
     var body: some View {
         VStack {
@@ -69,7 +70,7 @@ struct SettingsView: View {
                     .padding()
                 VStack(alignment: .leading){
                     Text("Show notification on shortcut")
-                    ShortcutView(keyCombo: $defaultsInteractor.shortcut)
+                    ShortcutView(notificationsInteractor: notificationsInteractor, keyCombo: $defaultsInteractor.shortcut)
                         .frame(minHeight: 30, maxHeight: 30)
                 }.padding(.horizontal)
             }
@@ -128,9 +129,12 @@ struct SettingsView: View {
 struct ShortcutView: NSViewRepresentable {
     typealias NSViewType = RecordView
     
+    private let notificationsInteractor: NotificationsInteractor
+    
     @Binding private var keyCombo: KeyCombo?
     
-    init(keyCombo: Binding<KeyCombo?>) {
+    init(notificationsInteractor: NotificationsInteractor, keyCombo: Binding<KeyCombo?>) {
+        self.notificationsInteractor = notificationsInteractor
         self._keyCombo = keyCombo
     }
     
@@ -158,6 +162,15 @@ struct ShortcutView: NSViewRepresentable {
         
         func recordView(_ recordView: RecordView, didChangeKeyCombo keyCombo: KeyCombo?) {
             self.parent.keyCombo = keyCombo
+            
+            if let keyCombo {
+                let hotKey = HotKey(identifier: "showKey", keyCombo: keyCombo) { key in
+                    self.parent.notificationsInteractor.showNotification(force: true)
+                }
+                HotKeyCenter.shared.register(with: hotKey)
+            } else {
+                HotKeyCenter.shared.unregisterAll()
+            }
         }
         
         func recordViewShouldBeginRecording(_ recordView: RecordView) -> Bool {
@@ -176,7 +189,7 @@ struct ShortcutView: NSViewRepresentable {
 
 struct Settings_Preview: PreviewProvider {
     @StateObject private static var defaultsInteractor = DefaultsInteractor()
-    @StateObject private static var permissionsIteractor = PermissionsInteractor.shared
+    @StateObject private static var permissionsIteractor = PermissionsInteractor()
     
     static var previews: some View {
         SettingsView()

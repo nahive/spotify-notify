@@ -11,16 +11,21 @@ import Combine
 import UserNotifications
 import AppKit
 
-final class NotificationsInteractor: ObservableObject {
-    let defaultsInteractor: DefaultsInteractor = .init()
-    let spotifyInteractor: SpotifyInteractor = .init()
+final class NotificationsInteractor: NSObject, ObservableObject {
+    let defaultsInteractor: DefaultsInteractor
+    let spotifyInteractor: SpotifyInteractor
     
     private var previousTrack: Track?
     private var currentTrack: Track?
     
     private var cancellables = Set<AnyCancellable>()
     
-    init() {
+    init(defaultsInteractor: DefaultsInteractor, spotifyInteractor: SpotifyInteractor) {
+        self.defaultsInteractor = defaultsInteractor
+        self.spotifyInteractor = spotifyInteractor
+        
+        super.init()
+        
         spotifyInteractor.$currentState
             .dropFirst()
             .sink(receiveValue: { [weak self] _ in
@@ -33,8 +38,8 @@ final class NotificationsInteractor: ObservableObject {
     func showNotification(force: Bool = false) {
         System.logger.info("Starting notification flow")
         
-        if force, let currentTrack = spotifyInteractor.currentTrack {
-            createNotification(model: .init(track: currentTrack,
+        if force, spotifyInteractor.currentTrack != .empty {
+            createNotification(model: .init(track: spotifyInteractor.currentTrack,
                                             showSongProgress: defaultsInteractor.shouldShowSongProgress,
                                             songProgress: spotifyInteractor.currentProgress))
         }
@@ -152,6 +157,28 @@ final class NotificationsInteractor: ObservableObject {
         }
     }
 }
+
+extension NotificationsInteractor: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        // Force notifications to be shown, even if the SpotifyNotify is in the foreground
+        completionHandler([.banner, .sound])
+    }
+
+    /// Handle the action buttons
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        switch response.actionIdentifier {
+        case NotificationIdentifier.skip:
+            spotifyInteractor.nextTrack()
+        default:
+            spotifyInteractor.openSpotify()
+        }
+    }
+}
+
 
 enum ImageError: Error {
     case notAnImage

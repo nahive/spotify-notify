@@ -12,18 +12,31 @@ import AppKit
 
 @main
 struct SpotifyNotifyApp: App {
-    @StateObject private var spotifyInteractor = SpotifyInteractor()
-    @StateObject private var defaultsInteractor = DefaultsInteractor()
-    @StateObject private var notificationsInteractor = NotificationsInteractor()
-    @StateObject private var permissionsInteractor = PermissionsInteractor.shared
+    @StateObject private var spotifyInteractor: SpotifyInteractor
+    @StateObject private var defaultsInteractor: DefaultsInteractor
+    @StateObject private var notificationsInteractor: NotificationsInteractor
+    @StateObject private var permissionsInteractor: PermissionsInteractor
     
-    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    init() {
+        let spotifyInteractor = SpotifyInteractor()
+        let defaultsInteractor = DefaultsInteractor()
+        let notificationsInteractor = NotificationsInteractor(defaultsInteractor: defaultsInteractor, spotifyInteractor: spotifyInteractor)
+        let permissionsInteractor = PermissionsInteractor()
+        
+        self._spotifyInteractor = StateObject(wrappedValue: spotifyInteractor)
+        self._defaultsInteractor = StateObject(wrappedValue: defaultsInteractor)
+        self._notificationsInteractor = StateObject(wrappedValue: notificationsInteractor)
+        self._permissionsInteractor = StateObject(wrappedValue: permissionsInteractor)
+    }
+    
+//    @AppStorage(DefaultsInteractor.Key.menuIconVisible) var isMenuIconVisible = true
     
     var body: some Scene {
         MenuBarExtra {
             MenuView()
                 .environmentObject(spotifyInteractor)
                 .environmentObject(notificationsInteractor)
+                .environmentObject(permissionsInteractor)
         } label: {
             HStack {
                 Image(defaultsInteractor.isMenuIconColored ? "IconStatusBarColor" : "IconStatusBarMonochrome")
@@ -32,21 +45,9 @@ struct SpotifyNotifyApp: App {
         .menuBarExtraStyle(.window)
         Settings {
             SettingsView()
+                .environmentObject(notificationsInteractor)
                 .environmentObject(defaultsInteractor)
                 .environmentObject(permissionsInteractor)
         }
-    }
-}
-
-class AppDelegate: NSObject, NSApplicationDelegate {
-    func applicationDidFinishLaunching(_ notification: Notification) {
-        PermissionsInteractor.shared.registerForNotifications()
-        PermissionsInteractor.shared.registerForControl()
-    }
-
-    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-        guard !flag else { return true }
-
-        return true
     }
 }

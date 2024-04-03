@@ -23,7 +23,6 @@
 		4CDE08BD2A35CAAE009609E7 /* NotificationsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08BC2A35CAAE009609E7 /* NotificationsInteractor.swift */; };
 		4CDE08BF2A35CC68009609E7 /* SpotifyNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08BE2A35CC68009609E7 /* SpotifyNotification.swift */; };
 		4CDE08C42A35F53B009609E7 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 4CDE08C32A35F53B009609E7 /* LaunchAtLogin */; };
-		4CDE08C62A35F664009609E7 /* AppOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08C52A35F664009609E7 /* AppOpener.swift */; };
 		FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */; };
 /* End PBXBuildFile section */
 
@@ -44,7 +43,6 @@
 		4CDE08B82A35C238009609E7 /* DefaultsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsInteractor.swift; sourceTree = "<group>"; };
 		4CDE08BC2A35CAAE009609E7 /* NotificationsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsInteractor.swift; sourceTree = "<group>"; };
 		4CDE08BE2A35CC68009609E7 /* SpotifyNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyNotification.swift; sourceTree = "<group>"; };
-		4CDE08C52A35F664009609E7 /* AppOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppOpener.swift; sourceTree = "<group>"; };
 		FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -100,7 +98,6 @@
 			isa = PBXGroup;
 			children = (
 				4C858884203F218800ED1692 /* SpotifyBridge.swift */,
-				4CDE08C52A35F664009609E7 /* AppOpener.swift */,
 				4CAF91112A3620B700C6A19B /* Logger.swift */,
 			);
 			path = Helpers;
@@ -255,7 +252,6 @@
 			files = (
 				4CDE08B32A35B3CD009609E7 /* String+Ext.swift in Sources */,
 				4C858885203F218800ED1692 /* SpotifyBridge.swift in Sources */,
-				4CDE08C62A35F664009609E7 /* AppOpener.swift in Sources */,
 				4CDE08B02A35B39D009609E7 /* Track.swift in Sources */,
 				4CDE08A62A35AB9B009609E7 /* SpotifyNotifyApp.swift in Sources */,
 				4CDE08AA2A35AEF6009609E7 /* MenuView.swift in Sources */,

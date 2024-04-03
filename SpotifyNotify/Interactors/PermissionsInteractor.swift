@@ -11,17 +11,12 @@ import UserNotifications
 import AppKit
 
 final class PermissionsInteractor: NSObject, ObservableObject {
-    
-    static let shared = PermissionsInteractor()
-    
     @Published var notificationPermissionEnabled = false
     @Published var automationPermissionEnabled = false
     
-    private override init() {}
-    
-    func registerForNotifications() {
+    func registerForNotifications(delegate: UNUserNotificationCenterDelegate) {
         let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.delegate = self
+        notificationCenter.delegate = delegate
 
         // Check notification authorisation first
         notificationCenter.requestAuthorization(options: [.alert, .sound]) { [weak self] (granted, error) in
@@ -51,7 +46,7 @@ final class PermissionsInteractor: NSObject, ObservableObject {
         UNUserNotificationCenter.current().setNotificationCategories([category])
     }
     
-    func registerForControl() {
+    func registerForControl() {        
         let targetAEDescriptor = NSAppleEventDescriptor(bundleIdentifier: SpotifyInteractor.Const.spotifyBundleId)
         let status = AEDeterminePermissionToAutomateTarget(targetAEDescriptor.aeDesc, typeWildCard, typeWildCard, true)
         
@@ -90,26 +85,5 @@ final class PermissionsInteractor: NSObject, ObservableObject {
     
     func openAutomationSettings() {
         NSWorkspace.shared.open("x-apple.systempreferences:com.apple.preference.security?Privacy_Automation".asURL!)
-    }
-}
-
-extension PermissionsInteractor: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        // Force notifications to be shown, even if the SpotifyNotify is in the foreground
-        completionHandler([.banner, .sound])
-    }
-
-    /// Handle the action buttons
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse,
-                                withCompletionHandler completionHandler: @escaping () -> Void) {
-        switch response.actionIdentifier {
-        case NotificationIdentifier.skip:
-            SpotifyInteractor().nextTrack()
-        default:
-            AppOpener.openSpotify()
-        }
     }
 }

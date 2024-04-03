@@ -1,4 +1,5 @@
 {
+  "originHash" : "6d27897e2135001aaed8bc4ae1dbff492a95a6b005b2f3ea2bab0ea762ec7a1a",
   "pins" : [
     {
       "identity" : "keyholder",
@@ -6,7 +7,7 @@
       "location" : "https://github.com/Clipy/KeyHolder",
       "state" : {
         "branch" : "master",
-        "revision" : "66cd7ef7b94a276493ba831992a8c212760d8ab4"
+        "revision" : "9459ade1d13313f4008d5dba12ff83f28889de82"
       }
     },
     {
@@ -15,7 +16,7 @@
       "location" : "https://github.com/sindresorhus/LaunchAtLogin-Modern",
       "state" : {
         "branch" : "main",
-        "revision" : "9c41991631605c8ccfe0347bbcb5c659169f2ec5"
+        "revision" : "a04ec1c363be3627734f6dad757d82f5d4fa8fcc"
       }
     },
     {
@@ -24,7 +25,7 @@
       "location" : "https://github.com/Clipy/Magnet",
       "state" : {
         "branch" : "master",
-        "revision" : "3a683b657367464f0ab0f7949fcb0cc4173cbfcd"
+        "revision" : "3401f876f210e611b9969725ff0a9f3153bb1b31"
       }
     },
     {
@@ -32,10 +33,10 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Clipy/Sauce",
       "state" : {
-        "revision" : "2fcf7e43a242b183fdea3f2275ebec0d773b65f5",
-        "version" : "2.2.0"
+        "revision" : "df657bc1beba23ffd580953f183cd756b5bcd514",
+        "version" : "2.4.1"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

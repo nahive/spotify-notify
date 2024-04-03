@@ -17,40 +17,12 @@ struct MenuView: View {
     @State private var isHoveringPrevious = false
     @State private var isHoveringPlayPause = false
     @State private var isHoveringNext = false
-    @State private var currentTrackDuration = "--:--"
-    
-    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    
-    private var currentTrack: Track {
-        guard let track = spotifyInteractor.currentTrack else {
-            return .init(id: UUID().uuidString,
-                         name: "Unknown",
-                         album: "Unknown",
-                         artist: "Unkown",
-                         artworkURL: nil,
-                         duration: 0)!
-        }
-        return track
-    }
-    
-    private var calculatedTrackDuration: String {
-        let duration = Duration.seconds(spotifyInteractor.currentProgress)
-        return duration.formatted(.time(pattern: .minuteSecond))
-    }
-    
-    private var fullTrackDuration: String {
-        guard let trackDuration = currentTrack.duration else {
-            return "--:--"
-        }
-        let duration = Duration.milliseconds(trackDuration)
-        return duration.formatted(.time(pattern: .minuteSecond))
-    }
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Menu {
                 Button {
-                    AppOpener.openSpotify()
+                    spotifyInteractor.openSpotify()
                 } label: {
                     Text("Open Spotify")
                     Image(systemName: "play.house")
@@ -87,8 +59,8 @@ struct MenuView: View {
             
             HStack {
                 ZStack(alignment: .center) {
-                    AsyncImage(url: currentTrack.artworkURL) { phase in
-                        CoverImageView(image: phase.image ?? Image("IconSettings"), album: currentTrack.album)
+                    AsyncImage(url: spotifyInteractor.currentTrack.artworkURL) { phase in
+                        CoverImageView(image: phase.image ?? Image("IconSettings"), album: spotifyInteractor.currentTrack.album)
                     }
                     .padding()
                     .frame(width: 200, height: 200)
@@ -98,32 +70,29 @@ struct MenuView: View {
                 
                 VStack {
                     Spacer()
-                    Text(currentTrack.name)
+                    Text(spotifyInteractor.currentTrack.name)
                         .font(.title)
                         .fontWeight(.bold)
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
-                    Text(currentTrack.artist)
+                        .animation(.default, value: spotifyInteractor.currentTrack)
+                    Text(spotifyInteractor.currentTrack.artist)
                         .font(.title3)
                         .foregroundStyle(Color.gray)
+                        .animation(.default, value: spotifyInteractor.currentTrack)
                     HStack {
-                        Text(currentTrackDuration)
+                        Text(spotifyInteractor.currentTrackProgress)
                             .font(.caption)
                             .foregroundStyle(Color.gray)
                         ProgressView(value: spotifyInteractor.currentProgressPercent, total: 1.0)
                             .tint(Color(.progress))
-                        Text(fullTrackDuration)
+                        Text(spotifyInteractor.fullTrackDuration)
                             .font(.caption)
                             .foregroundStyle(Color.gray)
                     }
-                    .onAppear {
-                        currentTrackDuration = calculatedTrackDuration
-                    }
-                    .onReceive(timer) { _ in
-                        currentTrackDuration = calculatedTrackDuration
-                    }
                     HStack {
                         Image(systemName: "backward.fill")
+                            .frame(width: 20, height: 20)
                             .font(.title3)
                             .padding()
                             .background(Color.primary.opacity(isHoveringPrevious ? 0.3 : 0.1))
@@ -136,20 +105,43 @@ struct MenuView: View {
                                     isHoveringPrevious = isHovering
                                 }
                             }
-                        Image(systemName: spotifyInteractor.currentState == .playing ? "pause.fill" : "play.fill")
-                            .font(.largeTitle)
-                            .padding()
-                            .background(Color.primary.opacity(isHoveringPlayPause ? 0.3 : 0.1))
-                            .clipShape(Circle())
-                            .onTapGesture {
-                                spotifyInteractor.playPause()
-                            }
-                            .onHover { isHovering in
-                                withAnimation {
-                                    isHoveringPlayPause = isHovering
+                        if #available(macOS 14.0, *) {
+                            Image(systemName: spotifyInteractor.currentState == .playing ? "pause.fill" : "play.fill")
+                                .frame(width: 25, height: 25)
+                                .font(.largeTitle)
+                                .padding()
+                                .background(Color.primary.opacity(isHoveringPlayPause ? 0.3 : 0.1))
+                                .clipShape(Circle())
+                                .onTapGesture {
+                                    spotifyInteractor.playPause()
                                 }
-                            }
+                                .onHover { isHovering in
+                                    withAnimation {
+                                        isHoveringPlayPause = isHovering
+                                    }
+                                }
+                                .contentTransition(.symbolEffect)
+                        }
+                        else {
+                            Image(systemName: spotifyInteractor.currentState == .playing ? "pause.fill" : "play.fill")
+                                .frame(width: 25, height: 25)
+                                .font(.largeTitle)
+                                .padding()
+                                .background(Color.primary.opacity(isHoveringPlayPause ? 0.3 : 0.1))
+                                .clipShape(Circle())
+                                .onTapGesture {
+                                    spotifyInteractor.playPause()
+                                }
+                                .onHover { isHovering in
+                                    withAnimation {
+                                        isHoveringPlayPause = isHovering
+                                    }
+                                }
+                                .animation(.default, value: spotifyInteractor.currentState == .playing)
+                        }
+
                         Image(systemName: "forward.fill")
+                            .frame(width: 20, height: 20)
                             .font(.title3)
                             .padding()
                             .background(Color.primary.opacity(isHoveringNext ? 0.3 : 0.1))
@@ -174,10 +166,6 @@ struct MenuView: View {
 }
 
 private struct CoverImageView: View {
-    
-    @State private var glowYOffset = -5.0
-    @State private var glowXOffset = -5.0
-    @State private var glowOpacity = 1.0
     @State private var shouldShowAlbumName = false
     
     let image: Image
@@ -218,13 +206,8 @@ private struct CoverImageView: View {
                 shouldShowAlbumName = isHovering
             }
         }
+        .animation(.default, value: image)
     }
-}
-
-#Preview {
-    MenuView()
-        .environmentObject(SpotifyInteractor())
-        .environmentObject(NotificationsInteractor())
 }
 
 private extension SpotifyPlayerState {

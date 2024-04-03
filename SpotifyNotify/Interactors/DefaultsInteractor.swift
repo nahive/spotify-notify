@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 import Magnet
 import LaunchAtLogin
+import Combine
 
 final class DefaultsInteractor: ObservableObject {
     enum Key {
@@ -25,7 +26,7 @@ final class DefaultsInteractor: ObservableObject {
         static let roundAlbumArt = "roundalbumart.key"
         static let showSongProgress = "songprogress.key"
         
-        static let showMenuIcon = "menuiconshow.key"
+        static let menuIconVisible = "menuiconvisible.key"
         static let menuIconColored = "menuiconcolored.key"
         static let menuBarShowSong = "menubarshowsong.key"
         static let shortcutKeyCode = "shortcut.keycode.key"
@@ -43,11 +44,12 @@ final class DefaultsInteractor: ObservableObject {
     @AppStorage(Key.roundAlbumArt) var shouldRoundAlbumArt = false
     @AppStorage(Key.showSongProgress) var shouldShowSongProgress = false
     
-    @AppStorage(Key.showMenuIcon) var shouldShowMenuIcon = true
+    @AppStorage(Key.menuIconVisible) var isMenuIconVisible = true
     @AppStorage(Key.menuIconColored) var isMenuIconColored = false
     @AppStorage(Key.menuBarShowSong) var shouldShowSongInMenuBar = false
     @AppStorage(Key.shortcutKeyCode) private var shortcutKeyCode = 0
     @AppStorage(Key.shortcutModifiers) private var shortcutModifier = 0
+    
     
     var shortcut: KeyCombo? {
         get {
@@ -57,15 +59,6 @@ final class DefaultsInteractor: ObservableObject {
         set {
             shortcutKeyCode = newValue?.QWERTYKeyCode ?? 0
             shortcutModifier = newValue?.modifiers ?? 0
-            
-            if let keyCombo = newValue {
-                let hotKey = HotKey(identifier: "showKey", keyCombo: keyCombo) { key in
-                    NotificationsInteractor().showNotification(force: true)
-                }
-                HotKeyCenter.shared.register(with: hotKey)
-            } else {
-                HotKeyCenter.shared.unregisterAll()
-            }
         }
     }
 }
