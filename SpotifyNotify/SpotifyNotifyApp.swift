@@ -30,6 +30,9 @@ struct SpotifyNotifyApp: App {
         self._defaultsInteractor = StateObject(wrappedValue: defaultsInteractor)
         self._notificationsInteractor = StateObject(wrappedValue: notificationsInteractor)
         self._permissionsInteractor = StateObject(wrappedValue: permissionsInteractor)
+        
+        permissionsInteractor.registerForNotifications(delegate: notificationsInteractor)
+        permissionsInteractor.registerForControl()
     }
     
     var body: some Scene {
