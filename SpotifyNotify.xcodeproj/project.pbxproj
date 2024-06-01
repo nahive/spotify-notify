@@ -395,20 +395,20 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1203;
+				CURRENT_PROJECT_VERSION = 1512;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = LK98J2HBA6;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SpotifyNotify/Other/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Spotify Notify";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 0.5;
+				MARKETING_VERSION = 0.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = Notify;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -426,20 +426,20 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1203;
+				CURRENT_PROJECT_VERSION = 1512;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = LK98J2HBA6;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SpotifyNotify/Other/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Spotify Notify";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 0.5;
+				MARKETING_VERSION = 0.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = Notify;
 				PROVISIONING_PROFILE_SPECIFIER = "";

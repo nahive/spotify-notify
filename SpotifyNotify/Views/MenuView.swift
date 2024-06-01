@@ -10,6 +10,7 @@ import SwiftUI
 import AppKit
 
 struct MenuView: View {
+    @Environment(\.openWindow) private var openWindow
     
     @EnvironmentObject var spotifyInteractor: SpotifyInteractor
     @EnvironmentObject var notificationsInteractor: NotificationsInteractor
@@ -28,20 +29,12 @@ struct MenuView: View {
                     Image(systemName: "play.house")
                 }
                 Divider()
-                if #available(macOS 14.0, *) {
-                    SettingsLink {
-                        Text("Settings")
-                        Image(systemName: "gear")
-                    }
-                }
-                else {
-                    Button {
-                        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-                        NSApp.activate(ignoringOtherApps: true)
-                    } label: {
-                        Text("Settings")
-                        Image(systemName: "gear")
-                    }
+                Button {
+                    openWindow(id: "settings-window")
+                    NSApp.activate(ignoringOtherApps: true)
+                } label: {
+                    Text("Settings")
+                    Image(systemName: "gear")
                 }
                 Button {
                     NSApp.terminate(nil)

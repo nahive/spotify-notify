@@ -31,9 +31,13 @@ struct SettingsView: View {
                 .padding()
             VStack(alignment: .leading) {
                 LaunchAtLogin.Toggle("Launch on startup")
+                Toggle(isOn: $defaultsInteractor.isMenuIconVisible) {
+                    Text("Show menu bar icon")
+                }
                 Toggle(isOn: $defaultsInteractor.isMenuIconColored) {
                     Text("Show colored menu bar icon")
                 }
+                .disabled(!defaultsInteractor.isMenuIconVisible)
                 Divider()
                     .padding()
                 Toggle(isOn: $defaultsInteractor.areNotificationsEnabled) {
