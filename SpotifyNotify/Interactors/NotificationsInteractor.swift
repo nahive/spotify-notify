@@ -16,7 +16,6 @@ final class NotificationsInteractor: NSObject, ObservableObject {
     let spotifyInteractor: SpotifyInteractor
     
     private var previousTrack: Track?
-    private var currentTrack: Track?
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -26,22 +25,28 @@ final class NotificationsInteractor: NSObject, ObservableObject {
         
         super.init()
         
-        spotifyInteractor.$currentState
-            .dropFirst()
-            .sink(receiveValue: { [weak self] _ in
+        spotifyInteractor.$currentTrack
+            .sink(receiveValue: { [weak self] in
                 guard let self else { return }
-                self.showNotification()
+                self.showNotification($0)
             })
             .store(in: &cancellables)
     }
     
-    func showNotification(force: Bool = false) {
+    func forceShowNotification() {
+        guard spotifyInteractor.currentTrack != .empty else { return }
+        createNotification(model: .init(track: spotifyInteractor.currentTrack,
+                                        showSongProgress: defaultsInteractor.shouldShowSongProgress,
+                                        songProgress: spotifyInteractor.currentProgress))
+    }
+    
+    func showNotification(_ track: Track) {
         System.logger.info("Starting notification flow")
         
-        if force, spotifyInteractor.currentTrack != .empty {
-            createNotification(model: .init(track: spotifyInteractor.currentTrack,
-                                            showSongProgress: defaultsInteractor.shouldShowSongProgress,
-                                            songProgress: spotifyInteractor.currentProgress))
+        // return if current track is nil
+        guard track != .empty else {
+            System.logger.info("⚠ spotify has no track available")
+            return
         }
         
         // return if notifications are disabled
@@ -55,12 +60,9 @@ final class NotificationsInteractor: NSObject, ObservableObject {
             System.logger.info("⚠ spotify is frontmost")
             return
         }
-        
-        previousTrack = currentTrack
-        currentTrack  = spotifyInteractor.currentTrack
     
         // return if previous track is same as previous => play/pause and if it's disabled
-        guard currentTrack != previousTrack || defaultsInteractor.shouldShowNotificationOnPlayPause else {
+        guard track != previousTrack || defaultsInteractor.shouldShowNotificationOnPlayPause else {
             System.logger.info("⚠ spotify is changing from play/pause")
             return
         }
@@ -69,15 +71,11 @@ final class NotificationsInteractor: NSObject, ObservableObject {
             System.logger.info("⚠ spotify is not playing")
             return
         }
-
-        // return if current track is nil
-        guard let currentTrack = currentTrack else {
-            System.logger.info("⚠ spotify has no track available")
-            return
-        }
+        
+        previousTrack = track
 
         // Create and deliver notifications
-        createNotification(model: .init(track: currentTrack,
+        createNotification(model: .init(track: track,
                                         showSongProgress: defaultsInteractor.shouldShowSongProgress,
                                         songProgress: spotifyInteractor.currentProgress))
     }

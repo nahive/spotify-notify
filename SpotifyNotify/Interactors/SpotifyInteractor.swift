@@ -74,6 +74,7 @@ final class SpotifyInteractor: NSObject, ObservableObject {
                 switch state {
                 case "Paused", "Playing":
                     self.currentState = self.spotifyBridge?.playerState?.asPlayerState ?? .unknown
+                    self.currentTrack = self.spotifyBridge?.currentTrack?.asTrack ?? .empty
                 default:
                     self.currentState = .unknown
                     self.currentTrack = .empty
@@ -111,8 +112,6 @@ final class SpotifyInteractor: NSObject, ObservableObject {
         currentProgressPercent = progress / Double(duration)
         currentTrackProgress = Duration.milliseconds(progress).formatted(.time(pattern: .minuteSecond))
         fullTrackDuration = Duration.milliseconds(duration).formatted(.time(pattern: .minuteSecond))
-        print("\(fullTrackDuration)")
-        print("current: \(currentProgressPercent)")
     }
     
     func openSpotify() {

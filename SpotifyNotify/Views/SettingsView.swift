@@ -169,7 +169,7 @@ struct ShortcutView: NSViewRepresentable {
             
             if let keyCombo {
                 let hotKey = HotKey(identifier: "showKey", keyCombo: keyCombo) { key in
-                    self.parent.notificationsInteractor.showNotification(force: true)
+                    self.parent.notificationsInteractor.forceShowNotification()
                 }
                 HotKeyCenter.shared.register(with: hotKey)
             } else {
