@@ -8,13 +8,13 @@
 
 import Foundation
 
-enum NotificationIdentifier {
+enum NotificationIdentifier: Sendable {
     static let skip = "notification.skip"
     static let category = "notification.category"
 }
 
 /// A notification view model for setting up a notification
-struct SpotifyNotification {
+struct SpotifyNotification: Sendable {
     let identifier = NSUUID().uuidString
     let title: String
     let subtitle: String

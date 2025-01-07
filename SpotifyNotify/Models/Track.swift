@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Track {
+struct Track: Sendable {
     let id: String
     let name: String
     let album: String?

@@ -7,10 +7,11 @@
 //
 
 import Foundation
-import Combine
-import UserNotifications
+@preconcurrency import Combine
+@preconcurrency import UserNotifications
 import AppKit
 
+@MainActor
 final class NotificationsInteractor: NSObject, ObservableObject {
     let defaultsInteractor: DefaultsInteractor
     let spotifyInteractor: SpotifyInteractor
@@ -156,18 +157,14 @@ final class NotificationsInteractor: NSObject, ObservableObject {
     }
 }
 
-extension NotificationsInteractor: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+extension NotificationsInteractor: @preconcurrency UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
         // Force notifications to be shown, even if the SpotifyNotify is in the foreground
-        completionHandler([.banner, .sound])
+        [.banner, .sound]
     }
-
+    
     /// Handle the action buttons
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse,
-                                withCompletionHandler completionHandler: @escaping () -> Void) {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
         switch response.actionIdentifier {
         case NotificationIdentifier.skip:
             spotifyInteractor.nextTrack()
@@ -199,6 +196,8 @@ private extension URL {
     }
 }
 
+// TODO: fix this
+extension NSImage: @unchecked @retroactive Sendable {}
 
 private extension NSImage {
     enum Const {

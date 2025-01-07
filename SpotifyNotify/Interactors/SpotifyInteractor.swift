@@ -12,6 +12,7 @@ import AppKit
 import Combine
 import UserNotifications
 
+@MainActor
 final class SpotifyInteractor: NSObject, ObservableObject {
     enum Const {
         static let spotifyAppName = "Spotify"
@@ -19,7 +20,7 @@ final class SpotifyInteractor: NSObject, ObservableObject {
         static let playbackStateChanged = spotifyBundleId + ".PlaybackStateChanged"
     }
     
-    private var spotifyBridge: SpotifyApplication? {
+    private var spotifyBridge: (any SpotifyApplication)? {
         guard isSpotifyOpen else {
             return nil
         }
@@ -68,6 +69,7 @@ final class SpotifyInteractor: NSObject, ObservableObject {
         DistributedNotificationCenter.default().publisher(for: .init(Const.playbackStateChanged))
             .compactMap { $0.userInfo?["Player State"] as? String }
             .removeDuplicates()
+            .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] state in
                 guard let self else { return }
                 System.logger.info("Received Spotify state change")
@@ -87,6 +89,7 @@ final class SpotifyInteractor: NSObject, ObservableObject {
         DistributedNotificationCenter.default().publisher(for: .init(Const.playbackStateChanged))
             .compactMap { $0.userInfo?["Player State"] as? String }
             .filter { $0 == "Playing" }
+            .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] state in
                 guard let self else { return }
                 System.logger.info("Received Spotify track change")
@@ -94,7 +97,9 @@ final class SpotifyInteractor: NSObject, ObservableObject {
             })
             .store(in: &cancellables)
         
-        timer.sink { [weak self] _ in
+        timer
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
             guard let self, currentState == .playing else { return }
             self.calculateProgress()
         }.store(in: &cancellables)

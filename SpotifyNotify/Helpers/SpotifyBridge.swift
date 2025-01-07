@@ -3,18 +3,18 @@
 import AppKit
 import ScriptingBridge
 
-@objc public protocol SBObjectProtocol: NSObjectProtocol {
+@objc protocol SBObjectProtocol: NSObjectProtocol {
     func get() -> Any!
 }
 
-@objc public protocol SBApplicationProtocol: SBObjectProtocol {
+@objc protocol SBApplicationProtocol: SBObjectProtocol {
     func activate()
-    var delegate: SBApplicationDelegate? { get set }
+    var delegate: (any SBApplicationDelegate)? { get set }
     var isRunning: Bool { @objc(isRunning) get }
 }
 
 // MARK: SpotifyEPlS
-@objc public enum SpotifyEPlS : AEKeyword {
+@objc enum SpotifyEPlS: AEKeyword {
     case unknown = 0 /* this happens when permissions for reading macos interactions are disabled */
     case stopped = 0x6b505353 /* 'kPSS' */
     case playing = 0x6b505350 /* 'kPSP' */
@@ -22,8 +22,8 @@ import ScriptingBridge
 }
 
 // MARK: SpotifyApplication
-@objc public protocol SpotifyApplication: SBApplicationProtocol {
-    @objc optional var currentTrack: SpotifyTrack { get } // The current playing track.
+@objc protocol SpotifyApplication: SBApplicationProtocol {
+    @objc optional var currentTrack: any SpotifyTrack { get } // The current playing track.
     @objc optional var soundVolume: Int { get } // The sound output volume (0 = minimum, 100 = maximum)
     @objc optional var playerState: SpotifyEPlS { get } // Is Spotify stopped, paused, or playing?
     @objc optional var playerPosition: Double { get } // The player’s position within the currently playing track in seconds.
@@ -48,7 +48,7 @@ import ScriptingBridge
 extension SBApplication: SpotifyApplication {}
 
 // MARK: SpotifyTrack
-@objc public protocol SpotifyTrack: SBObjectProtocol {
+@objc protocol SpotifyTrack: SBObjectProtocol {
     @objc optional var artist: String { get } // The artist of the track.
     @objc optional var album: String { get } // The album of the track.
     @objc optional var discNumber: Int { get } // The disc number of the track.

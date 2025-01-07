@@ -12,6 +12,7 @@ import Magnet
 import LaunchAtLogin
 import Combine
 
+@MainActor
 final class DefaultsInteractor: ObservableObject {
     enum Key {
         static let notificationsEnabled = "notifications.enabled.key"
@@ -44,7 +45,9 @@ final class DefaultsInteractor: ObservableObject {
     @AppStorage(Key.roundAlbumArt) var shouldRoundAlbumArt = false
     @AppStorage(Key.showSongProgress) var shouldShowSongProgress = false
     
-    @AppStorage(Key.menuIconVisible) var isMenuIconVisible = true
+    // deprecated for not due to MenuBarExtra not respecting bindings properly
+    // @AppStorage(Key.menuIconVisible) var isMenuIconVisible = true
+    @Published var deprecated_isMenuIconVisible = false
     @AppStorage(Key.menuIconColored) var isMenuIconColored = false
     @AppStorage(Key.menuBarShowSong) var shouldShowSongInMenuBar = false
     @AppStorage(Key.shortcutKeyCode) private var shortcutKeyCode = 0

@@ -31,12 +31,14 @@ struct SpotifyNotifyApp: App {
         self._notificationsInteractor = StateObject(wrappedValue: notificationsInteractor)
         self._permissionsInteractor = StateObject(wrappedValue: permissionsInteractor)
         
-        permissionsInteractor.registerForNotifications(delegate: notificationsInteractor)
-        permissionsInteractor.registerForControl()
+        Task {
+            await permissionsInteractor.registerForNotifications(delegate: notificationsInteractor)
+            await permissionsInteractor.registerForControl()
+        }
     }
     
     var body: some Scene {
-        MenuBarExtra(isInserted: .constant(defaultsInteractor.isMenuIconVisible)) {
+        MenuBarExtra {
             MenuView()
                 .environmentObject(spotifyInteractor)
                 .environmentObject(notificationsInteractor)
@@ -57,19 +59,15 @@ struct SpotifyNotifyApp: App {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    func applicationDidFinishLaunching(_ notification: Notification) {
-        // prevent settings from showing on launch
-        if let window = NSApplication.shared.windows.first {
-            window.close()
-        }
-    }
+    @Environment(\.openWindow) var openWindow
     
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         guard !flag else {
             return true
         }
-        
-        return !DefaultsInteractor().isMenuIconVisible
+        // TODO: fix opening settings
+        openWindow(id: "settings-window")
+        return true
     }
     
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {

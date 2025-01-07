@@ -10,30 +10,22 @@ import Foundation
 import UserNotifications
 import AppKit
 
+@MainActor
 final class PermissionsInteractor: NSObject, ObservableObject {
     @Published var notificationPermissionEnabled = false
     @Published var automationPermissionEnabled = false
     
-    func registerForNotifications(delegate: UNUserNotificationCenterDelegate) {
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.delegate = delegate
+    func registerForNotifications(delegate: any UNUserNotificationCenterDelegate) async {
+        UNUserNotificationCenter.current().delegate = delegate
 
         // Check notification authorisation first
-        notificationCenter.requestAuthorization(options: [.alert, .sound]) { [weak self] (granted, error) in
-            guard let self else { return }
-            
-            DispatchQueue.main.async {
-                self.notificationPermissionEnabled = granted
-            }
-            
-            if let error = error {
-                System.logger.warning("Notification authorisation was denied: \(error)")
-                DispatchQueue.main.async {
-                    self.showAlert(message: "Missing notification permissions", onSettingsTap: self.openNotificationsSettings)
-                }
-            } else {
-                System.logger.info("Notification authorisation was granted: \(granted)")
-            }
+        do {
+            let granted = try await UNUserNotificationCenter.current().requestAuthorization()
+            notificationPermissionEnabled = granted
+            System.logger.info("Notification authorisation was granted: \(granted)")
+        } catch {
+            showAlert(message: "Missing notification permissions", onSettingsTap: self.openNotificationsSettings)
+            System.logger.warning("Notification authorisation was denied: \(error)")
         }
 
         let skip = UNNotificationAction(identifier: NotificationIdentifier.skip, title: "Skip")
@@ -46,7 +38,11 @@ final class PermissionsInteractor: NSObject, ObservableObject {
         UNUserNotificationCenter.current().setNotificationCategories([category])
     }
     
-    func registerForControl() {        
+    func updateNotifications(_ granted: Bool) {
+        self.notificationPermissionEnabled = granted
+    }
+    
+    func registerForControl() async {        
         let targetAEDescriptor = NSAppleEventDescriptor(bundleIdentifier: SpotifyInteractor.Const.spotifyBundleId)
         let status = AEDeterminePermissionToAutomateTarget(targetAEDescriptor.aeDesc, typeWildCard, typeWildCard, true)
         

@@ -31,13 +31,13 @@ struct SettingsView: View {
                 .padding()
             VStack(alignment: .leading) {
                 LaunchAtLogin.Toggle("Launch on startup")
-                Toggle(isOn: $defaultsInteractor.isMenuIconVisible) {
+                Toggle(isOn: $defaultsInteractor.deprecated_isMenuIconVisible) {
                     Text("Show menu bar icon")
                 }
+                .disabled(true)
                 Toggle(isOn: $defaultsInteractor.isMenuIconColored) {
                     Text("Show colored menu bar icon")
                 }
-                .disabled(!defaultsInteractor.isMenuIconVisible)
                 Divider()
                     .padding()
                 Toggle(isOn: $defaultsInteractor.areNotificationsEnabled) {
@@ -157,7 +157,8 @@ struct ShortcutView: NSViewRepresentable {
         Coordinator(parent: self)
     }
     
-    class Coordinator: NSObject, RecordViewDelegate {
+    @MainActor
+    class Coordinator: NSObject, @preconcurrency RecordViewDelegate {
         var parent: ShortcutView
         
         init(parent: ShortcutView) {
