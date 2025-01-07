@@ -182,15 +182,14 @@ private struct CoverImageView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
+                .opacity(shouldShowAlbumName ? 0.3 : 1)
             
             if let album = album {
                 Text(album)
                     .padding()
                     .font(.body)
                     .minimumScaleFactor(0.8)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.black.opacity(0.8))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .shadow(color: Color.black, radius: 3)
                     .opacity(shouldShowAlbumName ? 1 : 0)
             }
         }

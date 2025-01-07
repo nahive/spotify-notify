@@ -42,20 +42,24 @@ final class PermissionsInteractor: NSObject, ObservableObject {
         self.notificationPermissionEnabled = granted
     }
     
-    func registerForControl() async {        
-        let targetAEDescriptor = NSAppleEventDescriptor(bundleIdentifier: SpotifyInteractor.Const.spotifyBundleId)
-        let status = AEDeterminePermissionToAutomateTarget(targetAEDescriptor.aeDesc, typeWildCard, typeWildCard, true)
-        
-        switch status {
-        case noErr:
-            automationPermissionEnabled = true
-            System.logger.info("Automation authorisation was granted")
-        case OSStatus(errAEEventNotPermitted):
-            automationPermissionEnabled = false
-            showAlert(message: "Missing required automation permissions", onSettingsTap: openAutomationSettings)
-            System.logger.warning("Automation authorisation was denied")
-        case OSStatus(procNotFound), _:
-            System.logger.info("Spotify is not running")
+    func registerForControl() async {
+        Task.detached {
+            let targetAEDescriptor = NSAppleEventDescriptor(bundleIdentifier: SpotifyInteractor.Const.spotifyBundleId)
+            let status = AEDeterminePermissionToAutomateTarget(targetAEDescriptor.aeDesc, typeWildCard, typeWildCard, true)
+            
+            Task { @MainActor in
+                switch status {
+                case noErr:
+                    self.automationPermissionEnabled = true
+                    System.logger.info("Automation authorisation was granted")
+                case OSStatus(errAEEventNotPermitted):
+                    self.automationPermissionEnabled = false
+                    self.showAlert(message: "Missing required automation permissions", onSettingsTap: self.openAutomationSettings)
+                    System.logger.warning("Automation authorisation was denied")
+                case OSStatus(procNotFound), _:
+                    System.logger.info("Spotify is not running")
+                }
+            }
         }
     }
 
