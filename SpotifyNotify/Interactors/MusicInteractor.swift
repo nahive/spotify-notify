@@ -1,5 +1,5 @@
 //
-//  SpotifyInteractor.swift
+//  MusicInteractor.swift
 //  SpotifyNotify
 //
 //  Created by Szymon Maślanka on 2023/06/11.
@@ -13,42 +13,39 @@ import Combine
 import UserNotifications
 
 @MainActor
-final class SpotifyInteractor: NSObject, ObservableObject {
-    enum Const {
-        static let spotifyAppName = "Spotify"
-        static let spotifyBundleId = "com.spotify.client"
-        static let playbackStateChanged = spotifyBundleId + ".PlaybackStateChanged"
-    }
+final class MusicInteractor: ObservableObject {
     
-    private var spotifyBridge: (any SpotifyApplication)? {
-        guard isSpotifyOpen else {
+    private let config: any CommonMusicConfig
+    
+    private var bridge: (any CommonMusicPlayerBridge)? {
+        guard isApplicationOpen else {
             return nil
         }
-        return SBApplication(bundleIdentifier: Const.spotifyBundleId)
+        return SBApplication(bundleIdentifier: config.bundleId) as? (any CommonMusicPlayerBridge)
     }
-    
-    private var spotifyApp: NSRunningApplication? {
+
+    private var application: NSRunningApplication? {
         NSWorkspace.shared.runningApplications
-            .filter { $0.bundleIdentifier == Const.spotifyBundleId }
+            .filter { $0.bundleIdentifier == config.bundleId }
             .first
     }
-    
+
     var isFrontmost: Bool {
-        NSWorkspace.shared.frontmostApplication?.bundleIdentifier == Const.spotifyBundleId
+        NSWorkspace.shared.frontmostApplication?.bundleIdentifier == config.bundleId
     }
-    
-    private var isSpotifyOpen: Bool {
-        guard let spotifyApp else {
+
+    private var isApplicationOpen: Bool {
+        guard let application else {
             return false
         }
-        return !spotifyApp.isTerminated
+        return !application.isTerminated
     }
     
     var currentProgress: Double {
-         spotifyBridge?.playerPosition ?? 0
+         bridge?.playerPosition ?? 0
      }
     
-    @Published var currentState: SpotifyPlayerState = .unknown
+    @Published var currentState: MusicPlayerState = .unknown
     @Published var currentTrack: Track = .empty
     
     @Published var currentProgressPercent: Double = 0
@@ -59,24 +56,25 @@ final class SpotifyInteractor: NSObject, ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
-    override init() {
-        super.init()
+    init(config: any CommonMusicConfig) {
+        self.config = config
         
-        currentState = spotifyBridge?.playerState?.asPlayerState ?? .unknown
-        currentTrack = spotifyBridge?.currentTrack?.asTrack ?? .empty
+        currentState = bridge?.currentState ?? .unknown
+        currentTrack = bridge?.currentTrack ?? .empty
+        
         calculateProgress()
         
-        DistributedNotificationCenter.default().publisher(for: .init(Const.playbackStateChanged))
+        DistributedNotificationCenter.default().publisher(for: .init(config.playbackChangedName))
             .compactMap { $0.userInfo?["Player State"] as? String }
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] state in
                 guard let self else { return }
-                System.logger.info("Received Spotify state change")
+                System.logger.info("Received \(config.appName) state change")
                 switch state {
                 case "Paused", "Playing":
-                    self.currentState = self.spotifyBridge?.playerState?.asPlayerState ?? .unknown
-                    self.currentTrack = self.spotifyBridge?.currentTrack?.asTrack ?? .empty
+                    self.currentState = self.bridge?.currentState ?? .unknown
+                    self.currentTrack = self.bridge?.currentTrack ?? .empty
                 default:
                     self.currentState = .unknown
                     self.currentTrack = .empty
@@ -86,14 +84,14 @@ final class SpotifyInteractor: NSObject, ObservableObject {
             })
             .store(in: &cancellables)
         
-        DistributedNotificationCenter.default().publisher(for: .init(Const.playbackStateChanged))
+        DistributedNotificationCenter.default().publisher(for: .init(config.playbackChangedName))
             .compactMap { $0.userInfo?["Player State"] as? String }
             .filter { $0 == "Playing" }
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] state in
                 guard let self else { return }
-                System.logger.info("Received Spotify track change")
-                self.currentTrack = self.spotifyBridge?.currentTrack?.asTrack ?? .empty
+                System.logger.info("Received \(config.appName) track change")
+                self.currentTrack = self.bridge?.currentTrack ?? .empty
             })
             .store(in: &cancellables)
         
@@ -104,7 +102,7 @@ final class SpotifyInteractor: NSObject, ObservableObject {
             self.calculateProgress()
         }.store(in: &cancellables)
     }
-    
+
     private func calculateProgress() {
         guard let duration = currentTrack.duration, duration != 0 else {
             currentProgressPercent = 0.0
@@ -113,14 +111,14 @@ final class SpotifyInteractor: NSObject, ObservableObject {
             return
         }
         
-        let progress = (self.spotifyBridge?.playerPosition ?? 0) * 1000
+        let progress = (self.bridge?.playerPosition ?? 0) * 1000
         currentProgressPercent = progress / Double(duration)
         currentTrackProgress = Duration.milliseconds(progress).formatted(.time(pattern: .minuteSecond))
         fullTrackDuration = Duration.milliseconds(duration).formatted(.time(pattern: .minuteSecond))
     }
-    
-    func openSpotify() {
-        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.spotify.client") else { return }
+   
+    func openApplication() {
+        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: config.bundleId) else { return }
 
         let path = "/bin"
         let configuration = NSWorkspace.OpenConfiguration()
@@ -129,50 +127,34 @@ final class SpotifyInteractor: NSObject, ObservableObject {
                                            configuration: configuration,
                                            completionHandler: nil)
     }
-    
+
     func nextTrack() {
-        guard let spotifyBridge else {
-            openSpotify()
+        guard let bridge else {
+            openApplication()
             return
         }
+        bridge.nextTrack()
+        
         System.logger.info("Next track")
-        spotifyBridge.nextTrack?()
     }
     
     func previousTrack() {
-        guard let spotifyBridge else {
-            openSpotify()
+        guard let bridge else {
+            openApplication()
             return
         }
+        bridge.previousTrack()
+        
         System.logger.info("Prev track")
-        spotifyBridge.previousTrack?()
     }
     
     func playPause() {
-        guard let spotifyBridge else {
-            openSpotify()
+        guard let bridge else {
+            openApplication()
             return
         }
+        bridge.playPause()
+        
         System.logger.info("Play/pause")
-        spotifyBridge.playpause?()
-    }
-}
-
-enum SpotifyPlayerState {
-    case stopped, paused, playing, unknown
-}
-
-extension SpotifyEPlS {
-    var asPlayerState: SpotifyPlayerState {
-        switch self {
-        case .paused:
-            .paused
-        case .playing:
-            .playing
-        case .stopped:
-            .stopped
-        default:
-            .unknown
-        }
     }
 }

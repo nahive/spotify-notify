@@ -14,19 +14,19 @@ import AppKit
 @MainActor
 final class NotificationsInteractor: NSObject, ObservableObject {
     let defaultsInteractor: DefaultsInteractor
-    let spotifyInteractor: SpotifyInteractor
+    let musicInteractor: MusicInteractor
     
     private var previousTrack: Track?
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(defaultsInteractor: DefaultsInteractor, spotifyInteractor: SpotifyInteractor) {
+    init(defaultsInteractor: DefaultsInteractor, musicInteractor: MusicInteractor) {
         self.defaultsInteractor = defaultsInteractor
-        self.spotifyInteractor = spotifyInteractor
+        self.musicInteractor = musicInteractor
         
         super.init()
         
-        spotifyInteractor.$currentTrack
+        musicInteractor.$currentTrack
             .sink(receiveValue: { [weak self] in
                 guard let self else { return }
                 self.showNotification($0)
@@ -35,10 +35,10 @@ final class NotificationsInteractor: NSObject, ObservableObject {
     }
     
     func forceShowNotification() {
-        guard spotifyInteractor.currentTrack != .empty else { return }
-        createNotification(model: .init(track: spotifyInteractor.currentTrack,
+        guard musicInteractor.currentTrack != .empty else { return }
+        createNotification(model: .init(track: musicInteractor.currentTrack,
                                         showSongProgress: defaultsInteractor.shouldShowSongProgress,
-                                        songProgress: spotifyInteractor.currentProgress))
+                                        songProgress: musicInteractor.currentProgress))
     }
     
     func showNotification(_ track: Track) {
@@ -46,7 +46,7 @@ final class NotificationsInteractor: NSObject, ObservableObject {
         
         // return if current track is nil
         guard track != .empty else {
-            System.logger.info("⚠ spotify has no track available")
+            System.logger.info("⚠ music has no track available")
             return
         }
         
@@ -57,19 +57,19 @@ final class NotificationsInteractor: NSObject, ObservableObject {
         }
         
         // return if notifications are disabled when in focus
-        if spotifyInteractor.isFrontmost, defaultsInteractor.shouldDisableNotificationsOnFocus {
-            System.logger.info("⚠ spotify is frontmost")
+        if musicInteractor.isFrontmost, defaultsInteractor.shouldDisableNotificationsOnFocus {
+            System.logger.info("⚠ music is frontmost")
             return
         }
     
         // return if previous track is same as previous => play/pause and if it's disabled
         guard track != previousTrack || defaultsInteractor.shouldShowNotificationOnPlayPause else {
-            System.logger.info("⚠ spotify is changing from play/pause")
+            System.logger.info("⚠ music is changing from play/pause")
             return
         }
         
-        guard spotifyInteractor.currentState == .playing else {
-            System.logger.info("⚠ spotify is not playing")
+        guard musicInteractor.currentState == .playing else {
+            System.logger.info("⚠ music is not playing")
             return
         }
         
@@ -78,10 +78,10 @@ final class NotificationsInteractor: NSObject, ObservableObject {
         // Create and deliver notifications
         createNotification(model: .init(track: track,
                                         showSongProgress: defaultsInteractor.shouldShowSongProgress,
-                                        songProgress: spotifyInteractor.currentProgress))
+                                        songProgress: musicInteractor.currentProgress))
     }
     
-    private func createNotification(model: SpotifyNotification) {
+    private func createNotification(model: MusicNotification) {
         System.logger.info("Creating notification")
         
         let notification = UNMutableNotificationContent()
@@ -107,7 +107,7 @@ final class NotificationsInteractor: NSObject, ObservableObject {
         }
     }
     
-    private func deliverNotificationWithArtwork(notification: UNMutableNotificationContent, model: SpotifyNotification) {
+    private func deliverNotificationWithArtwork(notification: UNMutableNotificationContent, model: MusicNotification) {
         guard let url = model.artworkURL else {
             System.logger.info("Creating notification with artwork failed, resolving to normal")
             DispatchQueue.main.async { [weak self] in
@@ -167,9 +167,9 @@ extension NotificationsInteractor: @preconcurrency UNUserNotificationCenterDeleg
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
         switch response.actionIdentifier {
         case NotificationIdentifier.skip:
-            spotifyInteractor.nextTrack()
+            musicInteractor.nextTrack()
         default:
-            spotifyInteractor.openSpotify()
+            musicInteractor.openApplication()
         }
     }
 }

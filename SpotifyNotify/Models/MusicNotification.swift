@@ -1,6 +1,6 @@
 //
 //  Notification.swift
-//  SpotifyNotify
+//  MusicNotify
 //
 //  Created by Szymon Maślanka on 2023/06/11.
 //  Copyright © 2023 Szymon Maślanka. All rights reserved.
@@ -14,7 +14,7 @@ enum NotificationIdentifier: Sendable {
 }
 
 /// A notification view model for setting up a notification
-struct SpotifyNotification: Sendable {
+struct MusicNotification: Sendable {
     let identifier = NSUUID().uuidString
     let title: String
     let subtitle: String

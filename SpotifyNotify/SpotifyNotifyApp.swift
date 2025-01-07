@@ -15,18 +15,18 @@ struct SpotifyNotifyApp: App {
     
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    @StateObject private var spotifyInteractor: SpotifyInteractor
+    @StateObject private var musicInteractor: MusicInteractor
     @StateObject private var defaultsInteractor: DefaultsInteractor
     @StateObject private var notificationsInteractor: NotificationsInteractor
     @StateObject private var permissionsInteractor: PermissionsInteractor
     
     init() {
-        let spotifyInteractor = SpotifyInteractor()
+        let spotifyInteractor = MusicInteractor()
         let defaultsInteractor = DefaultsInteractor()
         let notificationsInteractor = NotificationsInteractor(defaultsInteractor: defaultsInteractor, spotifyInteractor: spotifyInteractor)
         let permissionsInteractor = PermissionsInteractor()
         
-        self._spotifyInteractor = StateObject(wrappedValue: spotifyInteractor)
+        self._musicInteractor = StateObject(wrappedValue: musicInteractor)
         self._defaultsInteractor = StateObject(wrappedValue: defaultsInteractor)
         self._notificationsInteractor = StateObject(wrappedValue: notificationsInteractor)
         self._permissionsInteractor = StateObject(wrappedValue: permissionsInteractor)
@@ -40,7 +40,7 @@ struct SpotifyNotifyApp: App {
     var body: some Scene {
         MenuBarExtra {
             MenuView()
-                .environmentObject(spotifyInteractor)
+                .environmentObject(musicInteractor)
                 .environmentObject(notificationsInteractor)
                 .environmentObject(permissionsInteractor)
         } label: {
