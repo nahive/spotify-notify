@@ -29,6 +29,7 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
         UNUserNotificationCenter.current().delegate = self
         
         musicInteractor.$currentTrack
+            .dropFirst()
             .sink(receiveValue: { [weak self] in
                 guard let self else { return }
                 self.showNotification($0)
@@ -76,11 +77,13 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
         guard
             let track,
             defaultsInteractor.areNotificationsEnabled,
-            musicInteractor.isPlayerFrontmost,
-            defaultsInteractor.shouldDisableNotificationsOnFocus,
             defaultsInteractor.shouldShowNotificationOnPlayPause,
             musicInteractor.currentState == .playing
         else {
+            return
+        }
+        
+        if defaultsInteractor.shouldDisableNotificationsOnFocus && musicInteractor.isPlayerFrontmost {
             return
         }
 

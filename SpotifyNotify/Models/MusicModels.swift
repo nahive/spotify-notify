@@ -10,7 +10,7 @@ import Foundation
 import AppKit
 
 enum SupportedMusicApplication: String, CaseIterable {
-    case spotify, applemusic
+    case applemusic, spotify
     
     var appName: String {
         switch self {

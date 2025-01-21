@@ -62,8 +62,10 @@ private struct GeneralSettingsView: View {
     let musicInteractor: MusicInteractor
     let notificationsInteractor: NotificationsInteractor
     
-    @State private var selectedApplication: SelectableMusicApplication
     @State private var timerCancellable: AnyCancellable?
+    
+    // TODO: not perfect way to refresh - refactor that
+    @State private var refreshID: UUID = .init()
     
     init(defaultsInteractor: DefaultsInteractor,
          musicInteractor: MusicInteractor,
@@ -71,14 +73,28 @@ private struct GeneralSettingsView: View {
         self.defaultsInteractor = defaultsInteractor
         self.musicInteractor = musicInteractor
         self.notificationsInteractor = notificationsInteractor
-        self.selectedApplication = defaultsInteractor.selectedApplication.asSelectableMusicApplication
     }
     
     var body: some View {
         VStack {
-            Picker("Application", selection: $selectedApplication) {
-                ForEach(SelectableMusicApplication.allCases, id: \.self) {
-                    Text($0.name)
+            HStack {
+                ForEach(SupportedMusicApplication.allCases, id: \.rawValue) { app in
+                    ZStack {
+                        if let icon = app.icon {
+                            Image(nsImage: icon)
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                        } else {
+                            Text(app.appName)
+                                .frame(width: 50, height: 50)
+                        }
+                    }
+                    .padding(5)
+                    .background(defaultsInteractor.selectedApplication == app ? app.color.opacity(0.5) : Color.clear)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .onTapGesture {
+                        defaultsInteractor.selectedApplication = app
+                    }
                 }
             }
             VStack {
@@ -115,9 +131,8 @@ private struct GeneralSettingsView: View {
                 }
             }
         }
-        .onChange(of: selectedApplication) {
-            defaultsInteractor.selectedApplication = $0.asSupportedMusicApplication
-            musicInteractor.set(application: $0.asSupportedMusicApplication)
+        .onChange(of: defaultsInteractor.selectedApplication) {
+            musicInteractor.set(application: $0)
         }
         .onAppear {
             startTimer()
@@ -133,11 +148,40 @@ private struct GeneralSettingsView: View {
             .sink { _ in
                 notificationsInteractor.updateNotificationsPermissions()
                 musicInteractor.updateControlPermissions()
+                refreshID = .init()
             }
     }
 
     private func stopTimer() {
         timerCancellable?.cancel()
+    }
+}
+
+private extension SupportedMusicApplication {
+    var color: Color {
+        switch self {
+        case .applemusic:
+            .appleMusic
+        case .spotify:
+            .spotify
+        }
+    }
+    
+    var icon: NSImage? {
+        switch self {
+        case .spotify:
+            getAppIcon(for: bundleId)
+        case .applemusic:
+            getAppIcon(for: bundleId)
+        }
+    }
+    
+    private func getAppIcon(for bundleIdentifier: String) -> NSImage? {
+        guard let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) else {
+            return nil
+        }
+
+        return NSWorkspace.shared.icon(forFile: appURL.path)
     }
 }
 
