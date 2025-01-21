@@ -22,12 +22,12 @@ struct MenuView: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Menu {
-                Button {
-                    musicInteractor.openApplication()
-                } label: {
-                    Text("Open Spotify")
-                    Image(systemName: "play.house")
-                }
+//                Button {
+//                    SystemNavigator.openApplication()
+//                } label: {
+//                    Text("Open Spotify")
+//                    Image(systemName: "play.house")
+//                }
                 Divider()
                 Button {
                     openWindow(id: "settings-window")
@@ -51,25 +51,35 @@ struct MenuView: View {
             .padding()
             
             HStack {
-                ZStack(alignment: .center) {
-                    AsyncImage(url: musicInteractor.currentTrack.artworkURL) { phase in
-                        CoverImageView(image: phase.image ?? Image("IconSettings"), album: musicInteractor.currentTrack.album)
+                if let track = musicInteractor.currentTrack, let artwork = track.artwork {
+                    switch artwork {
+                    case .url(let url):
+                        ZStack(alignment: .center) {
+                            AsyncImage(url: url) { phase in
+                                CoverImageView(image: phase.image ?? Image("IconSettings"), album: track.album)
+                            }
+                            .padding()
+                            .frame(width: 200, height: 200)
+                        }
+                    case .image(let image):
+                        ZStack(alignment: .center) {
+                            CoverImageView(image: Image(nsImage: image), album: track.album)
+                            .padding()
+                            .frame(width: 200, height: 200)
+                        }
                     }
-                    .padding()
-                    .frame(width: 200, height: 200)
+                    Spacer()
                 }
-                
-                Spacer()
                 
                 VStack {
                     Spacer()
-                    Text(musicInteractor.currentTrack.name)
+                    Text(musicInteractor.currentTrack?.name ?? "")
                         .font(.title)
                         .fontWeight(.bold)
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
                         .animation(.default, value: musicInteractor.currentTrack)
-                    Text(musicInteractor.currentTrack.artist)
+                    Text(musicInteractor.currentTrack?.artist ?? "")
                         .font(.title3)
                         .foregroundStyle(Color.gray)
                         .animation(.default, value: musicInteractor.currentTrack)

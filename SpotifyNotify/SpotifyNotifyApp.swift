@@ -18,23 +18,17 @@ struct SpotifyNotifyApp: App {
     @StateObject private var musicInteractor: MusicInteractor
     @StateObject private var defaultsInteractor: DefaultsInteractor
     @StateObject private var notificationsInteractor: NotificationsInteractor
-    @StateObject private var permissionsInteractor: PermissionsInteractor
     
     init() {
-        let spotifyInteractor = MusicInteractor()
+        let musicInteractor = MusicInteractor()
         let defaultsInteractor = DefaultsInteractor()
-        let notificationsInteractor = NotificationsInteractor(defaultsInteractor: defaultsInteractor, spotifyInteractor: spotifyInteractor)
-        let permissionsInteractor = PermissionsInteractor()
+        let notificationsInteractor = NotificationsInteractor(defaultsInteractor: defaultsInteractor, musicInteractor: musicInteractor)
         
         self._musicInteractor = StateObject(wrappedValue: musicInteractor)
         self._defaultsInteractor = StateObject(wrappedValue: defaultsInteractor)
         self._notificationsInteractor = StateObject(wrappedValue: notificationsInteractor)
-        self._permissionsInteractor = StateObject(wrappedValue: permissionsInteractor)
         
-        Task {
-            await permissionsInteractor.registerForNotifications(delegate: notificationsInteractor)
-            await permissionsInteractor.registerForControl()
-        }
+        musicInteractor.set(application: defaultsInteractor.selectedApplication)
     }
     
     var body: some Scene {
@@ -42,7 +36,6 @@ struct SpotifyNotifyApp: App {
             MenuView()
                 .environmentObject(musicInteractor)
                 .environmentObject(notificationsInteractor)
-                .environmentObject(permissionsInteractor)
         } label: {
             HStack {
                 Image(defaultsInteractor.isMenuIconColored ? "IconStatusBarColor" : "IconStatusBarMonochrome")
@@ -51,15 +44,19 @@ struct SpotifyNotifyApp: App {
         .menuBarExtraStyle(.window)
         Window("Settings", id: "settings-window") {
             SettingsView()
+                .environmentObject(musicInteractor)
                 .environmentObject(notificationsInteractor)
                 .environmentObject(defaultsInteractor)
-                .environmentObject(permissionsInteractor)
         }
     }
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     @Environment(\.openWindow) var openWindow
+    
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        print("STARTED")
+    }
     
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         guard !flag else {

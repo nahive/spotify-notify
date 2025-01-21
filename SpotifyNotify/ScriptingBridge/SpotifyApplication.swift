@@ -1,17 +1,5 @@
-// from https://gist.github.com/gf3/d622d927496d50c6108fd6ea36619bdf
-
 import AppKit
 import ScriptingBridge
-
-@objc protocol SBObjectProtocol: NSObjectProtocol {
-    func get() -> Any!
-}
-
-@objc protocol SBApplicationProtocol: SBObjectProtocol {
-    func activate()
-    var delegate: (any SBApplicationDelegate)? { get set }
-    var isRunning: Bool { @objc(isRunning) get }
-}
 
 // MARK: SpotifyEPlS
 @objc enum SpotifyEPlS: AEKeyword {

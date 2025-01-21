@@ -13,48 +13,63 @@ enum NotificationIdentifier: Sendable {
     static let category = "notification.category"
 }
 
-/// A notification view model for setting up a notification
 struct MusicNotification: Sendable {
     let identifier = NSUUID().uuidString
     let title: String
-    let subtitle: String
+    let subtitle: String?
     let body: String
-    let artworkURL: URL?
-
-    /// Defaults to show if, for any reason, Spotify returns nil
-    private let unknownAlbum = "Unknown Album"
-
-    init(track: Track, showSongProgress: Bool, songProgress: Double?) {
+    let artwork: MusicArtwork?
+    
+    init(track: MusicTrack, style: Style) {
+        title = track.name
         
-        func progress(for track: Track) -> String {
-            guard let songProgress = songProgress, let duration = track.duration else {
-                    return "00:00/00:00"
+        subtitle = {
+            switch style {
+            case .simple:
+                return track.album
+            case .progress:
+                if let album = track.album {
+                    return "\(track.artist) - \(album)"
+                } else {
+                    return track.artist
+                }
             }
-
-            let percentage = songProgress / (Double(duration) / 1000.0)
-
-            let progressMax = 14
-            let currentProgress = Int(Double(progressMax) * percentage)
-
-            let progressString = "⁃".repeated(currentProgress) +  "-".repeated(progressMax - currentProgress)
-
-            let now = Int(songProgress).minutesSeconds
-            let length = (duration / 1000).minutesSeconds
-
-            let nowS = "\(now.minutes)".withLeadingZeroes + ":" + "\(now.seconds)".withLeadingZeroes
-            let lengthS = "\(length.minutes)".withLeadingZeroes + ":" + "\(length.seconds)".withLeadingZeroes
-
-            return "\(nowS)  \(progressString)  \(lengthS)"
-        }
+        }()
         
-        let name = track.name
-        let artist = track.artist
-        let album = track.album ?? unknownAlbum
- 
-        title = name
-        subtitle = showSongProgress ? "\(artist) - \(album)" : artist
-        body = showSongProgress ? progress(for: track) : album
-        artworkURL = track.artworkURL
+        body = {
+            switch style {
+            case .simple:
+                return track.artist
+            case .progress(let progress):
+                guard let duration = track.duration else {
+                    return "--:--/--:--"
+                }
+
+                let percentage = progress / (Double(duration) / 1000.0)
+
+                let progressMax = 14
+                let currentProgress = Int(Double(progressMax) * percentage)
+
+                let progressString = "⁃".repeated(currentProgress) +  "-".repeated(progressMax - currentProgress)
+
+                let now = Int(progress).minutesSeconds
+                let length = (duration / 1000).minutesSeconds
+
+                let nowS = "\(now.minutes)".withLeadingZeroes + ":" + "\(now.seconds)".withLeadingZeroes
+                let lengthS = "\(length.minutes)".withLeadingZeroes + ":" + "\(length.seconds)".withLeadingZeroes
+
+                return "\(nowS)  \(progressString)  \(lengthS)"
+            }
+            
+        }()
+        
+        artwork = track.artwork
+    }
+}
+
+extension MusicNotification {
+    enum Style {
+        case simple, progress(Double)
     }
 }
 

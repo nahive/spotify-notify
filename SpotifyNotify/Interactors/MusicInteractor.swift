@@ -13,40 +13,13 @@ import Combine
 import UserNotifications
 
 @MainActor
-final class MusicInteractor: ObservableObject {
+final class MusicInteractor: ObservableObject, AlertDisplayable {
+    private var player: (any MusicPlayerProtocol)?
     
-    private let config: any CommonMusicConfig
-    
-    private var bridge: (any CommonMusicPlayerBridge)? {
-        guard isApplicationOpen else {
-            return nil
-        }
-        return SBApplication(bundleIdentifier: config.bundleId) as? (any CommonMusicPlayerBridge)
-    }
+    @Published var permissionStatus: MusicPlayerPermissionStatus = .denied
 
-    private var application: NSRunningApplication? {
-        NSWorkspace.shared.runningApplications
-            .filter { $0.bundleIdentifier == config.bundleId }
-            .first
-    }
-
-    var isFrontmost: Bool {
-        NSWorkspace.shared.frontmostApplication?.bundleIdentifier == config.bundleId
-    }
-
-    private var isApplicationOpen: Bool {
-        guard let application else {
-            return false
-        }
-        return !application.isTerminated
-    }
-    
-    var currentProgress: Double {
-         bridge?.playerPosition ?? 0
-     }
-    
-    @Published var currentState: MusicPlayerState = .unknown
-    @Published var currentTrack: Track = .empty
+    @Published var currentState: MusicPlayerState?
+    @Published var currentTrack: MusicTrack?
     
     @Published var currentProgressPercent: Double = 0
     @Published var currentTrackProgress: String = "--:--"
@@ -54,107 +27,145 @@ final class MusicInteractor: ObservableObject {
     
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
+    var isPlayerFrontmost: Bool {
+        player?.isFrontmost ?? false
+    }
+    
     private var cancellables = Set<AnyCancellable>()
     
-    init(config: any CommonMusicConfig) {
-        self.config = config
+    func set(application: SupportedMusicApplication?) {
+        unbind()
         
-        currentState = bridge?.currentState ?? .unknown
-        currentTrack = bridge?.currentTrack ?? .empty
+        self.player = application?.player
         
-        calculateProgress()
+        if let player {
+            bind(to: player)
+        }
+    }
+    
+    private func unbind() {
+        currentState = nil
+        currentTrack = nil
         
-        DistributedNotificationCenter.default().publisher(for: .init(config.playbackChangedName))
+        cancellables.removeAll()
+    }
+    
+    private func bind(to player: any MusicPlayerProtocol) {
+        currentState = player.currentState
+        currentTrack = player.currentTrack
+        
+        calculateProgress(player: player)
+        
+        DistributedNotificationCenter.default().publisher(for: .init(player.playbackChangedName))
             .compactMap { $0.userInfo?["Player State"] as? String }
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] state in
                 guard let self else { return }
-                System.logger.info("Received \(config.appName) state change")
                 switch state {
                 case "Paused", "Playing":
-                    self.currentState = self.bridge?.currentState ?? .unknown
-                    self.currentTrack = self.bridge?.currentTrack ?? .empty
+                    self.currentState = player.currentState
+                    self.currentTrack = player.currentTrack
                 default:
-                    self.currentState = .unknown
-                    self.currentTrack = .empty
+                    self.currentState = nil
+                    self.currentTrack = nil
                     self.currentProgressPercent = 0.0
                     self.fullTrackDuration = "--:--"
                 }
             })
             .store(in: &cancellables)
         
-        DistributedNotificationCenter.default().publisher(for: .init(config.playbackChangedName))
+        DistributedNotificationCenter.default().publisher(for: .init(player.playbackChangedName))
             .compactMap { $0.userInfo?["Player State"] as? String }
             .filter { $0 == "Playing" }
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] state in
                 guard let self else { return }
-                System.logger.info("Received \(config.appName) track change")
-                self.currentTrack = self.bridge?.currentTrack ?? .empty
+                self.currentTrack = player.currentTrack
             })
             .store(in: &cancellables)
         
         timer
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-            guard let self, currentState == .playing else { return }
-            self.calculateProgress()
+                guard let self, currentState == .playing else { return }
+                self.calculateProgress(player: player)
         }.store(in: &cancellables)
+        
+        updateControlPermissions()
+    }
+    
+    func updateControlPermissions() {
+        permissionStatus = {
+            guard let player, player.isOpen else {
+                return .closed
+            }
+            guard player.hasPermissionToControl else {
+                return .denied
+            }
+            return .granted
+        }()
     }
 
-    private func calculateProgress() {
-        guard let duration = currentTrack.duration, duration != 0 else {
+    private func calculateProgress(player: any MusicPlayerProtocol) {
+        guard let duration = currentTrack?.duration, duration != 0, let position = player.playerPosition else {
             currentProgressPercent = 0.0
             currentTrackProgress = "--:--"
             fullTrackDuration = "--:--"
             return
         }
-        
-        let progress = (self.bridge?.playerPosition ?? 0) * 1000
-        currentProgressPercent = progress / Double(duration)
-        currentTrackProgress = Duration.milliseconds(progress).formatted(.time(pattern: .minuteSecond))
-        fullTrackDuration = Duration.milliseconds(duration).formatted(.time(pattern: .minuteSecond))
-    }
-   
-    func openApplication() {
-        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: config.bundleId) else { return }
-
-        let path = "/bin"
-        let configuration = NSWorkspace.OpenConfiguration()
-        configuration.arguments = [path]
-        NSWorkspace.shared.openApplication(at: url,
-                                           configuration: configuration,
-                                           completionHandler: nil)
+    
+        currentProgressPercent = position / Double(duration)
+        currentTrackProgress = Duration.seconds(position).formatted(.time(pattern: .minuteSecond))
+        fullTrackDuration = Duration.seconds(duration).formatted(.time(pattern: .minuteSecond))
     }
 
     func nextTrack() {
-        guard let bridge else {
-            openApplication()
-            return
-        }
-        bridge.nextTrack()
-        
-        System.logger.info("Next track")
+        guard canControlPlayer() else { return }
+        player?.nextTrack()
     }
     
     func previousTrack() {
-        guard let bridge else {
-            openApplication()
-            return
-        }
-        bridge.previousTrack()
-        
-        System.logger.info("Prev track")
+        guard canControlPlayer() else { return }
+        player?.previousTrack()
     }
     
     func playPause() {
-        guard let bridge else {
-            openApplication()
-            return
+        guard canControlPlayer() else { return }
+        player?.playPause()
+    }
+    
+    private func canControlPlayer() -> Bool {
+        guard let player else { return false }
+        guard player.isOpen else {
+            SystemNavigator.openApplication(bundleId: player.bundleId)
+            return false
         }
-        bridge.playPause()
-        
-        System.logger.info("Play/pause")
+        return true
+    }
+}
+
+// MARK: app permissions
+extension MusicInteractor {
+    func registerForAutomation(for application: SupportedMusicApplication) {
+        Task.detached {
+            let targetAEDescriptor = NSAppleEventDescriptor(bundleIdentifier: application.bundleId)
+            let status = AEDeterminePermissionToAutomateTarget(targetAEDescriptor.aeDesc, typeWildCard, typeWildCard, true)
+            
+            Task { @MainActor in
+                switch status {
+                case OSStatus(errAEEventNotPermitted):
+                    self.showSettingsAlert(message: "Missing required automation permissions") {
+                        SystemNavigator.openAutomationSettings()
+                    }
+                case OSStatus(procNotFound), _:
+                    self.showSettingsAlert(message: "\(application.appName) is not running") {
+                        SystemNavigator.openApplication(application)
+                    }
+                }
+                
+                self.updateControlPermissions()
+            }
+        }
     }
 }

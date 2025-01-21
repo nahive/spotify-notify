@@ -15,6 +15,9 @@ import Combine
 @MainActor
 final class DefaultsInteractor: ObservableObject {
     enum Key {
+        static let selectedApplication = "selected.application.key"
+        static let isFirstRun = "is.first.run.key"
+        
         static let notificationsEnabled = "notifications.enabled.key"
         static let notificationsKeep = "notifications.keep.key"
         static let notificationsPlayPause = "notifications.playpause.key"
@@ -34,6 +37,9 @@ final class DefaultsInteractor: ObservableObject {
         static let shortcutModifiers = "shortcut.modifiers.key"
     }
     
+    @AppStorage(Key.selectedApplication) var selectedApplication: SupportedMusicApplication?
+    @AppStorage(Key.isFirstRun) var isFirstRun = true
+    
     @AppStorage(Key.notificationsEnabled) var areNotificationsEnabled = true
     @AppStorage(Key.notificationsKeep) var shouldKeepNotificationsOnScreen = false
     @AppStorage(Key.notificationsPlayPause) var shouldShowNotificationOnPlayPause = true
@@ -42,14 +48,17 @@ final class DefaultsInteractor: ObservableObject {
     @AppStorage(Key.notificationsLength) var notificationLength = 5
     
     @AppStorage(Key.showAlbumArt) var shouldShowAlbumArt = true
-    @AppStorage(Key.roundAlbumArt) var shouldRoundAlbumArt = false
+    
+    // deprecated for now
+    // @AppStorage(Key.roundAlbumArt) var shouldRoundAlbumArt = false
     @AppStorage(Key.showSongProgress) var shouldShowSongProgress = false
     
     // deprecated for now due to MenuBarExtra not respecting bindings properly
     // @AppStorage(Key.menuIconVisible) var isMenuIconVisible = true
-    @Published var deprecated_isMenuIconVisible = false
     @AppStorage(Key.menuIconColored) var isMenuIconColored = false
     @AppStorage(Key.menuBarShowSong) var shouldShowSongInMenuBar = false
+    
+    
     @AppStorage(Key.shortcutKeyCode) private var shortcutKeyCode = 0
     @AppStorage(Key.shortcutModifiers) private var shortcutModifier = 0
     
