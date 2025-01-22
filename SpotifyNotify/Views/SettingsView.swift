@@ -23,21 +23,23 @@ struct SettingsView: View {
                                 musicInteractor: musicInteractor,
                                 notificationsInteractor: notificationsInteractor)
                 .tabItem {
-                    Label("General", systemImage: "tray.and.arrow.down.fill")
+                    Label("General", systemImage: "gear")
                 }
             
-            NotificationSettingsView(defaultsInteractor: defaultsInteractor)
+            NotificationSettingsView(defaultsInteractor: defaultsInteractor,
+                                     notificationsInteractor: notificationsInteractor)
                 .tabItem {
-                    Label("Notifications", systemImage: "bell")
+                    Label("Notifications", systemImage: "bell.fill")
                 }
             
             AboutSettingsView()
                 .tabItem {
-                    Label("About", systemImage: "person")
+                    Label("About", systemImage: "info.circle")
                 }
         }
-        .tabViewStyle(.automatic)
         .padding()
+        .frame(maxWidth: 450, minHeight: 400)
+        .tabViewStyle(.automatic)
     }
 }
 
@@ -83,10 +85,10 @@ private struct GeneralSettingsView: View {
                         if let icon = app.icon {
                             Image(nsImage: icon)
                                 .resizable()
-                                .frame(width: 50, height: 50)
+                                .frame(width: 60, height: 60)
                         } else {
                             Text(app.appName)
-                                .frame(width: 50, height: 50)
+                                .frame(width: 60, height: 60)
                         }
                     }
                     .padding(5)
@@ -97,6 +99,8 @@ private struct GeneralSettingsView: View {
                     }
                 }
             }
+            .padding()
+            
             VStack {
                 HStack(alignment: .center) {
                     Circle()
@@ -105,34 +109,46 @@ private struct GeneralSettingsView: View {
                     Text("Notification permissions")
                 }
                 if !notificationsInteractor.areNotificationsEnabled {
-                    Button("Notification settings") {
-//                        permissionsInteractor.registerForNotifications(delegate: notificationsInteractor)
+                    Button("Enable notifications") {
+                        notificationsInteractor.registerForNotifications()
                     }
                 }
             }
             
-            VStack {
-                HStack(alignment: .center) {
+            if let selectedApplication = defaultsInteractor.selectedApplication {
+                VStack {
                     switch musicInteractor.permissionStatus {
                     case .granted:
-                        Circle()
-                            .foregroundStyle(Color.green)
-                            .frame(width: 8)
+                        HStack {
+                            Circle()
+                                .foregroundStyle(Color.green)
+                                .frame(width: 8)
+                            Text("Control permissions")
+                        }
                     case .closed:
-                        Circle()
-                            .foregroundStyle(Color.yellow)
-                            .frame(width: 8)
+                        HStack {
+                            Circle()
+                                .foregroundStyle(Color.yellow)
+                                .frame(width: 8)
+                            Button("Open \(selectedApplication.appName) to enable automation") {
+                                musicInteractor.openApplication()
+                            }
+                        }
                     case .denied:
-                        Circle()
-                            .foregroundStyle(Color.red)
-                            .frame(width: 8)
+                        HStack {
+                            Circle()
+                                .foregroundStyle(Color.red)
+                                .frame(width: 8)
+                            Button("Enable control for \(selectedApplication.appName)") {
+                                musicInteractor.registerForAutomation(for: selectedApplication)
+                            }
+                        }
                     }
-                    Text("Automation permissions")
                 }
             }
         }
-        .onChange(of: defaultsInteractor.selectedApplication) {
-            musicInteractor.set(application: $0)
+        .onChange(of: defaultsInteractor.selectedApplication) { old, new in
+            musicInteractor.set(application: new)
         }
         .onAppear {
             startTimer()
@@ -214,6 +230,7 @@ private extension Optional<SupportedMusicApplication> {
 
 private struct NotificationSettingsView: View {
     let defaultsInteractor: DefaultsInteractor
+    let notificationsInteractor: NotificationsInteractor
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -250,11 +267,11 @@ private struct NotificationSettingsView: View {
             .disabled(!defaultsInteractor.areNotificationsEnabled)
             Divider()
                 .padding()
-            //                VStack(alignment: .leading){
-            //                    Text("Show notification on shortcut")
-            //                    ShortcutView(notificationsInteractor: notificationsInteractor, keyCombo: $defaultsInteractor.shortcut)
-            //                        .frame(minHeight: 30, maxHeight: 30)
-            //                }.padding(.horizontal)
+            VStack(alignment: .leading) {
+                Text("Show notification on shortcut")
+                ShortcutView(notificationsInteractor: notificationsInteractor, defaultsInteractor: defaultsInteractor)
+                    .frame(height: 30)
+            }
         }
         .padding()
     }
@@ -270,7 +287,7 @@ private struct AboutSettingsView: View {
         VStack {
             Image(.iconSettings)
                 .resizable()
-                .frame(width: 150.0, height: 150.0)
+                .frame(width: 100, height: 100)
                 .fixedSize()
                 .padding()
             
@@ -294,68 +311,61 @@ private struct AboutSettingsView: View {
     }
 }
 
+struct ShortcutView: NSViewRepresentable {
+    typealias NSViewType = RecordView
 
-//struct ShortcutView: NSViewRepresentable {
-//    typealias NSViewType = RecordView
-//
-//    private let notificationsInteractor: NotificationsInteractor
-//
-//    @Binding private var keyCombo: KeyCombo?
-//
-//    init(notificationsInteractor: NotificationsInteractor, keyCombo: Binding<KeyCombo?>) {
-//        self.notificationsInteractor = notificationsInteractor
-//        self._keyCombo = keyCombo
-//    }
-//
-//    func makeNSView(context: Context) -> RecordView {
-//        let view = RecordView(frame: .zero)
-//        view.cornerRadius = 5
-//        view.delegate = context.coordinator
-//        return view
-//    }
-//
-//    func updateNSView(_ recordView: RecordView, context: Context) {
-//        recordView.keyCombo = keyCombo
-//    }
-//
-//    func makeCoordinator() -> Coordinator {
-//        Coordinator(parent: self)
-//    }
-//
-//    @MainActor
-//    class Coordinator: NSObject, @preconcurrency RecordViewDelegate {
-//        var parent: ShortcutView
-//
-//        init(parent: ShortcutView) {
-//            self.parent = parent
-//        }
-//
-//        func recordView(_ recordView: RecordView, didChangeKeyCombo keyCombo: KeyCombo?) {
-//            self.parent.keyCombo = keyCombo
-//
-//            if let keyCombo {
-//                let hotKey = HotKey(identifier: "showKey", keyCombo: keyCombo) { key in
-//                    self.parent.notificationsInteractor.forceShowNotification()
-//                }
-//                HotKeyCenter.shared.register(with: hotKey)
-//            } else {
-//                HotKeyCenter.shared.unregisterAll()
-//            }
-//        }
-//
-//        func recordViewShouldBeginRecording(_ recordView: RecordView) -> Bool {
-//            true
-//        }
-//
-//        func recordView(_ recordView: RecordView, canRecordKeyCombo keyCombo: KeyCombo) -> Bool {
-//            true
-//        }
-//
-//        func recordViewDidEndRecording(_ recordView: RecordView) {
-//            // nothing
-//        }
-//    }
-//}
+    let notificationsInteractor: NotificationsInteractor
+    let defaultsInteractor: DefaultsInteractor
+
+    func makeNSView(context: Context) -> RecordView {
+        let view = RecordView(frame: .zero)
+        view.cornerRadius = 5
+        view.delegate = context.coordinator
+        return view
+    }
+
+    func updateNSView(_ recordView: RecordView, context: Context) {
+        recordView.keyCombo = defaultsInteractor.shortcut
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
+
+    @MainActor
+    class Coordinator: NSObject, @preconcurrency RecordViewDelegate {
+        var parent: ShortcutView
+
+        init(parent: ShortcutView) {
+            self.parent = parent
+        }
+
+        func recordView(_ recordView: RecordView, didChangeKeyCombo keyCombo: KeyCombo?) {
+            self.parent.defaultsInteractor.shortcut = keyCombo
+
+            if let keyCombo {
+                let hotKey = HotKey(identifier: "showKey", keyCombo: keyCombo) { key in
+                    self.parent.notificationsInteractor.forceShowNotification()
+                }
+                HotKeyCenter.shared.register(with: hotKey)
+            } else {
+                HotKeyCenter.shared.unregisterAll()
+            }
+        }
+
+        func recordViewShouldBeginRecording(_ recordView: RecordView) -> Bool {
+            true
+        }
+
+        func recordView(_ recordView: RecordView, canRecordKeyCombo keyCombo: KeyCombo) -> Bool {
+            true
+        }
+
+        func recordViewDidEndRecording(_ recordView: RecordView) {
+            // nothing
+        }
+    }
+}
 
 struct Settings_Preview: PreviewProvider {
     @StateObject private static var defaultsInteractor = DefaultsInteractor()

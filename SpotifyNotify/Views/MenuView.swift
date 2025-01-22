@@ -11,6 +11,7 @@ import AppKit
 
 struct MenuView: View {
     @Environment(\.openWindow) private var openWindow
+    @Environment(\.openSettings) private var openSettings
     
     @EnvironmentObject var musicInteractor: MusicInteractor
     @EnvironmentObject var notificationsInteractor: NotificationsInteractor
@@ -30,7 +31,7 @@ struct MenuView: View {
 //                }
                 Divider()
                 Button {
-                    openWindow(id: "settings-window")
+                    openSettings()
                     NSApp.activate(ignoringOtherApps: true)
                 } label: {
                     Text("Settings")

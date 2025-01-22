@@ -42,7 +42,7 @@ struct SpotifyNotifyApp: App {
             }
         }
         .menuBarExtraStyle(.window)
-        Window("Settings", id: "settings-window") {
+        Settings {
             SettingsView()
                 .environmentObject(musicInteractor)
                 .environmentObject(notificationsInteractor)
@@ -52,7 +52,7 @@ struct SpotifyNotifyApp: App {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    @Environment(\.openWindow) var openWindow
+    @Environment(\.openSettings) var openSettings
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         print("STARTED")
@@ -63,7 +63,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return true
         }
         // TODO: fix opening settings
-        openWindow(id: "settings-window")
+        openSettings()
         return true
     }
     

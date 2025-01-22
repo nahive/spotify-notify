@@ -138,7 +138,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     private func canControlPlayer() -> Bool {
         guard let player else { return false }
         guard player.isOpen else {
-            SystemNavigator.openApplication(bundleId: player.bundleId)
+            openApplication()
             return false
         }
         return true
@@ -156,16 +156,32 @@ extension MusicInteractor {
                 switch status {
                 case OSStatus(errAEEventNotPermitted):
                     self.showSettingsAlert(message: "Missing required automation permissions") {
-                        SystemNavigator.openAutomationSettings()
+                        self.openAutomationSettings()
                     }
                 case OSStatus(procNotFound), _:
                     self.showSettingsAlert(message: "\(application.appName) is not running") {
-                        SystemNavigator.openApplication(application)
+                        self.openApplication()
                     }
                 }
                 
                 self.updateControlPermissions()
             }
         }
+    }
+}
+
+extension MusicInteractor {
+    func openApplication() {
+        guard let player else { return }
+        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: player.bundleId) else { return }
+
+        let path = "/bin"
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.arguments = [path]
+        NSWorkspace.shared.openApplication(at: url, configuration: configuration, completionHandler: nil)
+    }
+    
+    func openAutomationSettings() {
+        NSWorkspace.shared.open("x-apple.systempreferences:com.apple.preference.security?Privacy_Automation".asURL!)
     }
 }

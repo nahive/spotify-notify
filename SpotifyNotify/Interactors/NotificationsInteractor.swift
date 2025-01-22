@@ -40,25 +40,27 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
     }
 
     // MARK: notification permissions
-    func registerForNotifications() async {
-        do {
-            let _ = try await UNUserNotificationCenter.current().requestAuthorization()
-        } catch {
-            showSettingsAlert(message: "Missing notification permissions") {
-                SystemNavigator.openNotificationsSettings()
+    func registerForNotifications() {
+        Task {
+            do {
+                let _ = try await UNUserNotificationCenter.current().requestAuthorization()
+            } catch {
+                showSettingsAlert(message: "Missing notification permissions") {
+                    openNotificationsSettings()
+                }
             }
+            
+            let skip = UNNotificationAction(identifier: NotificationIdentifier.skip, title: "Skip")
+            
+            let category = UNNotificationCategory(identifier: NotificationIdentifier.category,
+                                                  actions: [skip],
+                                                  intentIdentifiers: [],
+                                                  options: [])
+            
+            UNUserNotificationCenter.current().setNotificationCategories([category])
+            
+            updateNotificationsPermissions()
         }
-        
-        let skip = UNNotificationAction(identifier: NotificationIdentifier.skip, title: "Skip")
-        
-        let category = UNNotificationCategory(identifier: NotificationIdentifier.category,
-                                              actions: [skip],
-                                              intentIdentifiers: [],
-                                              options: [])
-        
-        UNUserNotificationCenter.current().setNotificationCategories([category])
-        
-        updateNotificationsPermissions()
     }
     
     func updateNotificationsPermissions() {
@@ -168,9 +170,14 @@ extension NotificationsInteractor: @preconcurrency UNUserNotificationCenterDeleg
         case NotificationIdentifier.skip:
             musicInteractor.nextTrack()
         default:
-            guard let application = defaultsInteractor.selectedApplication else { return }
-            SystemNavigator.openApplication(application)
+            musicInteractor.openApplication()
         }
+    }
+}
+
+extension NotificationsInteractor {
+    func openNotificationsSettings() {
+        NSWorkspace.shared.open("x-apple.systempreferences:com.apple.preference.notifications".asURL!)
     }
 }
 
