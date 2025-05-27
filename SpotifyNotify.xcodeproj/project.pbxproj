@@ -28,6 +28,12 @@
 		4CE2617C2D390A8100C8B9D1 /* SpotifyPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE2617B2D390A8100C8B9D1 /* SpotifyPlayer.swift */; };
 		4CE2617E2D390D1200C8B9D1 /* AppleMusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE2617D2D390D1200C8B9D1 /* AppleMusicPlayer.swift */; };
 		4CF74EB52D3F8CE7009E8B00 /* AlertDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EB42D3F8CE7009E8B00 /* AlertDisplayable.swift */; };
+		4CF74EBB2D412D83009E8B00 /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EBA2D412D83009E8B00 /* NotificationsSettingsView.swift */; };
+		4CF74EBD2D412DCA009E8B00 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EBC2D412DCA009E8B00 /* GeneralSettingsView.swift */; };
+		4CF74EBF2D412E38009E8B00 /* ShortcutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EBE2D412E38009E8B00 /* ShortcutView.swift */; };
+		4CF74EC12D412E7A009E8B00 /* AboutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC02D412E7A009E8B00 /* AboutSettingsView.swift */; };
+		4CF74EC42D413302009E8B00 /* CoverImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC32D413302009E8B00 /* CoverImageView.swift */; };
+		4CF74EC62D413325009E8B00 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC52D413325009E8B00 /* PlayerView.swift */; };
 		FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +59,12 @@
 		4CE2617B2D390A8100C8B9D1 /* SpotifyPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyPlayer.swift; sourceTree = "<group>"; };
 		4CE2617D2D390D1200C8B9D1 /* AppleMusicPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicPlayer.swift; sourceTree = "<group>"; };
 		4CF74EB42D3F8CE7009E8B00 /* AlertDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertDisplayable.swift; sourceTree = "<group>"; };
+		4CF74EBA2D412D83009E8B00 /* NotificationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsView.swift; sourceTree = "<group>"; };
+		4CF74EBC2D412DCA009E8B00 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		4CF74EBE2D412E38009E8B00 /* ShortcutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutView.swift; sourceTree = "<group>"; };
+		4CF74EC02D412E7A009E8B00 /* AboutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSettingsView.swift; sourceTree = "<group>"; };
+		4CF74EC32D413302009E8B00 /* CoverImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoverImageView.swift; sourceTree = "<group>"; };
+		4CF74EC52D413325009E8B00 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -117,8 +129,8 @@
 		4CDE08A82A35AEEE009609E7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				4CDE08A92A35AEF6009609E7 /* MenuView.swift */,
-				4CDE08B42A35BC9B009609E7 /* SettingsView.swift */,
+				4CF74EC22D4132F0009E8B00 /* Menu */,
+				4CF74EB92D412D75009E8B00 /* Settings */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -161,6 +173,28 @@
 				4CE261722D38F4E100C8B9D1 /* SBApplication.swift */,
 			);
 			path = ScriptingBridge;
+			sourceTree = "<group>";
+		};
+		4CF74EB92D412D75009E8B00 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				4CDE08B42A35BC9B009609E7 /* SettingsView.swift */,
+				4CF74EBA2D412D83009E8B00 /* NotificationsSettingsView.swift */,
+				4CF74EBC2D412DCA009E8B00 /* GeneralSettingsView.swift */,
+				4CF74EC02D412E7A009E8B00 /* AboutSettingsView.swift */,
+				4CF74EBE2D412E38009E8B00 /* ShortcutView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		4CF74EC22D4132F0009E8B00 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				4CDE08A92A35AEF6009609E7 /* MenuView.swift */,
+				4CF74EC32D413302009E8B00 /* CoverImageView.swift */,
+				4CF74EC52D413325009E8B00 /* PlayerView.swift */,
+			);
+			path = Menu;
 			sourceTree = "<group>";
 		};
 		FB400A8E203EFA3800F2D63C /* Frameworks */ = {
@@ -273,9 +307,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CF74EC12D412E7A009E8B00 /* AboutSettingsView.swift in Sources */,
+				4CF74EBF2D412E38009E8B00 /* ShortcutView.swift in Sources */,
+				4CF74EBB2D412D83009E8B00 /* NotificationsSettingsView.swift in Sources */,
 				4CDE08B32A35B3CD009609E7 /* String+Ext.swift in Sources */,
 				4C3FB6F02D2D1A210073EE24 /* AppleMusicApplication.swift in Sources */,
 				4C858885203F218800ED1692 /* SpotifyApplication.swift in Sources */,
+				4CF74EC62D413325009E8B00 /* PlayerView.swift in Sources */,
+				4CF74EC42D413302009E8B00 /* CoverImageView.swift in Sources */,
 				4CDE08A62A35AB9B009609E7 /* SpotifyNotifyApp.swift in Sources */,
 				4C3FB6F42D2D1D4D0073EE24 /* MusicPlayerProtocol.swift in Sources */,
 				4CDE08AA2A35AEF6009609E7 /* MenuView.swift in Sources */,
@@ -283,6 +322,7 @@
 				4CAF91122A3620B700C6A19B /* Logger.swift in Sources */,
 				4CE2617E2D390D1200C8B9D1 /* AppleMusicPlayer.swift in Sources */,
 				4CE2617A2D390A3900C8B9D1 /* MusicModels.swift in Sources */,
+				4CF74EBD2D412DCA009E8B00 /* GeneralSettingsView.swift in Sources */,
 				4CE2617C2D390A8100C8B9D1 /* SpotifyPlayer.swift in Sources */,
 				4CDE08BF2A35CC68009609E7 /* MusicNotification.swift in Sources */,
 				4CF74EB52D3F8CE7009E8B00 /* AlertDisplayable.swift in Sources */,
