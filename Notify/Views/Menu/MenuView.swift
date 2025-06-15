@@ -16,6 +16,7 @@ struct MenuView: View {
     @EnvironmentObject var musicInteractor: MusicInteractor
     @EnvironmentObject var notificationsInteractor: NotificationsInteractor
     @EnvironmentObject var defaultsInteractor: DefaultsInteractor
+    @EnvironmentObject var historyInteractor: HistoryInteractor
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -28,6 +29,13 @@ struct MenuView: View {
                         Image(systemName: "play.house")
                     }
                     Divider()
+                }
+                Button {
+                    openWindow(id: "history")
+                    NSApp.activate(ignoringOtherApps: true)
+                } label: {
+                    Text("Song History")
+                    Image(systemName: "clock")
                 }
                 Button {
                     openSettings()

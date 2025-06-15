@@ -1,6 +1,6 @@
 //
 //  SpotifyPlayer.swift
-//  Notify
+//  SpotifyNotify
 //
 //  Created by Szymon Maślanka on 2025/01/16.
 //  Copyright © 2025 Szymon Maślanka. All rights reserved.
@@ -12,26 +12,23 @@ import AppKit
 
 final class SpotifyPlayer: NSObject, MusicPlayerProtocol {
     let bundleId: String
-    private let lock = NSLock()
-    private nonisolated(unsafe) var _storedApplication: (any SpotifyApplication)?
     
     init(bundleId: String) {
         self.bundleId = bundleId
     }
     
+    private nonisolated(unsafe) var storedApplication: (any SpotifyApplication)?
+    
     private var application: (any SpotifyApplication)? {
         get {
-            lock.lock()
-            defer { lock.unlock() }
-            
             if isOpen {
-                if _storedApplication == nil {
-                    _storedApplication = SBApplication(bundleIdentifier: bundleId)
+                if storedApplication == nil {
+                    storedApplication = SBApplication(bundleIdentifier: bundleId)
                 }
             } else {
-                _storedApplication = nil
+                storedApplication = nil
             }
-            return _storedApplication
+            return storedApplication
         }
     }
 

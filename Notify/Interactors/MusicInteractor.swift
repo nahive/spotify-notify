@@ -14,6 +14,8 @@ import UserNotifications
 
 @MainActor
 final class MusicInteractor: ObservableObject, AlertDisplayable {
+    private let historyInteractor: HistoryInteractor
+    
     private var player: (any MusicPlayerProtocol)?
     
     @Published var permissionStatus: MusicPlayerPermissionStatus = .denied
@@ -32,6 +34,10 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     }
     
     private var cancellables = Set<AnyCancellable>()
+    
+    init(historyInteractor: HistoryInteractor) {
+        self.historyInteractor = historyInteractor
+    }
     
     func set(application: SupportedMusicApplication?) {
         unbind()
@@ -154,11 +160,11 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
 // MARK: app permissions
 extension MusicInteractor {
     func registerForAutomation(for application: SupportedMusicApplication) {
-        Task {
+        Task.detached {
             let targetAEDescriptor = NSAppleEventDescriptor(bundleIdentifier: application.bundleId)
             let status = AEDeterminePermissionToAutomateTarget(targetAEDescriptor.aeDesc, typeWildCard, typeWildCard, true)
             
-            await MainActor.run {
+            Task { @MainActor in
                 switch status {
                 case OSStatus(errAEEventNotPermitted):
                     System.log("Automation permission denied for \(application.appName)", level: .warning)

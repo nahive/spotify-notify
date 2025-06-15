@@ -9,6 +9,7 @@
 import SwiftUI
 import UserNotifications
 import AppKit
+import SwiftData
 
 @main
 struct NotifyApp: App {
@@ -18,15 +19,26 @@ struct NotifyApp: App {
     @StateObject private var musicInteractor: MusicInteractor
     @StateObject private var defaultsInteractor: DefaultsInteractor
     @StateObject private var notificationsInteractor: NotificationsInteractor
+    @StateObject private var historyInteractor: HistoryInteractor
+    
+    let modelContainer: ModelContainer
     
     init() {
-        let musicInteractor = MusicInteractor()
+        do {
+            modelContainer = try ModelContainer(for: SongHistory.self)
+        } catch {
+            fatalError("Failed to initialize ModelContainer: \(error)")
+        }
+        
+        let historyInteractor = HistoryInteractor(modelContext: modelContainer.mainContext)
+        let musicInteractor = MusicInteractor(historyInteractor: historyInteractor)
         let defaultsInteractor = DefaultsInteractor()
         let notificationsInteractor = NotificationsInteractor(defaultsInteractor: defaultsInteractor, musicInteractor: musicInteractor)
         
         self._musicInteractor = StateObject(wrappedValue: musicInteractor)
         self._defaultsInteractor = StateObject(wrappedValue: defaultsInteractor)
         self._notificationsInteractor = StateObject(wrappedValue: notificationsInteractor)
+        self._historyInteractor = StateObject(wrappedValue: historyInteractor)
         
         musicInteractor.set(application: defaultsInteractor.selectedApplication)
     }
@@ -37,12 +49,20 @@ struct NotifyApp: App {
                 .environmentObject(musicInteractor)
                 .environmentObject(notificationsInteractor)
                 .environmentObject(defaultsInteractor)
+                .environmentObject(historyInteractor)
         } label: {
             HStack {
                 Image(defaultsInteractor.isMenuIconColored ? "IconStatusBarColor" : "IconStatusBarMonochrome")
             }
         }
         .menuBarExtraStyle(.window)
+        .modelContainer(modelContainer)
+        
+        WindowGroup(id: "history") {
+            HistoryView()
+                .environmentObject(historyInteractor)
+        }
+        
         Settings {
             SettingsView()
                 .environmentObject(musicInteractor)
