@@ -154,11 +154,11 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
 // MARK: app permissions
 extension MusicInteractor {
     func registerForAutomation(for application: SupportedMusicApplication) {
-        Task.detached {
+        Task {
             let targetAEDescriptor = NSAppleEventDescriptor(bundleIdentifier: application.bundleId)
             let status = AEDeterminePermissionToAutomateTarget(targetAEDescriptor.aeDesc, typeWildCard, typeWildCard, true)
             
-            Task { @MainActor in
+            await MainActor.run {
                 switch status {
                 case OSStatus(errAEEventNotPermitted):
                     System.log("Automation permission denied for \(application.appName)", level: .warning)

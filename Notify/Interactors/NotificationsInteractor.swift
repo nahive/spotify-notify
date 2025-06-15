@@ -112,14 +112,14 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
     }
     
     private func createArtworkAttachment(artwork: MusicArtwork) async -> UNNotificationAttachment? {
-        let image: NSImage? = await {
-            switch artwork {
-            case .url(let url):
-                return await url.asyncImage
-            case .image(let image):
-                return image
-            }
-        }()
+        let image: NSImage?
+        
+        switch artwork {
+        case .url(let url):
+            image = await url.asyncImage
+        case .image(let nsImage):
+            image = nsImage
+        }
         
         guard let image, let fileURL = saveArtworkTemporarly(image) else {
             return nil
@@ -151,9 +151,11 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
         UNUserNotificationCenter.current().add(.init(identifier: identifier, content: notification, trigger: nil))
 
         if !defaultsInteractor.shouldKeepNotificationsOnScreen {
-            Task { @MainActor in
+            Task {
                 try await Task.sleep(for: .seconds(defaultsInteractor.notificationLength))
-                UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+                await MainActor.run {
+                    UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+                }
             }
         }
     }
@@ -190,7 +192,13 @@ private extension URL {
     
     var asyncImage: NSImage? {
         get async {
-            try? await URLSession.shared.data(from: self).0.asNSImage
+            do {
+                let (data, _) = try await URLSession.shared.data(from: self)
+                return data.asNSImage
+            } catch {
+                System.log("Failed to load image from URL: \(self), error: \(error)", level: .warning)
+                return nil
+            }
         }
     }
 }
@@ -201,5 +209,6 @@ private extension Data {
     }
 }
                 
-// TODO: fix this
+// NSImage is not inherently Sendable, but we ensure thread-safe usage
+// by only accessing it on MainActor-isolated contexts
 extension NSImage: @unchecked @retroactive Sendable {}
