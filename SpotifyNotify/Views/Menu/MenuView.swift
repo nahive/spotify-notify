@@ -15,17 +15,20 @@ struct MenuView: View {
     
     @EnvironmentObject var musicInteractor: MusicInteractor
     @EnvironmentObject var notificationsInteractor: NotificationsInteractor
+    @EnvironmentObject var defaultsInteractor: DefaultsInteractor
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Menu {
-//                Button {
-//                    SystemNavigator.openApplication()
-//                } label: {
-//                    Text("Open Spotify")
-//                    Image(systemName: "play.house")
-//                }
-                Divider()
+                if let selectedApplication = defaultsInteractor.selectedApplication {
+                    Button {
+                        musicInteractor.openApplication()
+                    } label: {
+                        Text("Open \(selectedApplication.appName)")
+                        Image(systemName: "play.house")
+                    }
+                    Divider()
+                }
                 Button {
                     openSettings()
                     NSApp.activate(ignoringOtherApps: true)

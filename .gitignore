@@ -115,3 +115,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# LSP/Build Server
+buildServer.json

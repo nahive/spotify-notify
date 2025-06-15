@@ -36,6 +36,7 @@ struct SpotifyNotifyApp: App {
             MenuView()
                 .environmentObject(musicInteractor)
                 .environmentObject(notificationsInteractor)
+                .environmentObject(defaultsInteractor)
         } label: {
             HStack {
                 Image(defaultsInteractor.isMenuIconColored ? "IconStatusBarColor" : "IconStatusBarMonochrome")
@@ -55,7 +56,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @Environment(\.openSettings) var openSettings
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        print("STARTED")
+        System.log("SpotifyNotify application started", level: .info)
     }
     
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {

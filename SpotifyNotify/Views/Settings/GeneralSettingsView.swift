@@ -62,7 +62,7 @@ struct GeneralSettingsView: View {
                 .background(defaultsInteractor.selectedApplication == app ? app.color.opacity(0.5) : Color.clear)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .onTapGesture {
-//                    guard app.isInstalled else { return }
+                    guard app.isInstalled else { return }
                     defaultsInteractor.selectedApplication = app
                 }
                 .accessibilityLabel("Select \(app.appName)")

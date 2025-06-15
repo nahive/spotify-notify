@@ -25,7 +25,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     @Published var currentTrackProgress: String = "--:--"
     @Published var fullTrackDuration: String = "--:--"
     
-    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    private var progressTimer: Timer?
     
     var isPlayerFrontmost: Bool {
         player?.isFrontmost ?? false
@@ -46,13 +46,32 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     private func unbind() {
         currentState = nil
         currentTrack = nil
+        currentProgressPercent = 0.0
+        currentTrackProgress = "--:--"
+        fullTrackDuration = "--:--"
         
+        stopProgressTimer()
         cancellables.removeAll()
+    }
+    
+    private func startProgressTimer(for player: any MusicPlayerProtocol) {
+        stopProgressTimer()
+        progressTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                guard let self, self.currentState == .playing else { return }
+                self.calculateProgress(player: player)
+            }
+        }
+    }
+    
+    private func stopProgressTimer() {
+        progressTimer?.invalidate()
+        progressTimer = nil
     }
     
     private func bind(to player: any MusicPlayerProtocol) {
         currentState = player.currentState
-        currentTrack = validatedTrack(from: player.currentTrack)
+        currentTrack = MusicTrack.validated(from: player.currentTrack)
         
         calculateProgress(player: player)
         
@@ -65,7 +84,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
                 switch state {
                 case "Paused", "Playing":
                     self.currentState = player.currentState
-                    self.currentTrack = self.validatedTrack(from: player.currentTrack)
+                    self.currentTrack = MusicTrack.validated(from: player.currentTrack)
                 default:
                     self.currentState = nil
                     self.currentTrack = nil
@@ -75,22 +94,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
             })
             .store(in: &cancellables)
         
-        DistributedNotificationCenter.default().publisher(for: .init(player.playbackChangedName))
-            .compactMap { $0.userInfo?["Player State"] as? String }
-            .filter { $0 == "Playing" }
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] state in
-                guard let self else { return }
-                self.currentTrack = self.validatedTrack(from: player.currentTrack)
-            })
-            .store(in: &cancellables)
-        
-        timer
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                guard let self, currentState == .playing else { return }
-                self.calculateProgress(player: player)
-        }.store(in: &cancellables)
+        startProgressTimer(for: player)
         
         updateControlPermissions()
     }
@@ -144,31 +148,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         return true
     }
     
-    private func validatedTrack(from track: MusicTrack?) -> MusicTrack? {
-        guard let track = track else { return nil }
 
-        guard !track.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-              !track.artist.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-              !track.id.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            return nil
-        }
-        
-        let invalidNames = ["Unknown", "N/A", "", "-", "null", "undefined"]
-        let trackNameLower = track.name.lowercased()
-        let artistNameLower = track.artist.lowercased()
-        
-        for invalidName in invalidNames {
-            if trackNameLower == invalidName.lowercased() || artistNameLower == invalidName.lowercased() {
-                return nil
-            }
-        }
-    
-        if let duration = track.duration, duration <= 0 {
-            return nil
-        }
-        
-        return track
-    }
 }
 
 // MARK: app permissions
@@ -181,13 +161,17 @@ extension MusicInteractor {
             Task { @MainActor in
                 switch status {
                 case OSStatus(errAEEventNotPermitted):
+                    System.log("Automation permission denied for \(application.appName)", level: .warning)
                     self.showSettingsAlert(message: "Missing required automation permissions") {
                         self.openAutomationSettings()
                     }
-                case OSStatus(procNotFound), _:
+                case OSStatus(procNotFound):
+                    System.log("\(application.appName) not found or not running", level: .warning)
                     self.showSettingsAlert(message: "\(application.appName) is not running") {
                         self.openApplication()
                     }
+                case let status:
+                    System.log("Unexpected automation status: \(status) for \(application.appName)", level: .error)
                 }
                 
                 self.updateControlPermissions()

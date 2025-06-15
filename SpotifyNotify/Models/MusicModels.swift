@@ -9,6 +9,26 @@
 import Foundation
 import AppKit
 
+enum SpotifyNotifyError: LocalizedError {
+    case permissionDenied
+    case applicationNotFound
+    case invalidTrack
+    case automationError(String)
+    
+    var errorDescription: String? {
+        switch self {
+        case .permissionDenied: 
+            return "Automation permission denied"
+        case .applicationNotFound: 
+            return "Music application not found"
+        case .invalidTrack: 
+            return "Invalid track data"
+        case .automationError(let message):
+            return "Automation error: \(message)"
+        }
+    }
+}
+
 enum SupportedMusicApplication: String, CaseIterable {
     case applemusic, spotify
     
