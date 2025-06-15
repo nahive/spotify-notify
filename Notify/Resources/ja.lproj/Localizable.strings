@@ -43,4 +43,4 @@
 "Automation permission denied" = "自動化の許可が拒否されました";
 "Music application not found" = "音楽アプリケーションが見つかりません";
 "Invalid track data" = "無効なトラックデータ";
-"Automation error: %@" = "自動化エラー: %@"; 
+"Automation error: %@" = "自動化エラー: %@";

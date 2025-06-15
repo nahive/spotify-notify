@@ -1,0 +1,46 @@
+// Settings and permissions
+"Notification permissions" = "Notification permissions";
+"Enable notifications" = "Enable notifications";
+"Control permissions" = "Control permissions";
+"Open %@ to enable automation" = "Open %@ to enable automation";
+"Enable control for %@" = "Enable control for %@";
+"Select %@" = "Select %@";
+
+// Player view accessibility
+"Album artwork for %@" = "Album artwork for %@";
+"Track name" = "Track name";
+"Artist name" = "Artist name";
+"Previous track" = "Previous track";
+"Double tap to go to previous track" = "Double tap to go to previous track";
+"Pause" = "Pause";
+"Play" = "Play";
+"Double tap to pause playback" = "Double tap to pause playback";
+"Double tap to start playback" = "Double tap to start playback";
+"Next track" = "Next track";
+"Double tap to go to next track" = "Double tap to go to next track";
+
+// Player states
+"Paused" = "Paused";
+"Stopped" = "Stopped";
+"Playing" = "Playing";
+"Unknown" = "Unknown";
+
+// Settings
+"Launch on startup" = "Launch on startup";
+"Show colored menu bar icon" = "Show colored menu bar icon";
+"Keep notifications on screen (swipe right to hide)" = "Keep notifications on screen (swipe right to hide)";
+"Display notification on play | pause" = "Display notification on play | pause";
+"Play notification sound" = "Play notification sound";
+"Disable notifications when player is focused" = "Disable notifications when player is focused";
+"Include album art" = "Include album art";
+"Display song progress in notification" = "Display song progress in notification";
+
+// Alert messages
+"Go to Settings" = "Go to Settings";
+"Cancel" = "Cancel";
+
+// Error messages
+"Automation permission denied" = "Automation permission denied";
+"Music application not found" = "Music application not found";
+"Invalid track data" = "Invalid track data";
+"Automation error: %@" = "Automation error: %@";
