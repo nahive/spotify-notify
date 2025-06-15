@@ -36,6 +36,10 @@
 		4CF74EC12D412E7A009E8B00 /* AboutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC02D412E7A009E8B00 /* AboutSettingsView.swift */; };
 		4CF74EC42D413302009E8B00 /* CoverImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC32D413302009E8B00 /* CoverImageView.swift */; };
 		4CF74EC62D413325009E8B00 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC52D413325009E8B00 /* PlayerView.swift */; };
+		4CFE1ED32DFEDD6000E52A47 /* SongHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED22DFEDD6000E52A47 /* SongHistory.swift */; };
+		4CFE1ED52DFEDD7000E52A47 /* HistoryInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED42DFEDD7000E52A47 /* HistoryInteractor.swift */; };
+		4CFE1ED72DFEDD7A00E52A47 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED62DFEDD7A00E52A47 /* HistoryView.swift */; };
+		4CFE1EDA2DFEDE9C00E52A47 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED82DFEDE9C00E52A47 /* Localizable.strings */; };
 		FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +73,12 @@
 		4CF74EC02D412E7A009E8B00 /* AboutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSettingsView.swift; sourceTree = "<group>"; };
 		4CF74EC32D413302009E8B00 /* CoverImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoverImageView.swift; sourceTree = "<group>"; };
 		4CF74EC52D413325009E8B00 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		4CFE1ED22DFEDD6000E52A47 /* SongHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongHistory.swift; sourceTree = "<group>"; };
+		4CFE1ED42DFEDD7000E52A47 /* HistoryInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryInteractor.swift; sourceTree = "<group>"; };
+		4CFE1ED62DFEDD7A00E52A47 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		4CFE1ED92DFEDE9C00E52A47 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4CFE1EDB2DFEDEA300E52A47 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4CFE1EDC2DFEDEC700E52A47 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -133,6 +143,7 @@
 		4CDE08A82A35AEEE009609E7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4CFE1EDD2DFEDFAD00E52A47 /* History */,
 				4CF74EC22D4132F0009E8B00 /* Menu */,
 				4CF74EB92D412D75009E8B00 /* Settings */,
 			);
@@ -142,6 +153,7 @@
 		4CDE08AB2A35B344009609E7 /* Interactors */ = {
 			isa = PBXGroup;
 			children = (
+				4CFE1ED42DFEDD7000E52A47 /* HistoryInteractor.swift */,
 				4CDE08AC2A35B34D009609E7 /* MusicInteractor.swift */,
 				4CDE08B82A35C238009609E7 /* DefaultsInteractor.swift */,
 				4CDE08BC2A35CAAE009609E7 /* NotificationsInteractor.swift */,
@@ -152,6 +164,7 @@
 		4CDE08AE2A35B393009609E7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				4CFE1ED22DFEDD6000E52A47 /* SongHistory.swift */,
 				4C3FB6F32D2D1D4D0073EE24 /* MusicPlayerProtocol.swift */,
 				4CE2617B2D390A8100C8B9D1 /* SpotifyPlayer.swift */,
 				4CE2617D2D390D1200C8B9D1 /* AppleMusicPlayer.swift */,
@@ -203,6 +216,14 @@
 			path = Menu;
 			sourceTree = "<group>";
 		};
+		4CFE1EDD2DFEDFAD00E52A47 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				4CFE1ED62DFEDD7A00E52A47 /* HistoryView.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
 		FB400A8E203EFA3800F2D63C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -222,6 +243,7 @@
 		FB6B9D0F203EC29D0062702B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4CFE1ED82DFEDE9C00E52A47 /* Localizable.strings */,
 				4C5764C81C982DC900364AFE /* Assets.xcassets */,
 			);
 			path = Resources;
@@ -260,7 +282,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 2600;
 				ORGANIZATIONNAME = "Szymon Maślanka";
 				TargetAttributes = {
 					4C5764C21C982DC800364AFE = {
@@ -281,6 +303,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 4C5764BA1C982DC800364AFE;
 			packageReferences = (
@@ -303,6 +326,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C5764C91C982DC900364AFE /* Assets.xcassets in Resources */,
+				4CFE1EDA2DFEDE9C00E52A47 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,7 +343,9 @@
 				4CF74EBF2D412E38009E8B00 /* ShortcutView.swift in Sources */,
 				4CF74EBB2D412D83009E8B00 /* NotificationsSettingsView.swift in Sources */,
 				4CDE08B32A35B3CD009609E7 /* String+Ext.swift in Sources */,
+				4CFE1ED52DFEDD7000E52A47 /* HistoryInteractor.swift in Sources */,
 				4C3FB6F02D2D1A210073EE24 /* AppleMusicApplication.swift in Sources */,
+				4CFE1ED32DFEDD6000E52A47 /* SongHistory.swift in Sources */,
 				4C858885203F218800ED1692 /* SpotifyApplication.swift in Sources */,
 				4CF74EC62D413325009E8B00 /* PlayerView.swift in Sources */,
 				4CF74EC42D413302009E8B00 /* CoverImageView.swift in Sources */,
@@ -332,6 +358,7 @@
 				4CE2617A2D390A3900C8B9D1 /* MusicModels.swift in Sources */,
 				4CF74EBD2D412DCA009E8B00 /* GeneralSettingsView.swift in Sources */,
 				4CE2617C2D390A8100C8B9D1 /* SpotifyPlayer.swift in Sources */,
+				4CFE1ED72DFEDD7A00E52A47 /* HistoryView.swift in Sources */,
 				4CDE08BF2A35CC68009609E7 /* MusicNotification.swift in Sources */,
 				4CF74EB52D3F8CE7009E8B00 /* AlertDisplayable.swift in Sources */,
 				4CE261732D38F4E100C8B9D1 /* SBApplication.swift in Sources */,
@@ -342,6 +369,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		4CFE1ED82DFEDE9C00E52A47 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4CFE1ED92DFEDE9C00E52A47 /* Base */,
+				4CFE1EDB2DFEDEA300E52A47 /* en */,
+				4CFE1EDC2DFEDEC700E52A47 /* ja */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		4C5764D91C982DC900364AFE /* Debug */ = {
