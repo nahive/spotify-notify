@@ -19,6 +19,9 @@ struct NotificationSettingsView: View {
             Toggle(isOn: defaultsInteractor.$isMenuIconColored) {
                 Text("Show colored menu bar icon")
             }
+            Toggle(isOn: defaultsInteractor.$shouldShowSongInMenuBar) {
+                Text("Show song name in menu bar")
+            }
             Divider()
                 .padding()
             Toggle(isOn: defaultsInteractor.$areNotificationsEnabled) {

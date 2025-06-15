@@ -56,7 +56,7 @@ final class DefaultsInteractor: ObservableObject {
     // deprecated for now due to MenuBarExtra not respecting bindings properly
     // @AppStorage(Key.menuIconVisible) var isMenuIconVisible = true
     @AppStorage(Key.menuIconColored) var isMenuIconColored = false
-    @AppStorage(Key.menuBarShowSong) var shouldShowSongInMenuBar = false
+    @AppStorage(Key.menuBarShowSong) var shouldShowSongInMenuBar = true
     
     
     @AppStorage(Key.shortcutKeyCode) private var shortcutKeyCode = 0

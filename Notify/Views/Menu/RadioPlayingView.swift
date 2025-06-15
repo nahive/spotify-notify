@@ -13,7 +13,6 @@ struct RadioPlayingView: View {
     
     @State private var isHovering = false
     @State private var animationTrigger = false
-    @State private var iconRotation: Double = 0
     
     var body: some View {
         VStack(spacing: 16) {
@@ -33,13 +32,6 @@ struct RadioPlayingView: View {
     private func startAnimations() {
         // Start radio wave animation immediately
         animationTrigger = true
-        
-        // Start icon rotation if playing
-        if musicInteractor.currentState == .playing {
-            withAnimation(.linear(duration: 2).repeatForever(autoreverses: false)) {
-                iconRotation = 360
-            }
-        }
     }
     
     private var radioWavesView: some View {
@@ -103,23 +95,12 @@ struct RadioPlayingView: View {
     
     private var playPauseButton: some View {
         let iconName = musicInteractor.currentState == .playing ? "pause.fill" : "play.fill"
-        let isPlaying = musicInteractor.currentState == .playing
         let buttonBackground = Circle()
             .fill(.primary.opacity(isHovering ? 0.15 : 0.08))
             .stroke(.primary.opacity(0.2), lineWidth: 1)
         
         return Button(action: {
             musicInteractor.playPause()
-            // Update icon rotation based on new state
-            if musicInteractor.currentState == .playing {
-                withAnimation(.linear(duration: 2).repeatForever(autoreverses: false)) {
-                    iconRotation = 360
-                }
-            } else {
-                withAnimation(.easeOut(duration: 0.3)) {
-                    iconRotation = 0
-                }
-            }
         }) {
             Image(systemName: iconName)
                 .font(.title2)
@@ -127,23 +108,11 @@ struct RadioPlayingView: View {
                 .padding(12)
                 .background(buttonBackground)
                 .scaleEffect(isHovering ? 1.05 : 1.0)
-                .rotationEffect(.degrees(isPlaying ? iconRotation : 0))
         }
         .buttonStyle(PlainButtonStyle())
         .onHover { hovering in
             withAnimation(.easeInOut(duration: 0.2)) {
                 isHovering = hovering
-            }
-        }
-        .onChange(of: musicInteractor.currentState) { _, newState in
-            if newState == .playing {
-                withAnimation(.linear(duration: 2).repeatForever(autoreverses: false)) {
-                    iconRotation = 360
-                }
-            } else {
-                withAnimation(.easeOut(duration: 0.3)) {
-                    iconRotation = 0
-                }
             }
         }
     }

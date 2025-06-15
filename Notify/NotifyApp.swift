@@ -52,11 +52,9 @@ struct NotifyApp: App {
                 .environmentObject(historyInteractor)
                 .tint(.appAccent)
         } label: {
-            AnimatedMenuBarIcon(
-                isColored: defaultsInteractor.isMenuIconColored,
-                isPlayingRadio: musicInteractor.isPlayingRadio,
-                isPlaying: musicInteractor.currentState == .playing
-            )
+            MenuBarLabel()
+                .environmentObject(musicInteractor)
+                .environmentObject(defaultsInteractor)
         }
         .menuBarExtraStyle(.window)
         .modelContainer(modelContainer)
@@ -100,39 +98,40 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
-struct AnimatedMenuBarIcon: View {
-    let isColored: Bool
-    let isPlayingRadio: Bool
-    let isPlaying: Bool
-    
-    @State private var rotationAngle: Double = 0
+struct MenuBarLabel: View {
+    @EnvironmentObject var musicInteractor: MusicInteractor
+    @EnvironmentObject var defaultsInteractor: DefaultsInteractor
     
     var body: some View {
-        Image(isColored ? "IconStatusBarColor" : "IconStatusBarMonochrome")
-            .rotationEffect(.degrees(shouldAnimate ? rotationAngle : 0))
-            .onAppear {
-                if shouldAnimate {
-                    withAnimation(.linear(duration: 3).repeatForever(autoreverses: false)) {
-                        rotationAngle = 360
-                    }
+        HStack(spacing: 6) {
+            if musicInteractor.isPlayingRadio && musicInteractor.currentState == .playing {
+                // Native SF Symbol animation with repeating animation
+                Image(systemName: "dot.radiowaves.left.and.right")
+                    .font(.system(size: 16, weight: .medium))
+                    .symbolEffect(.pulse.byLayer, options: .repeating)
+                    .foregroundColor(.primary)
+            } else {
+                Image(defaultsInteractor.isMenuIconColored ? "IconStatusBarColor" : "IconStatusBarMonochrome")
+            }
+
+            // Show song name if enabled and track exists
+            if defaultsInteractor.shouldShowSongInMenuBar {
+                if let track = musicInteractor.currentTrack {
+                    Text(track.name)
+                        .font(.system(size: 13, weight: .medium))
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .frame(maxWidth: 180)
+                } else if musicInteractor.isPlayingRadio {
+                    Text("Radio")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(.secondary)
                 }
             }
-            .onChange(of: shouldAnimate) { _, newValue in
-                if newValue {
-                    withAnimation(.linear(duration: 3).repeatForever(autoreverses: false)) {
-                        rotationAngle = 360
-                    }
-                } else {
-                    withAnimation(.easeOut(duration: 0.5)) {
-                        rotationAngle = 0
-                    }
-                }
-            }
-    }
-    
-    private var shouldAnimate: Bool {
-        isPlayingRadio && isPlaying
+        }
     }
 }
+
+
 
 
