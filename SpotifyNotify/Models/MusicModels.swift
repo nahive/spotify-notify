@@ -38,6 +38,10 @@ enum SupportedMusicApplication: String, CaseIterable {
             AppleMusicPlayer(bundleId: bundleId)
         }
     }
+    
+    var isInstalled: Bool {
+        NSWorkspace.shared.urlForApplication(withBundleIdentifier: self.bundleId) != nil
+    }
 }
 
 enum MusicPlayerState: Sendable {
@@ -73,3 +77,4 @@ struct MusicTrack: Sendable, Equatable {
         self.duration = duration
     }
 }
+

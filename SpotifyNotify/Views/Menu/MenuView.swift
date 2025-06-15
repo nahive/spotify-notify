@@ -47,15 +47,8 @@ struct MenuView: View {
             .frame(width: 25, height: 20)
             .padding()
             
-            if let track = musicInteractor.currentTrack {
-                PlayerView(musicInteractor: musicInteractor, track: track)
-                    .frame(width: 300, height: 100)
-                    .padding()
-            } else {
-                Text("NO TRACKS")
-                    .frame(width: 500, height: 200)
-                    .padding()
-            }
+            PlayerView(musicInteractor: musicInteractor, track: musicInteractor.currentTrack)
+                .padding()
         }
     }
 }

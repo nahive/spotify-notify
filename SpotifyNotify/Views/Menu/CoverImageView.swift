@@ -10,6 +10,7 @@ import SwiftUI
 
 struct CoverImageView: View {
     @State private var shouldShowAlbumName = false
+    @State private var isHovering = false
     
     let image: Image
     let album: String?
@@ -33,6 +34,7 @@ struct CoverImageView: View {
                 .aspectRatio(contentMode: .fit)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .opacity(shouldShowAlbumName ? 0.3 : 1)
+                .blur(radius: isHovering ? 2 : 0)
             
             if let album = album {
                 Text(album)
@@ -43,9 +45,10 @@ struct CoverImageView: View {
                     .opacity(shouldShowAlbumName ? 1 : 0)
             }
         }
-        .onHover { isHovering in
-            withAnimation {
-                shouldShowAlbumName = isHovering
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isHovering = hovering
+                shouldShowAlbumName = hovering
             }
         }
         .animation(.default, value: image)

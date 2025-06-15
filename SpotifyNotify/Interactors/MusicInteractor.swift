@@ -52,7 +52,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     
     private func bind(to player: any MusicPlayerProtocol) {
         currentState = player.currentState
-        currentTrack = player.currentTrack
+        currentTrack = validatedTrack(from: player.currentTrack)
         
         calculateProgress(player: player)
         
@@ -65,7 +65,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
                 switch state {
                 case "Paused", "Playing":
                     self.currentState = player.currentState
-                    self.currentTrack = player.currentTrack
+                    self.currentTrack = self.validatedTrack(from: player.currentTrack)
                 default:
                     self.currentState = nil
                     self.currentTrack = nil
@@ -81,7 +81,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] state in
                 guard let self else { return }
-                self.currentTrack = player.currentTrack
+                self.currentTrack = self.validatedTrack(from: player.currentTrack)
             })
             .store(in: &cancellables)
         
@@ -142,6 +142,32 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
             return false
         }
         return true
+    }
+    
+    private func validatedTrack(from track: MusicTrack?) -> MusicTrack? {
+        guard let track = track else { return nil }
+
+        guard !track.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+              !track.artist.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+              !track.id.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            return nil
+        }
+        
+        let invalidNames = ["Unknown", "N/A", "", "-", "null", "undefined"]
+        let trackNameLower = track.name.lowercased()
+        let artistNameLower = track.artist.lowercased()
+        
+        for invalidName in invalidNames {
+            if trackNameLower == invalidName.lowercased() || artistNameLower == invalidName.lowercased() {
+                return nil
+            }
+        }
+    
+        if let duration = track.duration, duration <= 0 {
+            return nil
+        }
+        
+        return track
     }
 }
 

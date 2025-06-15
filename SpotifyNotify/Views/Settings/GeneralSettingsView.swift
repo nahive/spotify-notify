@@ -44,18 +44,25 @@ struct GeneralSettingsView: View {
         HStack {
             ForEach(SupportedMusicApplication.allCases, id: \.rawValue) { app in
                 ZStack {
-                    if let icon = app.icon {
-                        Image(nsImage: icon)
-                            .resizable()
-                            .frame(width: 80, height: 80)
+                    if app.isInstalled {
+                        if let icon = app.icon {
+                            Image(nsImage: icon)
+                                .resizable()
+                                .frame(width: 80, height: 80)
+                        } else {
+                            Text(app.appName)
+                                .frame(width: 80, height: 80)
+                        }
                     } else {
-                        Text(app.appName)
+                        Text(app.appName + " is not installed")
                             .frame(width: 80, height: 80)
+                            .multilineTextAlignment(.center)
                     }
                 }
                 .background(defaultsInteractor.selectedApplication == app ? app.color.opacity(0.5) : Color.clear)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .onTapGesture {
+//                    guard app.isInstalled else { return }
                     defaultsInteractor.selectedApplication = app
                 }
                 .accessibilityLabel("Select \(app.appName)")
