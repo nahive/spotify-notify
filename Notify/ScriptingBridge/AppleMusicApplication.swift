@@ -404,7 +404,7 @@ extension SBObject: AppleMusicSubscriptionPlaylist {}
     @objc optional var purchaserName: String { get } // the name of the person who purchased this track
     @objc optional var rating: Int { get } // the rating of this track (0 to 100)
     @objc optional var ratingKind: AppleMusicERtK { get } // the rating kind of this track
-    @objc optional var releaseDate: Date { get } // the release date of this track
+    @objc optional var releaseDate: Date? { get } // the release date of this track
     @objc optional var sampleRate: Int { get } // the sample rate of the track (in Hz)
     @objc optional var seasonNumber: Int { get } // the season number of the track
     @objc optional var shufflable: Bool { get } // is this track included when shuffling?

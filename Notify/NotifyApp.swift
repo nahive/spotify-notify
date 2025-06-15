@@ -50,6 +50,7 @@ struct NotifyApp: App {
                 .environmentObject(notificationsInteractor)
                 .environmentObject(defaultsInteractor)
                 .environmentObject(historyInteractor)
+                .tint(.appAccent)
         } label: {
             HStack {
                 Image(defaultsInteractor.isMenuIconColored ? "IconStatusBarColor" : "IconStatusBarMonochrome")
@@ -58,16 +59,20 @@ struct NotifyApp: App {
         .menuBarExtraStyle(.window)
         .modelContainer(modelContainer)
         
-        WindowGroup(id: "history") {
+        Window("Song History", id: "history") {
             HistoryView()
                 .environmentObject(historyInteractor)
+                .environmentObject(musicInteractor)
+                .tint(.appAccent)
         }
+        .windowResizability(.contentSize)
         
         Settings {
             SettingsView()
                 .environmentObject(musicInteractor)
                 .environmentObject(notificationsInteractor)
                 .environmentObject(defaultsInteractor)
+                .tint(.appAccent)
         }
     }
 }

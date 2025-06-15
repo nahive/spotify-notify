@@ -70,8 +70,27 @@ final class AppleMusicPlayer: NSObject, MusicPlayerProtocol {
 }
 
 private extension AppleMusicTrack {
-    var asMusicTrack: MusicTrack?{
-        .init(id: id, name: name, album: album, artist: artist, artwork: musicArtwork, duration: duration?.asInt)
+    var asMusicTrack: MusicTrack? {
+        .init(
+            id: id, 
+            name: name, 
+            album: album, 
+            artist: artist, 
+            artwork: musicArtwork, 
+            duration: duration?.asInt,
+            albumArtist: albumArtist,
+            genre: genre,
+            year: year,
+            trackNumber: trackNumber,
+            discNumber: discNumber,
+            playedCount: playedCount,
+            rating: rating,
+            bpm: bpm,
+            bitRate: bitRate,
+            isLoved: loved,
+            composer: composer,
+            releaseDate: releaseDate ?? nil
+        )
     }
     
     var id: String? {

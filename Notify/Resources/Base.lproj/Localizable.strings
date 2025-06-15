@@ -44,3 +44,36 @@
 "Music application not found" = "Music application not found";
 "Invalid track data" = "Invalid track data";
 "Automation error: %@" = "Automation error: %@";
+
+// History view
+"Song History" = "Song History";
+"Clear All" = "Clear All";
+"Delete" = "Delete";
+"Clear History" = "Clear History";
+"This will permanently delete all song history. This action cannot be undone." = "This will permanently delete all song history. This action cannot be undone.";
+"Details" = "Details";
+"Select a song to view details" = "Select a song to view details";
+"No Song History" = "No Song History";
+"Songs you play will appear here" = "Songs you play will appear here";
+"Total Songs" = "Total Songs";
+"Artists" = "Artists";
+"Listening Time" = "Listening Time";
+"Duration" = "Duration";
+"Played" = "Played";
+"Music App" = "Music App";
+"Date" = "Date";
+
+// Menu view
+"Open %@" = "Open %@";
+"Settings" = "Settings";
+"Quit" = "Quit";
+
+// Nothing playing view
+"Nothing Playing" = "Nothing Playing";
+"Start playing music to see controls" = "Start playing music to see controls";
+"Play Music" = "Play Music";
+
+// About view
+"Created with ❤ by nahive" = "Created with ❤ by nahive";
+"Source" = "Source";
+"Home" = "Home";

@@ -7,14 +7,37 @@
 //
 
 import Foundation
+import SwiftUI
 
 extension String {
-    var asURL: URL? {
-        .init(string: self)
+    var repeated: String {
+        return String(repeating: self, count: count)
+    }
+    
+    func repeated(_ times: Int) -> String {
+        return String(repeating: self, count: times)
     }
     
     var withLeadingZeroes: String {
-        guard let int = Int(self) else { return self }
-        return String(format: "%02d", int)
+        if self.count == 1 {
+            return "0" + self
+        }
+        return self
     }
+    
+    var asURL: URL? {
+        URL(string: self)
+    }
+}
+
+extension Int {
+    var minutesSeconds: (minutes: Int, seconds: Int) {
+        (self / 60, self % 60)
+    }
+}
+
+// MARK: - Custom Colors
+extension Color {
+    static let appGreen = Color(red: 0.275, green: 0.898, blue: 0.545) // #46e58b
+    static let appAccent = appGreen
 }

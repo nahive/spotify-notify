@@ -66,8 +66,22 @@ final class SpotifyPlayer: NSObject, MusicPlayerProtocol {
 }
 
 private extension SpotifyTrack {
-    var asMusicTrack: MusicTrack?{
-        .init(id: id?(), name: name, album: album, artist: artist, artwork: musicArtwork, duration: fixedDuration)
+    var asMusicTrack: MusicTrack? {
+        .init(
+            id: id?(), 
+            name: name, 
+            album: album, 
+            artist: artist, 
+            artwork: musicArtwork, 
+            duration: fixedDuration,
+            albumArtist: albumArtist,
+            trackNumber: trackNumber,
+            discNumber: discNumber,
+            playedCount: playedCount,
+            rating: popularity, // Spotify uses popularity 0-100
+            isStarred: starred,
+            spotifyUrl: spotifyUrl
+        )
     }
     
     var fixedDuration: Int {

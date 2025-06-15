@@ -74,7 +74,7 @@ struct GeneralSettingsView: View {
         VStack {
             HStack(alignment: .center) {
                 Circle()
-                    .foregroundStyle(notificationsInteractor.areNotificationsEnabled ? Color.green : Color.red)
+                    .foregroundStyle(notificationsInteractor.areNotificationsEnabled ? Color.appGreen : Color.red)
                     .frame(width: 8)
                 Text("Notification permissions")
             }
@@ -92,7 +92,7 @@ struct GeneralSettingsView: View {
             case .granted:
                 HStack {
                     Circle()
-                        .foregroundStyle(Color.green)
+                        .foregroundStyle(Color.appGreen)
                         .frame(width: 8)
                     Text("Control permissions")
                 }

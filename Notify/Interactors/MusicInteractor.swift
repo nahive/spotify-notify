@@ -17,6 +17,11 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     private let historyInteractor: HistoryInteractor
     
     private var player: (any MusicPlayerProtocol)?
+    private var currentApplication: SupportedMusicApplication?
+    private var lastSavedTrackId: String?
+    
+    // Track saving
+    private var currentSavedTrack: MusicTrack?
     
     @Published var permissionStatus: MusicPlayerPermissionStatus = .denied
 
@@ -42,6 +47,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     func set(application: SupportedMusicApplication?) {
         unbind()
         
+        self.currentApplication = application
         self.player = application?.player
         
         if let player {
@@ -55,6 +61,8 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         currentProgressPercent = 0.0
         currentTrackProgress = "--:--"
         fullTrackDuration = "--:--"
+        lastSavedTrackId = nil
+        currentSavedTrack = nil
         
         stopProgressTimer()
         cancellables.removeAll()
@@ -83,7 +91,6 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         
         DistributedNotificationCenter.default().publisher(for: .init(player.playbackChangedName))
             .compactMap { $0.userInfo?["Player State"] as? String }
-            .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] state in
                 guard let self else { return }
@@ -96,6 +103,20 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
                     self.currentTrack = nil
                     self.currentProgressPercent = 0.0
                     self.fullTrackDuration = "--:--"
+                }
+            })
+            .store(in: &cancellables)
+        
+        // Track song changes for history
+        $currentTrack
+            .sink(receiveValue: { [weak self] track in
+                guard let self, let track, let app = self.currentApplication else { return }
+                
+                // Only save if it's a different track and we haven't saved it yet
+                if track.id != self.currentSavedTrack?.id && track.id != self.lastSavedTrackId {
+                    self.historyInteractor.saveSong(from: track, musicApp: app)
+                    self.currentSavedTrack = track
+                    self.lastSavedTrackId = track.id
                 }
             })
             .store(in: &cancellables)
@@ -154,6 +175,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         return true
     }
     
+
 
 }
 

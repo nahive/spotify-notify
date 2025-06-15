@@ -84,7 +84,44 @@ struct MusicTrack: Sendable, Equatable {
     let artwork: MusicArtwork?
     let duration: Int?
     
-    init?(id: String?, name: String?, album: String?, artist: String?, artwork: MusicArtwork?, duration: Int?) {
+    // Extended metadata
+    let albumArtist: String?
+    let genre: String?
+    let year: Int?
+    let trackNumber: Int?
+    let discNumber: Int?
+    let playedCount: Int?
+    let rating: Int?
+    let bpm: Int?
+    let bitRate: Int?
+    let isLoved: Bool?
+    let isStarred: Bool?
+    let composer: String?
+    let spotifyUrl: String?
+    let releaseDate: Date?
+    
+    init?(
+        id: String?, 
+        name: String?, 
+        album: String?, 
+        artist: String?, 
+        artwork: MusicArtwork?, 
+        duration: Int?,
+        albumArtist: String? = nil,
+        genre: String? = nil,
+        year: Int? = nil,
+        trackNumber: Int? = nil,
+        discNumber: Int? = nil,
+        playedCount: Int? = nil,
+        rating: Int? = nil,
+        bpm: Int? = nil,
+        bitRate: Int? = nil,
+        isLoved: Bool? = nil,
+        isStarred: Bool? = nil,
+        composer: String? = nil,
+        spotifyUrl: String? = nil,
+        releaseDate: Date? = nil
+    ) {
         guard let id, let name, let artist else {
             return nil
         }
@@ -95,6 +132,20 @@ struct MusicTrack: Sendable, Equatable {
         self.artist = artist
         self.artwork = artwork
         self.duration = duration
+        self.albumArtist = albumArtist
+        self.genre = genre
+        self.year = year
+        self.trackNumber = trackNumber
+        self.discNumber = discNumber
+        self.playedCount = playedCount
+        self.rating = rating
+        self.bpm = bpm
+        self.bitRate = bitRate
+        self.isLoved = isLoved
+        self.isStarred = isStarred
+        self.composer = composer
+        self.spotifyUrl = spotifyUrl
+        self.releaseDate = releaseDate
     }
 }
 

@@ -72,15 +72,3 @@ extension MusicNotification {
         case simple, progress(Double)
     }
 }
-
-private extension Int {
-    var minutesSeconds: (minutes: Int, seconds: Int) {
-        ((self % 3600) / 60, (self % 3600) % 60)
-    }
-}
-
-private extension String {
-    func repeated(_ count: Int) -> String {
-        String(repeating: self, count: count)
-    }
-}

@@ -44,3 +44,36 @@
 "Music application not found" = "音楽アプリケーションが見つかりません";
 "Invalid track data" = "無効なトラックデータ";
 "Automation error: %@" = "自動化エラー: %@";
+
+// History view
+"Song History" = "楽曲履歴";
+"Clear All" = "すべて削除";
+"Delete" = "削除";
+"Clear History" = "履歴を削除";
+"This will permanently delete all song history. This action cannot be undone." = "すべての楽曲履歴が完全に削除されます。この操作は元に戻せません。";
+"Details" = "詳細";
+"Select a song to view details" = "楽曲を選択して詳細を表示";
+"No Song History" = "楽曲履歴なし";
+"Songs you play will appear here" = "再生した楽曲がここに表示されます";
+"Total Songs" = "総楽曲数";
+"Artists" = "アーティスト";
+"Listening Time" = "再生時間";
+"Duration" = "再生時間";
+"Played" = "再生日時";
+"Music App" = "音楽アプリ";
+"Date" = "日付";
+
+// Menu view
+"Open %@" = "%@を開く";
+"Settings" = "設定";
+"Quit" = "終了";
+
+// Nothing playing view
+"Nothing Playing" = "再生中の楽曲なし";
+"Start playing music to see controls" = "音楽を再生してコントロールを表示";
+"Play Music" = "音楽を再生";
+
+// About view
+"Created with ❤ by nahive" = "nahiveが❤を込めて作成";
+"Source" = "ソース";
+"Home" = "ホーム";
