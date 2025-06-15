@@ -12,23 +12,26 @@ import AppKit
 
 final class SpotifyPlayer: NSObject, MusicPlayerProtocol {
     let bundleId: String
+    private let lock = NSLock()
+    private nonisolated(unsafe) var _storedApplication: (any SpotifyApplication)?
     
     init(bundleId: String) {
         self.bundleId = bundleId
     }
     
-    private var storedApplication: (any SpotifyApplication)?
-    
     private var application: (any SpotifyApplication)? {
         get {
+            lock.lock()
+            defer { lock.unlock() }
+            
             if isOpen {
-                if storedApplication == nil {
-                    storedApplication = SBApplication(bundleIdentifier: bundleId)
+                if _storedApplication == nil {
+                    _storedApplication = SBApplication(bundleIdentifier: bundleId)
                 }
             } else {
-                storedApplication = nil
+                _storedApplication = nil
             }
-            return storedApplication
+            return _storedApplication
         }
     }
 

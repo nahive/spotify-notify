@@ -9,7 +9,7 @@
 import Foundation
 import AppKit
 
-protocol MusicPlayerProtocol {
+protocol MusicPlayerProtocol: Sendable {
     var bundleId: String { get }
     
     var playbackChangedName: String { get }
