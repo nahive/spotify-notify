@@ -1,0 +1,46 @@
+// Settings and permissions
+"Notification permissions" = "通知の許可";
+"Enable notifications" = "通知を有効にする";
+"Control permissions" = "制御の許可";
+"Open %@ to enable automation" = "%@を開いて自動化を有効にする";
+"Enable control for %@" = "%@の制御を有効にする";
+"Select %@" = "%@を選択";
+
+// Player view accessibility
+"Album artwork for %@" = "%@のアルバムアートワーク";
+"Track name" = "トラック名";
+"Artist name" = "アーティスト名";
+"Previous track" = "前のトラック";
+"Double tap to go to previous track" = "ダブルタップで前のトラックへ";
+"Pause" = "一時停止";
+"Play" = "再生";
+"Double tap to pause playback" = "ダブルタップで再生を一時停止";
+"Double tap to start playback" = "ダブルタップで再生を開始";
+"Next track" = "次のトラック";
+"Double tap to go to next track" = "ダブルタップで次のトラックへ";
+
+// Player states
+"Paused" = "一時停止中";
+"Stopped" = "停止中";
+"Playing" = "再生中";
+"Unknown" = "不明";
+
+// Settings
+"Launch on startup" = "起動時に開始";
+"Show colored menu bar icon" = "カラーメニューバーアイコンを表示";
+"Keep notifications on screen (swipe right to hide)" = "通知を画面に保持（右にスワイプで非表示）";
+"Display notification on play | pause" = "再生・一時停止時に通知を表示";
+"Play notification sound" = "通知音を再生";
+"Disable notifications when player is focused" = "プレーヤーがフォーカス時に通知を無効化";
+"Include album art" = "アルバムアートを含める";
+"Display song progress in notification" = "通知に楽曲の進行状況を表示";
+
+// Alert messages
+"Go to Settings" = "設定に移動";
+"Cancel" = "キャンセル";
+
+// Error messages
+"Automation permission denied" = "自動化の許可が拒否されました";
+"Music application not found" = "音楽アプリケーションが見つかりません";
+"Invalid track data" = "無効なトラックデータ";
+"Automation error: %@" = "自動化エラー: %@"; 
