@@ -483,7 +483,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Notify/Other/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Spotify Notify";
+				INFOPLIST_KEY_CFBundleDisplayName = Notify;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -514,7 +514,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Notify/Other/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Spotify Notify";
+				INFOPLIST_KEY_CFBundleDisplayName = Notify;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
