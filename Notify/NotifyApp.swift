@@ -52,9 +52,11 @@ struct NotifyApp: App {
                 .environmentObject(historyInteractor)
                 .tint(.appAccent)
         } label: {
-            HStack {
-                Image(defaultsInteractor.isMenuIconColored ? "IconStatusBarColor" : "IconStatusBarMonochrome")
-            }
+            AnimatedMenuBarIcon(
+                isColored: defaultsInteractor.isMenuIconColored,
+                isPlayingRadio: musicInteractor.isPlayingRadio,
+                isPlaying: musicInteractor.currentState == .playing
+            )
         }
         .menuBarExtraStyle(.window)
         .modelContainer(modelContainer)
@@ -95,6 +97,41 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         false
+    }
+}
+
+struct AnimatedMenuBarIcon: View {
+    let isColored: Bool
+    let isPlayingRadio: Bool
+    let isPlaying: Bool
+    
+    @State private var rotationAngle: Double = 0
+    
+    var body: some View {
+        Image(isColored ? "IconStatusBarColor" : "IconStatusBarMonochrome")
+            .rotationEffect(.degrees(shouldAnimate ? rotationAngle : 0))
+            .onAppear {
+                if shouldAnimate {
+                    withAnimation(.linear(duration: 3).repeatForever(autoreverses: false)) {
+                        rotationAngle = 360
+                    }
+                }
+            }
+            .onChange(of: shouldAnimate) { _, newValue in
+                if newValue {
+                    withAnimation(.linear(duration: 3).repeatForever(autoreverses: false)) {
+                        rotationAngle = 360
+                    }
+                } else {
+                    withAnimation(.easeOut(duration: 0.5)) {
+                        rotationAngle = 0
+                    }
+                }
+            }
+    }
+    
+    private var shouldAnimate: Bool {
+        isPlayingRadio && isPlaying
     }
 }
 

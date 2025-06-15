@@ -13,6 +13,10 @@ struct NothingPlayingView: View {
     
     @State private var isHovering = false
     
+    private var isAppleMusic: Bool {
+        musicInteractor.currentApplication?.bundleId == "com.apple.Music"
+    }
+    
     var body: some View {
         VStack(spacing: 16) {
             Text("Nothing Playing")
@@ -20,7 +24,10 @@ struct NothingPlayingView: View {
                 .fontWeight(.semibold)
                 .foregroundStyle(.primary)
             
-            Text("Start playing music to see controls")
+            Text(isAppleMusic ? 
+                "Start playing music in Apple Music to see controls" : 
+                "Start playing music to see controls"
+            )
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -31,7 +38,7 @@ struct NothingPlayingView: View {
                 HStack(spacing: 8) {
                     Image(systemName: "play.fill")
                         .font(.title3)
-                    Text("Play Music")
+                    Text(isAppleMusic ? "Open Apple Music" : "Play Music")
                         .font(.subheadline)
                         .fontWeight(.medium)
                 }
@@ -51,8 +58,11 @@ struct NothingPlayingView: View {
                     isHovering = hovering
                 }
             }
-            .accessibilityLabel("Start playbook")
-            .accessibilityHint("Double tap to start playing music")
+            .accessibilityLabel(isAppleMusic ? "Open Apple Music" : "Start playback")
+            .accessibilityHint(isAppleMusic ? 
+                "Double tap to open Apple Music" : 
+                "Double tap to start playing music"
+            )
         }
         .padding(.vertical, 20)
         .padding(.horizontal, 30)

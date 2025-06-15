@@ -17,7 +17,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     private let historyInteractor: HistoryInteractor
     
     private var player: (any MusicPlayerProtocol)?
-    private var currentApplication: SupportedMusicApplication?
+    var currentApplication: SupportedMusicApplication?
     private var lastSavedTrackId: String?
     
     // Track saving
@@ -27,6 +27,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
 
     @Published var currentState: MusicPlayerState?
     @Published var currentTrack: MusicTrack?
+    @Published var isPlayingRadio: Bool = false
     
     @Published var currentProgressPercent: Double = 0
     @Published var currentTrackProgress: String = "--:--"
@@ -58,6 +59,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     private func unbind() {
         currentState = nil
         currentTrack = nil
+        isPlayingRadio = false
         currentProgressPercent = 0.0
         currentTrackProgress = "--:--"
         fullTrackDuration = "--:--"
@@ -85,7 +87,14 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     
     private func bind(to player: any MusicPlayerProtocol) {
         currentState = player.currentState
-        currentTrack = MusicTrack.validated(from: player.currentTrack)
+        isPlayingRadio = player.isPlayingRadio
+        
+        // Only validate track if not playing radio
+        if isPlayingRadio {
+            currentTrack = nil
+        } else {
+            currentTrack = MusicTrack.validated(from: player.currentTrack)
+        }
         
         calculateProgress(player: player)
         
@@ -97,10 +106,18 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
                 switch state {
                 case "Paused", "Playing":
                     self.currentState = player.currentState
-                    self.currentTrack = MusicTrack.validated(from: player.currentTrack)
+                    self.isPlayingRadio = player.isPlayingRadio
+                    
+                    // Only validate track if not playing radio
+                    if self.isPlayingRadio {
+                        self.currentTrack = nil
+                    } else {
+                        self.currentTrack = MusicTrack.validated(from: player.currentTrack)
+                    }
                 default:
                     self.currentState = nil
                     self.currentTrack = nil
+                    self.isPlayingRadio = false
                     self.currentProgressPercent = 0.0
                     self.fullTrackDuration = "--:--"
                 }

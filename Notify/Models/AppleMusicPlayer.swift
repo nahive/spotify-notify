@@ -56,6 +56,26 @@ final class AppleMusicPlayer: NSObject, MusicPlayerProtocol {
         application?.playerPosition
     }
     
+    /// Detects if Apple Music is playing radio/station content where track info might not be available
+    var isPlayingRadio: Bool {
+        guard let application else { return false }
+        guard application.playerState == .playing else { return false }
+        
+        // Check if we have a current track
+        guard let currentTrack = application.currentTrack else {
+            // Playing but no track at all - likely radio
+            return true
+        }
+        
+        // Check if track has valid identifying information
+        let hasValidName = currentTrack.name?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
+        let hasValidArtist = currentTrack.artist?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
+        let hasValidID = currentTrack.databaseID != nil && currentTrack.databaseID != 0
+        
+        // If playing but missing essential track info, likely radio/station
+        return !hasValidName || !hasValidArtist || !hasValidID
+    }
+    
     func nextTrack() {
         application?.nextTrack?()
     }

@@ -15,6 +15,8 @@ struct PlayerView: View {
     var body: some View {
         if let track = track {
             PlayingView(musicInteractor: musicInteractor, track: track)
+        } else if musicInteractor.isPlayingRadio {
+            RadioPlayingView(musicInteractor: musicInteractor)
         } else {
             NothingPlayingView(musicInteractor: musicInteractor)
         }
@@ -153,8 +155,6 @@ struct PlayingView: View {
             .accessibilityAddTraits(.isButton)
     }
 }
-
-
 
 private extension PlayingView {
     enum PlayerHoverTarget {

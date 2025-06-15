@@ -71,7 +71,13 @@
 // Nothing playing view
 "Nothing Playing" = "再生中の楽曲なし";
 "Start playing music to see controls" = "音楽を再生してコントロールを表示";
+"Start playing music in Apple Music to see controls" = "Apple Musicで音楽を再生してコントロールを表示";
 "Play Music" = "音楽を再生";
+"Open Apple Music" = "Apple Musicを開く";
+
+// Radio playing view
+"Radio Playing" = "ラジオ再生中";
+"Apple Music radio is playing but track details aren't available" = "Apple Musicラジオが再生中ですが、トラック詳細は利用できません";
 
 // About view
 "Created with ❤ by nahive" = "nahiveが❤を込めて作成";

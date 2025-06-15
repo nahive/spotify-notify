@@ -71,7 +71,13 @@
 // Nothing playing view
 "Nothing Playing" = "Nothing Playing";
 "Start playing music to see controls" = "Start playing music to see controls";
+"Start playing music in Apple Music to see controls" = "Start playing music in Apple Music to see controls";
 "Play Music" = "Play Music";
+"Open Apple Music" = "Open Apple Music";
+
+// Radio playing view
+"Radio Playing" = "Radio Playing";
+"Apple Music radio is playing but track details aren't available" = "Apple Music radio is playing but track details aren't available";
 
 // About view
 "Created with ❤ by nahive" = "Created with ❤ by nahive";

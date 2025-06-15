@@ -52,6 +52,11 @@ final class SpotifyPlayer: NSObject, MusicPlayerProtocol {
         application?.playerPosition
     }
     
+    var isPlayingRadio: Bool {
+        // Spotify doesn't have the same radio/station issue as Apple Music
+        false
+    }
+    
     func nextTrack() {
         application?.nextTrack?()
     }

@@ -19,6 +19,7 @@ protocol MusicPlayerProtocol: Sendable {
     var currentTrack: MusicTrack? { get }
     var currentState: MusicPlayerState? { get }
     var playerPosition: Double? { get }
+    var isPlayingRadio: Bool { get }
     
     func nextTrack()
     func previousTrack()
