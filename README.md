@@ -1,6 +1,6 @@
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/nahive/spotify-notify/master/logo.png" alt="Spotify Notify" width="200"/>
+<img src="https://raw.githubusercontent.com/nahive/spotify-notify/master/logo.png" alt="Notify" width="200"/>
 </p>
 <p align="center">
 <img src="https://raw.githubusercontent.com/nahive/spotify-notify/master/p1.png" alt="normal dark mode" width="300"/>
@@ -11,7 +11,7 @@
 <img src="https://raw.githubusercontent.com/nahive/spotify-notify/master/p4.png" alt="extended light mode" width="300"/>
 </p>
 
-# Spotify Notify
+# Notify
 ![Build Version](https://img.shields.io/github/release/nahive/spotify-notify.svg)
 <!-- [![Build Status](https://travis-ci.org/nahive/spotify-notify.png?branch=master)](https://travis-ci.org/nahive/spotify-notify) -->
 ##### *Inspired by [Spotify Notifications](https://github.com/citruspi/Spotify-Notifications) written in Swift*
@@ -54,7 +54,7 @@ If you click Don't Allow by accident, you can reset the permissions dialogue usi
 $ tccutil reset AppleEvents
 ```
 
-Additionally, it is now required to sign the app using a paid developer account. To do this, simply set the signing team and certificate in the General settings of the SpotifyNotify target:
+Additionally, it is now required to sign the app using a paid developer account. To do this, simply set the signing team and certificate in the General settings of the Notify target:
 
 <p align="center"><img src="docs/signing.png" alt="Signing"/></p>
 
@@ -63,7 +63,7 @@ Additionally, it is now required to sign the app using a paid developer account.
 ```
 $ git clone https://github.com/nahive/spotify-notify.git
 $ cd spotify-notify
-$ open SpotifyNotify.xcodeproj
+$ open Notify.xcodeproj
 ```
 
 ## Contributing

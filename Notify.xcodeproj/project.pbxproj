@@ -1,0 +1,601 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4C3FB6F02D2D1A210073EE24 /* AppleMusicApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3FB6EF2D2D1A210073EE24 /* AppleMusicApplication.swift */; };
+		4C3FB6F42D2D1D4D0073EE24 /* MusicPlayerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3FB6F32D2D1D4D0073EE24 /* MusicPlayerProtocol.swift */; };
+		4C5764C91C982DC900364AFE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764C81C982DC900364AFE /* Assets.xcassets */; };
+		4C858885203F218800ED1692 /* SpotifyApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C858884203F218800ED1692 /* SpotifyApplication.swift */; };
+		4C926D4C288043F40008809E /* KeyHolder in Frameworks */ = {isa = PBXBuildFile; productRef = 4C926D4B288043F40008809E /* KeyHolder */; };
+		4C926D4F288044010008809E /* Magnet in Frameworks */ = {isa = PBXBuildFile; productRef = 4C926D4E288044010008809E /* Magnet */; };
+		4CAD3BD52DFEB59400D6BF22 /* NothingPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAD3BD42DFEB59400D6BF22 /* NothingPlayingView.swift */; };
+		4CAD3BD72DFEBC3400D6BF22 /* MusicTrack+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAD3BD62DFEBC3400D6BF22 /* MusicTrack+Validation.swift */; };
+		4CAF91122A3620B700C6A19B /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAF91112A3620B700C6A19B /* Logger.swift */; };
+		4CDE08A62A35AB9B009609E7 /* NotifyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08A52A35AB9B009609E7 /* NotifyApp.swift */; };
+		4CDE08AA2A35AEF6009609E7 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08A92A35AEF6009609E7 /* MenuView.swift */; };
+		4CDE08AD2A35B34D009609E7 /* MusicInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08AC2A35B34D009609E7 /* MusicInteractor.swift */; };
+		4CDE08B32A35B3CD009609E7 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08B22A35B3CD009609E7 /* String+Ext.swift */; };
+		4CDE08B52A35BC9B009609E7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08B42A35BC9B009609E7 /* SettingsView.swift */; };
+		4CDE08B92A35C238009609E7 /* DefaultsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08B82A35C238009609E7 /* DefaultsInteractor.swift */; };
+		4CDE08BD2A35CAAE009609E7 /* NotificationsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08BC2A35CAAE009609E7 /* NotificationsInteractor.swift */; };
+		4CDE08BF2A35CC68009609E7 /* MusicNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE08BE2A35CC68009609E7 /* MusicNotification.swift */; };
+		4CDE08C42A35F53B009609E7 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 4CDE08C32A35F53B009609E7 /* LaunchAtLogin */; };
+		4CE261732D38F4E100C8B9D1 /* SBApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE261722D38F4E100C8B9D1 /* SBApplication.swift */; };
+		4CE2617A2D390A3900C8B9D1 /* MusicModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE261792D390A3500C8B9D1 /* MusicModels.swift */; };
+		4CE2617C2D390A8100C8B9D1 /* SpotifyPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE2617B2D390A8100C8B9D1 /* SpotifyPlayer.swift */; };
+		4CE2617E2D390D1200C8B9D1 /* AppleMusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE2617D2D390D1200C8B9D1 /* AppleMusicPlayer.swift */; };
+		4CF74EB52D3F8CE7009E8B00 /* AlertDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EB42D3F8CE7009E8B00 /* AlertDisplayable.swift */; };
+		4CF74EBB2D412D83009E8B00 /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EBA2D412D83009E8B00 /* NotificationsSettingsView.swift */; };
+		4CF74EBD2D412DCA009E8B00 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EBC2D412DCA009E8B00 /* GeneralSettingsView.swift */; };
+		4CF74EBF2D412E38009E8B00 /* ShortcutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EBE2D412E38009E8B00 /* ShortcutView.swift */; };
+		4CF74EC12D412E7A009E8B00 /* AboutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC02D412E7A009E8B00 /* AboutSettingsView.swift */; };
+		4CF74EC42D413302009E8B00 /* CoverImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC32D413302009E8B00 /* CoverImageView.swift */; };
+		4CF74EC62D413325009E8B00 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC52D413325009E8B00 /* PlayerView.swift */; };
+		FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		4C3340EC2A370EE90045B06B /* Notify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Notify.entitlements; sourceTree = "<group>"; };
+		4C3FB6EF2D2D1A210073EE24 /* AppleMusicApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicApplication.swift; sourceTree = "<group>"; };
+		4C3FB6F32D2D1D4D0073EE24 /* MusicPlayerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerProtocol.swift; sourceTree = "<group>"; };
+		4C5764C31C982DC800364AFE /* Notify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notify.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C5764C81C982DC900364AFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4C5764CD1C982DC900364AFE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C858884203F218800ED1692 /* SpotifyApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyApplication.swift; sourceTree = "<group>"; };
+		4CAD3BD42DFEB59400D6BF22 /* NothingPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NothingPlayingView.swift; sourceTree = "<group>"; };
+		4CAD3BD62DFEBC3400D6BF22 /* MusicTrack+Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MusicTrack+Validation.swift"; sourceTree = "<group>"; };
+		4CAF91112A3620B700C6A19B /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		4CDE08A52A35AB9B009609E7 /* NotifyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyApp.swift; sourceTree = "<group>"; };
+		4CDE08A92A35AEF6009609E7 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		4CDE08AC2A35B34D009609E7 /* MusicInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicInteractor.swift; sourceTree = "<group>"; };
+		4CDE08B22A35B3CD009609E7 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
+		4CDE08B42A35BC9B009609E7 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		4CDE08B82A35C238009609E7 /* DefaultsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsInteractor.swift; sourceTree = "<group>"; };
+		4CDE08BC2A35CAAE009609E7 /* NotificationsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsInteractor.swift; sourceTree = "<group>"; };
+		4CDE08BE2A35CC68009609E7 /* MusicNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicNotification.swift; sourceTree = "<group>"; };
+		4CE261722D38F4E100C8B9D1 /* SBApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SBApplication.swift; sourceTree = "<group>"; };
+		4CE261792D390A3500C8B9D1 /* MusicModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicModels.swift; sourceTree = "<group>"; };
+		4CE2617B2D390A8100C8B9D1 /* SpotifyPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyPlayer.swift; sourceTree = "<group>"; };
+		4CE2617D2D390D1200C8B9D1 /* AppleMusicPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicPlayer.swift; sourceTree = "<group>"; };
+		4CF74EB42D3F8CE7009E8B00 /* AlertDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertDisplayable.swift; sourceTree = "<group>"; };
+		4CF74EBA2D412D83009E8B00 /* NotificationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsView.swift; sourceTree = "<group>"; };
+		4CF74EBC2D412DCA009E8B00 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		4CF74EBE2D412E38009E8B00 /* ShortcutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutView.swift; sourceTree = "<group>"; };
+		4CF74EC02D412E7A009E8B00 /* AboutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSettingsView.swift; sourceTree = "<group>"; };
+		4CF74EC32D413302009E8B00 /* CoverImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoverImageView.swift; sourceTree = "<group>"; };
+		4CF74EC52D413325009E8B00 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4C5764C01C982DC800364AFE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C926D4F288044010008809E /* Magnet in Frameworks */,
+				4C926D4C288043F40008809E /* KeyHolder in Frameworks */,
+				4CDE08C42A35F53B009609E7 /* LaunchAtLogin in Frameworks */,
+				FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4C5764BA1C982DC800364AFE = {
+			isa = PBXGroup;
+			children = (
+				4C5764C51C982DC800364AFE /* Notify */,
+				FB400A8E203EFA3800F2D63C /* Frameworks */,
+				4C5764C41C982DC800364AFE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4C5764C41C982DC800364AFE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C5764C31C982DC800364AFE /* Notify.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4C5764C51C982DC800364AFE /* Notify */ = {
+			isa = PBXGroup;
+			children = (
+				4C3340EC2A370EE90045B06B /* Notify.entitlements */,
+				4CDE08A52A35AB9B009609E7 /* NotifyApp.swift */,
+				4CDE08AE2A35B393009609E7 /* Models */,
+				4CDE08AB2A35B344009609E7 /* Interactors */,
+				4CDE08A82A35AEEE009609E7 /* Views */,
+				4CE261762D38F52200C8B9D1 /* ScriptingBridge */,
+				4C5764E41C982E8900364AFE /* Helpers */,
+				4CDE08B12A35B3C3009609E7 /* Extensions */,
+				FB6B9D0F203EC29D0062702B /* Resources */,
+				FB6B9D0E203EC28E0062702B /* Other */,
+			);
+			path = Notify;
+			sourceTree = "<group>";
+		};
+		4C5764E41C982E8900364AFE /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				4CAF91112A3620B700C6A19B /* Logger.swift */,
+				4CF74EB42D3F8CE7009E8B00 /* AlertDisplayable.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		4CDE08A82A35AEEE009609E7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4CF74EC22D4132F0009E8B00 /* Menu */,
+				4CF74EB92D412D75009E8B00 /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		4CDE08AB2A35B344009609E7 /* Interactors */ = {
+			isa = PBXGroup;
+			children = (
+				4CDE08AC2A35B34D009609E7 /* MusicInteractor.swift */,
+				4CDE08B82A35C238009609E7 /* DefaultsInteractor.swift */,
+				4CDE08BC2A35CAAE009609E7 /* NotificationsInteractor.swift */,
+			);
+			path = Interactors;
+			sourceTree = "<group>";
+		};
+		4CDE08AE2A35B393009609E7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4C3FB6F32D2D1D4D0073EE24 /* MusicPlayerProtocol.swift */,
+				4CE2617B2D390A8100C8B9D1 /* SpotifyPlayer.swift */,
+				4CE2617D2D390D1200C8B9D1 /* AppleMusicPlayer.swift */,
+				4CE261792D390A3500C8B9D1 /* MusicModels.swift */,
+				4CDE08BE2A35CC68009609E7 /* MusicNotification.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		4CDE08B12A35B3C3009609E7 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				4CAD3BD62DFEBC3400D6BF22 /* MusicTrack+Validation.swift */,
+				4CDE08B22A35B3CD009609E7 /* String+Ext.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		4CE261762D38F52200C8B9D1 /* ScriptingBridge */ = {
+			isa = PBXGroup;
+			children = (
+				4C858884203F218800ED1692 /* SpotifyApplication.swift */,
+				4C3FB6EF2D2D1A210073EE24 /* AppleMusicApplication.swift */,
+				4CE261722D38F4E100C8B9D1 /* SBApplication.swift */,
+			);
+			path = ScriptingBridge;
+			sourceTree = "<group>";
+		};
+		4CF74EB92D412D75009E8B00 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				4CDE08B42A35BC9B009609E7 /* SettingsView.swift */,
+				4CF74EBA2D412D83009E8B00 /* NotificationsSettingsView.swift */,
+				4CF74EBC2D412DCA009E8B00 /* GeneralSettingsView.swift */,
+				4CF74EC02D412E7A009E8B00 /* AboutSettingsView.swift */,
+				4CF74EBE2D412E38009E8B00 /* ShortcutView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		4CF74EC22D4132F0009E8B00 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				4CAD3BD42DFEB59400D6BF22 /* NothingPlayingView.swift */,
+				4CDE08A92A35AEF6009609E7 /* MenuView.swift */,
+				4CF74EC32D413302009E8B00 /* CoverImageView.swift */,
+				4CF74EC52D413325009E8B00 /* PlayerView.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		FB400A8E203EFA3800F2D63C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FB6B9D0E203EC28E0062702B /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				4C5764CD1C982DC900364AFE /* Info.plist */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		FB6B9D0F203EC29D0062702B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4C5764C81C982DC900364AFE /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4C5764C21C982DC800364AFE /* Notify */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C5764DB1C982DC900364AFE /* Build configuration list for PBXNativeTarget "Notify" */;
+			buildPhases = (
+				4C5764BF1C982DC800364AFE /* Sources */,
+				4C5764C01C982DC800364AFE /* Frameworks */,
+				4C5764C11C982DC800364AFE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Notify;
+			packageProductDependencies = (
+				4C926D4B288043F40008809E /* KeyHolder */,
+				4C926D4E288044010008809E /* Magnet */,
+				4CDE08C32A35F53B009609E7 /* LaunchAtLogin */,
+			);
+			productName = NotifySpotify;
+			productReference = 4C5764C31C982DC800364AFE /* Notify.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4C5764BB1C982DC800364AFE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 0930;
+				LastUpgradeCheck = 1500;
+				ORGANIZATIONNAME = "Szymon Maślanka";
+				TargetAttributes = {
+					4C5764C21C982DC800364AFE = {
+						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = "";
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 4C5764BE1C982DC800364AFE /* Build configuration list for PBXProject "Notify" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4C5764BA1C982DC800364AFE;
+			packageReferences = (
+				4C926D4A288043F40008809E /* XCRemoteSwiftPackageReference "KeyHolder" */,
+				4C926D4D288044010008809E /* XCRemoteSwiftPackageReference "Magnet" */,
+				4CDE08C22A35F53B009609E7 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
+			);
+			productRefGroup = 4C5764C41C982DC800364AFE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4C5764C21C982DC800364AFE /* Notify */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4C5764C11C982DC800364AFE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C5764C91C982DC900364AFE /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4C5764BF1C982DC800364AFE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CAD3BD72DFEBC3400D6BF22 /* MusicTrack+Validation.swift in Sources */,
+				4CF74EC12D412E7A009E8B00 /* AboutSettingsView.swift in Sources */,
+				4CAD3BD52DFEB59400D6BF22 /* NothingPlayingView.swift in Sources */,
+				4CF74EBF2D412E38009E8B00 /* ShortcutView.swift in Sources */,
+				4CF74EBB2D412D83009E8B00 /* NotificationsSettingsView.swift in Sources */,
+				4CDE08B32A35B3CD009609E7 /* String+Ext.swift in Sources */,
+				4C3FB6F02D2D1A210073EE24 /* AppleMusicApplication.swift in Sources */,
+				4C858885203F218800ED1692 /* SpotifyApplication.swift in Sources */,
+				4CF74EC62D413325009E8B00 /* PlayerView.swift in Sources */,
+				4CF74EC42D413302009E8B00 /* CoverImageView.swift in Sources */,
+				4CDE08A62A35AB9B009609E7 /* NotifyApp.swift in Sources */,
+				4C3FB6F42D2D1D4D0073EE24 /* MusicPlayerProtocol.swift in Sources */,
+				4CDE08AA2A35AEF6009609E7 /* MenuView.swift in Sources */,
+				4CDE08BD2A35CAAE009609E7 /* NotificationsInteractor.swift in Sources */,
+				4CAF91122A3620B700C6A19B /* Logger.swift in Sources */,
+				4CE2617E2D390D1200C8B9D1 /* AppleMusicPlayer.swift in Sources */,
+				4CE2617A2D390A3900C8B9D1 /* MusicModels.swift in Sources */,
+				4CF74EBD2D412DCA009E8B00 /* GeneralSettingsView.swift in Sources */,
+				4CE2617C2D390A8100C8B9D1 /* SpotifyPlayer.swift in Sources */,
+				4CDE08BF2A35CC68009609E7 /* MusicNotification.swift in Sources */,
+				4CF74EB52D3F8CE7009E8B00 /* AlertDisplayable.swift in Sources */,
+				4CE261732D38F4E100C8B9D1 /* SBApplication.swift in Sources */,
+				4CDE08AD2A35B34D009609E7 /* MusicInteractor.swift in Sources */,
+				4CDE08B92A35C238009609E7 /* DefaultsInteractor.swift in Sources */,
+				4CDE08B52A35BC9B009609E7 /* SettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4C5764D91C982DC900364AFE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SAMPLE_CODE_DISAMBIGUATOR = "${DEVELOPMENT_TEAM}";
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_EXISTENTIAL_ANY = YES;
+				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
+				SWIFT_VERSION = 6.0;
+				_EXPERIMENTAL_SWIFT_EXPLICIT_MODULES = YES;
+			};
+			name = Debug;
+		};
+		4C5764DA1C982DC900364AFE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SAMPLE_CODE_DISAMBIGUATOR = "${DEVELOPMENT_TEAM}";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_UPCOMING_FEATURE_EXISTENTIAL_ANY = YES;
+				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
+				SWIFT_VERSION = 6.0;
+				_EXPERIMENTAL_SWIFT_EXPLICIT_MODULES = YES;
+			};
+			name = Release;
+		};
+		4C5764DC1C982DC900364AFE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Notify/Notify.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1512;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = LK98J2HBA6;
+				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Notify/Other/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Spotify Notify";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.5.1;
+				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.Notify;
+				PRODUCT_NAME = Notify;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		4C5764DD1C982DC900364AFE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Notify/Notify.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1512;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = LK98J2HBA6;
+				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Notify/Other/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Spotify Notify";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.5.1;
+				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.Notify;
+				PRODUCT_NAME = Notify;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4C5764BE1C982DC800364AFE /* Build configuration list for PBXProject "Notify" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C5764D91C982DC900364AFE /* Debug */,
+				4C5764DA1C982DC900364AFE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C5764DB1C982DC900364AFE /* Build configuration list for PBXNativeTarget "Notify" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C5764DC1C982DC900364AFE /* Debug */,
+				4C5764DD1C982DC900364AFE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4C926D4A288043F40008809E /* XCRemoteSwiftPackageReference "KeyHolder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Clipy/KeyHolder";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		4C926D4D288044010008809E /* XCRemoteSwiftPackageReference "Magnet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Clipy/Magnet";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		4CDE08C22A35F53B009609E7 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin-Modern";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4C926D4B288043F40008809E /* KeyHolder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4C926D4A288043F40008809E /* XCRemoteSwiftPackageReference "KeyHolder" */;
+			productName = KeyHolder;
+		};
+		4C926D4E288044010008809E /* Magnet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4C926D4D288044010008809E /* XCRemoteSwiftPackageReference "Magnet" */;
+			productName = Magnet;
+		};
+		4CDE08C32A35F53B009609E7 /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4CDE08C22A35F53B009609E7 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */;
+			productName = LaunchAtLogin;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 4C5764BB1C982DC800364AFE /* Project object */;
+}
