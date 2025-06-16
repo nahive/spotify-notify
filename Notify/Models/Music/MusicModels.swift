@@ -1,11 +1,3 @@
-//
-//  MusicModels.swift
-//  Notify
-//
-//  Created by Szymon Maślanka on 2025/01/16.
-//  Copyright © 2025 Szymon Maślanka. All rights reserved.
-//
-
 import Foundation
 import AppKit
 

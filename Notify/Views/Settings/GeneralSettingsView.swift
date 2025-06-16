@@ -1,11 +1,3 @@
-//
-//  GeneralSettingsView.swift
-//  Notify
-//
-//  Created by Szymon Maślanka on 2025/01/22.
-//  Copyright © 2025 Szymon Maślanka. All rights reserved.
-//
-
 import SwiftUI
 import Combine
 
@@ -74,7 +66,7 @@ struct GeneralSettingsView: View {
         VStack {
             HStack(alignment: .center) {
                 Circle()
-                    .foregroundStyle(notificationsInteractor.areNotificationsEnabled ? Color.appGreen : Color.red)
+                    .foregroundStyle(notificationsInteractor.areNotificationsEnabled ? Color.appAccent : Color.red)
                     .frame(width: 8)
                 Text("Notification permissions")
             }
@@ -92,7 +84,7 @@ struct GeneralSettingsView: View {
             case .granted:
                 HStack {
                     Circle()
-                        .foregroundStyle(Color.appGreen)
+                        .foregroundStyle(Color.appAccent)
                         .frame(width: 8)
                     Text("Control permissions")
                 }

@@ -1,11 +1,3 @@
-//
-//  AboutSettingsView.swift
-//  Notify
-//
-//  Created by Szymon Maślanka on 2025/01/22.
-//  Copyright © 2025 Szymon Maślanka. All rights reserved.
-//
-
 import SwiftUI
 
 struct AboutSettingsView: View {

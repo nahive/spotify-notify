@@ -1,11 +1,3 @@
-//
-//  MenuView.swift
-//  Notify
-//
-//  Created by Szymon Maślanka on 2023/06/11.
-//  Copyright © 2023 Szymon Maślanka. All rights reserved.
-//
-
 import SwiftUI
 import AppKit
 

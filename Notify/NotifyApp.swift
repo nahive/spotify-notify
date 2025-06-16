@@ -1,11 +1,3 @@
-//
-//  NotifyApp.swift
-//  Notify
-//
-//  Created by Szymon Maślanka on 2023/06/11.
-//  Copyright © 2023 Szymon Maślanka. All rights reserved.
-//
-
 import SwiftUI
 import UserNotifications
 import AppKit
@@ -21,7 +13,7 @@ struct NotifyApp: App {
     @StateObject private var notificationsInteractor: NotificationsInteractor
     @StateObject private var historyInteractor: HistoryInteractor
     
-    let modelContainer: ModelContainer
+    private let modelContainer: ModelContainer
     
     init() {
         do {
@@ -50,7 +42,6 @@ struct NotifyApp: App {
                 .environmentObject(notificationsInteractor)
                 .environmentObject(defaultsInteractor)
                 .environmentObject(historyInteractor)
-                .tint(.appAccent)
         } label: {
             MenuBarLabel()
                 .environmentObject(musicInteractor)
@@ -63,7 +54,6 @@ struct NotifyApp: App {
             HistoryView()
                 .environmentObject(historyInteractor)
                 .environmentObject(musicInteractor)
-                .tint(.appAccent)
         }
         .windowResizability(.contentSize)
         
@@ -72,7 +62,6 @@ struct NotifyApp: App {
                 .environmentObject(musicInteractor)
                 .environmentObject(notificationsInteractor)
                 .environmentObject(defaultsInteractor)
-                .tint(.appAccent)
         }
     }
 }
@@ -88,7 +77,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard !flag else {
             return true
         }
-        // TODO: fix opening settings
+        // TODO: fix opening settings - maybe someday
         openSettings()
         return true
     }
@@ -98,23 +87,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
-struct MenuBarLabel: View {
+private struct MenuBarLabel: View {
     @EnvironmentObject var musicInteractor: MusicInteractor
     @EnvironmentObject var defaultsInteractor: DefaultsInteractor
     
     var body: some View {
         HStack(spacing: 6) {
-            if musicInteractor.isPlayingRadio && musicInteractor.currentState == .playing {
-                // Native SF Symbol animation with repeating animation
-                Image(systemName: "dot.radiowaves.left.and.right")
+            if musicInteractor.currentTrack != nil || musicInteractor.isPlayingRadio {
+                let isPlaying = musicInteractor.currentState == .playing
+                Image(systemName: isPlaying ? "music.quarternote.3" : "music.note")
                     .font(.system(size: 16, weight: .medium))
-                    .symbolEffect(.pulse.byLayer, options: .repeating)
                     .foregroundColor(.primary)
             } else {
                 Image(defaultsInteractor.isMenuIconColored ? "IconStatusBarColor" : "IconStatusBarMonochrome")
             }
 
-            // Show song name if enabled and track exists
             if defaultsInteractor.shouldShowSongInMenuBar {
                 if let track = musicInteractor.currentTrack {
                     Text(track.name)

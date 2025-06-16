@@ -1,11 +1,3 @@
-//
-//  Notification.swift
-//  MusicNotify
-//
-//  Created by Szymon Maślanka on 2023/06/11.
-//  Copyright © 2023 Szymon Maślanka. All rights reserved.
-//
-
 import Foundation
 
 enum NotificationIdentifier: Sendable {

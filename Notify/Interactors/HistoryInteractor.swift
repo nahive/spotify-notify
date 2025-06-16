@@ -1,10 +1,3 @@
-//
-//  HistoryInteractor.swift
-//  Notify
-//
-//  Created by AI Assistant
-//
-
 import Foundation
 import SwiftData
 import AppKit

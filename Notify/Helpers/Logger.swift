@@ -1,11 +1,3 @@
-//
-//  Logger.swift
-//  Notify
-//
-//  Created by Szymon Maślanka on 2023/06/12.
-//  Copyright © 2023 Szymon Maślanka. All rights reserved.
-//
-
 import Foundation
 import os
 

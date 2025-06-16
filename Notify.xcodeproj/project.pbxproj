@@ -10,6 +10,12 @@
 		4C3FB6F02D2D1A210073EE24 /* AppleMusicApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3FB6EF2D2D1A210073EE24 /* AppleMusicApplication.swift */; };
 		4C3FB6F42D2D1D4D0073EE24 /* MusicPlayerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3FB6F32D2D1D4D0073EE24 /* MusicPlayerProtocol.swift */; };
 		4C4E199E2DFF079F00989540 /* RadioPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E199D2DFF079F00989540 /* RadioPlayingView.swift */; };
+		4C4E19A52E002C6C00989540 /* Int+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19A42E002C6C00989540 /* Int+Ext.swift */; };
+		4C4E19AA2E00300500989540 /* HeaderStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19A82E00300500989540 /* HeaderStatsView.swift */; };
+		4C4E19AB2E00300500989540 /* EmptyHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19A72E00300500989540 /* EmptyHistoryView.swift */; };
+		4C4E19AD2E00300500989540 /* HistoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19A92E00300500989540 /* HistoryRowView.swift */; };
+		4C4E19B12E00308F00989540 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19B02E00308F00989540 /* HistoryView.swift */; };
+		4C4E19B32E0030F800989540 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19B22E0030F800989540 /* DetailView.swift */; };
 		4C5764C91C982DC900364AFE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764C81C982DC900364AFE /* Assets.xcassets */; };
 		4C858885203F218800ED1692 /* SpotifyApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C858884203F218800ED1692 /* SpotifyApplication.swift */; };
 		4C926D4C288043F40008809E /* KeyHolder in Frameworks */ = {isa = PBXBuildFile; productRef = 4C926D4B288043F40008809E /* KeyHolder */; };
@@ -39,7 +45,6 @@
 		4CF74EC62D413325009E8B00 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC52D413325009E8B00 /* PlayerView.swift */; };
 		4CFE1ED32DFEDD6000E52A47 /* SongHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED22DFEDD6000E52A47 /* SongHistory.swift */; };
 		4CFE1ED52DFEDD7000E52A47 /* HistoryInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED42DFEDD7000E52A47 /* HistoryInteractor.swift */; };
-		4CFE1ED72DFEDD7A00E52A47 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED62DFEDD7A00E52A47 /* HistoryView.swift */; };
 		4CFE1EDA2DFEDE9C00E52A47 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED82DFEDE9C00E52A47 /* Localizable.strings */; };
 		FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */; };
 /* End PBXBuildFile section */
@@ -49,6 +54,12 @@
 		4C3FB6EF2D2D1A210073EE24 /* AppleMusicApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicApplication.swift; sourceTree = "<group>"; };
 		4C3FB6F32D2D1D4D0073EE24 /* MusicPlayerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerProtocol.swift; sourceTree = "<group>"; };
 		4C4E199D2DFF079F00989540 /* RadioPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioPlayingView.swift; sourceTree = "<group>"; };
+		4C4E19A42E002C6C00989540 /* Int+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Ext.swift"; sourceTree = "<group>"; };
+		4C4E19A72E00300500989540 /* EmptyHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyHistoryView.swift; sourceTree = "<group>"; };
+		4C4E19A82E00300500989540 /* HeaderStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderStatsView.swift; sourceTree = "<group>"; };
+		4C4E19A92E00300500989540 /* HistoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRowView.swift; sourceTree = "<group>"; };
+		4C4E19B02E00308F00989540 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		4C4E19B22E0030F800989540 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		4C5764C31C982DC800364AFE /* Notify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5764C81C982DC900364AFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4C5764CD1C982DC900364AFE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -77,7 +88,6 @@
 		4CF74EC52D413325009E8B00 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		4CFE1ED22DFEDD6000E52A47 /* SongHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongHistory.swift; sourceTree = "<group>"; };
 		4CFE1ED42DFEDD7000E52A47 /* HistoryInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryInteractor.swift; sourceTree = "<group>"; };
-		4CFE1ED62DFEDD7A00E52A47 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		4CFE1ED92DFEDE9C00E52A47 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4CFE1EDB2DFEDEA300E52A47 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4CFE1EDC2DFEDEC700E52A47 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -99,6 +109,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C4E199F2E002C1A00989540 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				4CDE08BE2A35CC68009609E7 /* MusicNotification.swift */,
+				4CE261792D390A3500C8B9D1 /* MusicModels.swift */,
+			);
+			path = Music;
+			sourceTree = "<group>";
+		};
+		4C4E19A02E002C2200989540 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				4CFE1ED22DFEDD6000E52A47 /* SongHistory.swift */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
+		4C4E19A12E002C3700989540 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				4C3FB6F32D2D1D4D0073EE24 /* MusicPlayerProtocol.swift */,
+				4CE2617B2D390A8100C8B9D1 /* SpotifyPlayer.swift */,
+				4CE2617D2D390D1200C8B9D1 /* AppleMusicPlayer.swift */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
 		4C5764BA1C982DC800364AFE = {
 			isa = PBXGroup;
 			children = (
@@ -166,12 +203,9 @@
 		4CDE08AE2A35B393009609E7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				4CFE1ED22DFEDD6000E52A47 /* SongHistory.swift */,
-				4C3FB6F32D2D1D4D0073EE24 /* MusicPlayerProtocol.swift */,
-				4CE2617B2D390A8100C8B9D1 /* SpotifyPlayer.swift */,
-				4CE2617D2D390D1200C8B9D1 /* AppleMusicPlayer.swift */,
-				4CE261792D390A3500C8B9D1 /* MusicModels.swift */,
-				4CDE08BE2A35CC68009609E7 /* MusicNotification.swift */,
+				4C4E19A12E002C3700989540 /* Player */,
+				4C4E19A02E002C2200989540 /* Database */,
+				4C4E199F2E002C1A00989540 /* Music */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -181,6 +215,7 @@
 			children = (
 				4CAD3BD62DFEBC3400D6BF22 /* MusicTrack+Validation.swift */,
 				4CDE08B22A35B3CD009609E7 /* String+Ext.swift */,
+				4C4E19A42E002C6C00989540 /* Int+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -222,7 +257,11 @@
 		4CFE1EDD2DFEDFAD00E52A47 /* History */ = {
 			isa = PBXGroup;
 			children = (
-				4CFE1ED62DFEDD7A00E52A47 /* HistoryView.swift */,
+				4C4E19B22E0030F800989540 /* DetailView.swift */,
+				4C4E19B02E00308F00989540 /* HistoryView.swift */,
+				4C4E19A72E00300500989540 /* EmptyHistoryView.swift */,
+				4C4E19A82E00300500989540 /* HeaderStatsView.swift */,
+				4C4E19A92E00300500989540 /* HistoryRowView.swift */,
 			);
 			path = History;
 			sourceTree = "<group>";
@@ -345,6 +384,7 @@
 				4CAD3BD52DFEB59400D6BF22 /* NothingPlayingView.swift in Sources */,
 				4CF74EBF2D412E38009E8B00 /* ShortcutView.swift in Sources */,
 				4CF74EBB2D412D83009E8B00 /* NotificationsSettingsView.swift in Sources */,
+				4C4E19A52E002C6C00989540 /* Int+Ext.swift in Sources */,
 				4CDE08B32A35B3CD009609E7 /* String+Ext.swift in Sources */,
 				4CFE1ED52DFEDD7000E52A47 /* HistoryInteractor.swift in Sources */,
 				4C3FB6F02D2D1A210073EE24 /* AppleMusicApplication.swift in Sources */,
@@ -355,14 +395,18 @@
 				4CDE08A62A35AB9B009609E7 /* NotifyApp.swift in Sources */,
 				4C3FB6F42D2D1D4D0073EE24 /* MusicPlayerProtocol.swift in Sources */,
 				4CDE08AA2A35AEF6009609E7 /* MenuView.swift in Sources */,
+				4C4E19B12E00308F00989540 /* HistoryView.swift in Sources */,
 				4CDE08BD2A35CAAE009609E7 /* NotificationsInteractor.swift in Sources */,
 				4CAF91122A3620B700C6A19B /* Logger.swift in Sources */,
+				4C4E19B32E0030F800989540 /* DetailView.swift in Sources */,
 				4CE2617E2D390D1200C8B9D1 /* AppleMusicPlayer.swift in Sources */,
 				4CE2617A2D390A3900C8B9D1 /* MusicModels.swift in Sources */,
 				4C4E199E2DFF079F00989540 /* RadioPlayingView.swift in Sources */,
 				4CF74EBD2D412DCA009E8B00 /* GeneralSettingsView.swift in Sources */,
+				4C4E19AA2E00300500989540 /* HeaderStatsView.swift in Sources */,
+				4C4E19AB2E00300500989540 /* EmptyHistoryView.swift in Sources */,
+				4C4E19AD2E00300500989540 /* HistoryRowView.swift in Sources */,
 				4CE2617C2D390A8100C8B9D1 /* SpotifyPlayer.swift in Sources */,
-				4CFE1ED72DFEDD7A00E52A47 /* HistoryView.swift in Sources */,
 				4CDE08BF2A35CC68009609E7 /* MusicNotification.swift in Sources */,
 				4CF74EB52D3F8CE7009E8B00 /* AlertDisplayable.swift in Sources */,
 				4CE261732D38F4E100C8B9D1 /* SBApplication.swift in Sources */,
@@ -533,7 +577,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = Notify;
@@ -564,7 +608,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = Notify;

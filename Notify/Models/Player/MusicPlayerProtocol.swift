@@ -1,11 +1,3 @@
-//
-//  MusicPlayerProtocol.swift
-//  Notify
-//
-//  Created by Szymon Maślanka on 2025/01/07.
-//  Copyright © 2025 Szymon Maślanka. All rights reserved.
-//
-
 import Foundation
 import AppKit
 

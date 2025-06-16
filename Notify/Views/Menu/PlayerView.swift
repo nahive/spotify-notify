@@ -1,11 +1,3 @@
-//
-//  File.swift
-//  Notify
-//
-//  Created by Szymon Maślanka on 2025/01/22.
-//  Copyright © 2025 Szymon Maślanka. All rights reserved.
-//
-
 import SwiftUI
 
 struct PlayerView: View {
@@ -24,7 +16,7 @@ struct PlayerView: View {
 }
 
 struct PlayingView: View {
-    let musicInteractor: MusicInteractor
+    @StateObject var musicInteractor: MusicInteractor
     let track: MusicTrack
     
     @State private var hoverTarget: PlayerHoverTarget = .none

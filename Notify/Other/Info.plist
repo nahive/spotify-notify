@@ -38,7 +38,7 @@
 	<key>NSAppleEventsUsageDescription</key>
 	<string>Access is required in order to retrieve current track information, and to allow control of music player from the menu bar.</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2024 Szymon Maślanka. All rights reserved.</string>
+	<string>Copyright © 2025 Szymon Maślanka. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
