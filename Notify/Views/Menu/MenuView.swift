@@ -1,6 +1,7 @@
 import SwiftUI
 import AppKit
 
+// MARK: - MenuView
 struct MenuView: View {
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openSettings) private var openSettings
@@ -56,6 +57,7 @@ struct MenuView: View {
     }
 }
 
+// MARK: - MusicPlayerState Extensions
 private extension MusicPlayerState {
     var localized: String {
         switch self {

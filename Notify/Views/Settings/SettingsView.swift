@@ -1,5 +1,6 @@
 import SwiftUI
 
+// MARK: - SettingsView
 struct SettingsView: View {
     @EnvironmentObject var defaultsInteractor: DefaultsInteractor
     @EnvironmentObject var musicInteractor: MusicInteractor
@@ -33,6 +34,7 @@ struct SettingsView: View {
     }
 }
 
+// MARK: - Preview
 struct Settings_Preview: PreviewProvider {
     @StateObject private static var defaultsInteractor = DefaultsInteractor()
     

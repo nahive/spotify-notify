@@ -4,37 +4,39 @@ import AppKit
 import Combine
 import UserNotifications
 
+// MARK: - MusicInteractor
 @MainActor
 final class MusicInteractor: ObservableObject, AlertDisplayable {
+    
+    // MARK: - Dependencies
     private let historyInteractor: HistoryInteractor
     
+    // MARK: - Private Properties
     private var player: (any MusicPlayerProtocol)?
     var currentApplication: SupportedMusicApplication?
+    private var progressTimer: Timer?
+    private var cancellables = Set<AnyCancellable>()
     
-
-    
+    // MARK: - Published Properties
     @Published var permissionStatus: MusicPlayerPermissionStatus = .denied
-
     @Published var currentState: MusicPlayerState?
     @Published var currentTrack: MusicTrack?
     @Published var isPlayingRadio: Bool = false
-    
     @Published var currentProgressPercent: Double = 0
     @Published var currentTrackProgress: String = "--:--"
     @Published var fullTrackDuration: String = "--:--"
     
-    private var progressTimer: Timer?
-    
+    // MARK: - Computed Properties
     var isPlayerFrontmost: Bool {
         player?.isFrontmost ?? false
     }
     
-    private var cancellables = Set<AnyCancellable>()
-    
+    // MARK: - Initialization
     init(historyInteractor: HistoryInteractor) {
         self.historyInteractor = historyInteractor
     }
     
+    // MARK: - Public Methods
     func set(application: SupportedMusicApplication?) {
         unbind()
         
@@ -46,6 +48,51 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         }
     }
     
+    func updateControlPermissions() {
+        permissionStatus = {
+            guard let player, player.isOpen else {
+                return .closed
+            }
+            guard player.hasPermissionToControl else {
+                return .denied
+            }
+            return .granted
+        }()
+    }
+    
+    func nextTrack() {
+        guard canControlPlayer() else { return }
+        player?.nextTrack()
+    }
+    
+    func previousTrack() {
+        guard canControlPlayer() else { return }
+        player?.previousTrack()
+    }
+    
+    func playPause() {
+        guard canControlPlayer() else { return }
+        player?.playPause()
+    }
+    
+    func seek(to percentage: Double) {
+        guard canControlPlayer() else { return }
+        guard let duration = currentTrack?.duration else { return }
+        let position = Double(duration) * percentage
+        player?.seek(to: position)
+        
+        stopProgressTimer()
+        
+        currentProgressPercent = percentage
+        currentTrackProgress = Duration.seconds(position).formatted(.time(pattern: .minuteSecond))
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self, let player = self.player else { return }
+            self.startProgressTimer(for: player)
+        }
+    }
+    
+    // MARK: - Private Methods
     private func unbind() {
         currentState = nil
         currentTrack = nil
@@ -54,7 +101,6 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         currentTrackProgress = "--:--"
         fullTrackDuration = "--:--"
 
-        
         stopProgressTimer()
         cancellables.removeAll()
     }
@@ -120,20 +166,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
             .store(in: &cancellables)
         
         startProgressTimer(for: player)
-        
         updateControlPermissions()
-    }
-    
-    func updateControlPermissions() {
-        permissionStatus = {
-            guard let player, player.isOpen else {
-                return .closed
-            }
-            guard player.hasPermissionToControl else {
-                return .denied
-            }
-            return .granted
-        }()
     }
 
     private func calculateProgress(player: any MusicPlayerProtocol) {
@@ -148,38 +181,6 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         currentTrackProgress = Duration.seconds(position).formatted(.time(pattern: .minuteSecond))
         fullTrackDuration = Duration.seconds(duration).formatted(.time(pattern: .minuteSecond))
     }
-
-    func nextTrack() {
-        guard canControlPlayer() else { return }
-        player?.nextTrack()
-    }
-    
-    func previousTrack() {
-        guard canControlPlayer() else { return }
-        player?.previousTrack()
-    }
-    
-    func playPause() {
-        guard canControlPlayer() else { return }
-        player?.playPause()
-    }
-    
-    func seek(to percentage: Double) {
-        guard canControlPlayer() else { return }
-        guard let duration = currentTrack?.duration else { return }
-        let position = Double(duration) * percentage
-        player?.seek(to: position)
-        
-        stopProgressTimer()
-        
-        currentProgressPercent = percentage
-        currentTrackProgress = Duration.seconds(position).formatted(.time(pattern: .minuteSecond))
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            guard let self, let player = self.player else { return }
-            self.startProgressTimer(for: player)
-        }
-    }
     
     private func canControlPlayer() -> Bool {
         guard let player else { return false }
@@ -189,9 +190,6 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         }
         return true
     }
-    
-
-
 }
 
 // MARK: app permissions

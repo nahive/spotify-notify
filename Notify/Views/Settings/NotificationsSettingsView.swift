@@ -8,9 +8,6 @@ struct NotificationSettingsView: View {
     var body: some View {
         VStack(alignment: .leading) {
             LaunchAtLogin.Toggle("Launch on startup")
-            Toggle(isOn: defaultsInteractor.$isMenuIconColored) {
-                Text("Show colored menu bar icon")
-            }
             Toggle(isOn: defaultsInteractor.$shouldShowSongInMenuBar) {
                 Text("Show song name in menu bar")
             }

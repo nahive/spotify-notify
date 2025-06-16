@@ -16,6 +16,7 @@
 		4C4E19AD2E00300500989540 /* HistoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19A92E00300500989540 /* HistoryRowView.swift */; };
 		4C4E19B12E00308F00989540 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19B02E00308F00989540 /* HistoryView.swift */; };
 		4C4E19B32E0030F800989540 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19B22E0030F800989540 /* DetailView.swift */; };
+		4C4E19B52E0041A500989540 /* AlbumArtworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19B42E0041A500989540 /* AlbumArtworkView.swift */; };
 		4C5764C91C982DC900364AFE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764C81C982DC900364AFE /* Assets.xcassets */; };
 		4C858885203F218800ED1692 /* SpotifyApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C858884203F218800ED1692 /* SpotifyApplication.swift */; };
 		4C926D4C288043F40008809E /* KeyHolder in Frameworks */ = {isa = PBXBuildFile; productRef = 4C926D4B288043F40008809E /* KeyHolder */; };
@@ -60,6 +61,7 @@
 		4C4E19A92E00300500989540 /* HistoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRowView.swift; sourceTree = "<group>"; };
 		4C4E19B02E00308F00989540 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		4C4E19B22E0030F800989540 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		4C4E19B42E0041A500989540 /* AlbumArtworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumArtworkView.swift; sourceTree = "<group>"; };
 		4C5764C31C982DC800364AFE /* Notify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5764C81C982DC900364AFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4C5764CD1C982DC900364AFE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 		4CF74EC22D4132F0009E8B00 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				4C4E19B42E0041A500989540 /* AlbumArtworkView.swift */,
 				4C4E199D2DFF079F00989540 /* RadioPlayingView.swift */,
 				4CAD3BD42DFEB59400D6BF22 /* NothingPlayingView.swift */,
 				4CDE08A92A35AEF6009609E7 /* MenuView.swift */,
@@ -403,6 +406,7 @@
 				4CE2617A2D390A3900C8B9D1 /* MusicModels.swift in Sources */,
 				4C4E199E2DFF079F00989540 /* RadioPlayingView.swift in Sources */,
 				4CF74EBD2D412DCA009E8B00 /* GeneralSettingsView.swift in Sources */,
+				4C4E19B52E0041A500989540 /* AlbumArtworkView.swift in Sources */,
 				4C4E19AA2E00300500989540 /* HeaderStatsView.swift in Sources */,
 				4C4E19AB2E00300500989540 /* EmptyHistoryView.swift in Sources */,
 				4C4E19AD2E00300500989540 /* HistoryRowView.swift in Sources */,

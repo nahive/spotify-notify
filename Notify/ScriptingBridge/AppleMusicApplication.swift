@@ -198,7 +198,7 @@ extension SBApplication: AppleMusicApplication {}
 @objc protocol AppleMusicItem: SBObjectProtocol, AppleMusicGenericMethods {
     @objc optional var container: SBObject { get } // the container of the item
     @objc optional func id() -> Int // the id of the item
-    @objc optional var index: Int { get } // the index of the item in internal application order
+    @objc optional var index: Int { get } // the index of the item in application order
     @objc optional var name: String { get } // the name of the item
     @objc optional var persistentID: String { get } // the id of the item as a hexadecimal string. This id does not change over time.
     @objc optional var properties: [AnyHashable : Any] { get } // every property of the item

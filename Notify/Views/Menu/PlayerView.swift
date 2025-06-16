@@ -1,5 +1,6 @@
 import SwiftUI
 
+// MARK: - PlayerView
 struct PlayerView: View {
     let musicInteractor: MusicInteractor
     let track: MusicTrack?
@@ -15,23 +16,12 @@ struct PlayerView: View {
     }
 }
 
+// MARK: - PlayingView
 struct PlayingView: View {
     @StateObject var musicInteractor: MusicInteractor
     let track: MusicTrack
     
     @State private var hoverTarget: PlayerHoverTarget = .none
-    
-    private enum Layout {
-        static let albumArtSize: CGFloat = 100
-        static let albumArtPadding: CGFloat = 8
-        static let buttonPadding: CGFloat = 10
-        static let smallButtonSize: CGFloat = 15
-        static let playButtonSize: CGFloat = 20
-        static let hoverOpacity: CGFloat = 0.3
-        static let defaultOpacity: CGFloat = 0.1
-        static let buttonSpacing: CGFloat = 8
-        static let trackInfoSpacing: CGFloat = 4
-    }
     
     var body: some View {
         HStack {
@@ -41,31 +31,13 @@ struct PlayingView: View {
         }
     }
     
+    // MARK: - Private View Components
     private var albumArtworkView: some View {
-        Group {
-            if let artwork = track.artwork {
-                switch artwork {
-                case .url(let url):
-                    AsyncImage(url: url) { phase in
-                        CoverImageView(image: phase.image ?? Image("IconSettings"), album: track.album)
-                    }
-                    .padding(Layout.albumArtPadding)
-                    .frame(width: Layout.albumArtSize, height: Layout.albumArtSize)
-                    .shadow(color: .black.opacity(0.15), radius: 8, y: 4)
-                    .accessibilityLabel("Album artwork for \(track.album ?? track.name)")
-                case .image(let image):
-                    CoverImageView(image: Image(nsImage: image), album: track.album)
-                    .padding(Layout.albumArtPadding)
-                    .frame(width: Layout.albumArtSize, height: Layout.albumArtSize)
-                    .shadow(color: .black.opacity(0.15), radius: 8, y: 4)
-                    .accessibilityLabel("Album artwork for \(track.album ?? track.name)")
-                }
-            }
-        }
+        AlbumArtworkView(track: track)
     }
     
     private var trackInfoView: some View {
-        VStack(spacing: Layout.trackInfoSpacing) {
+        VStack(spacing: 4) {
             Text(track.name)
                 .font(.title2)
                 .fontWeight(.semibold)
@@ -82,15 +54,15 @@ struct PlayingView: View {
                 .accessibilityLabel("Artist name")
                 .accessibilityValue(track.artist)
             CustomProgressView(musicInteractor: musicInteractor)
-                .padding(.top, 10)
+                .padding(.top, 12)
         }
     }
     
     private var controlButtonsView: some View {
-        HStack(spacing: Layout.buttonSpacing) {
+        HStack(spacing: 8) {
             controlButton(
                 systemName: "backward.fill",
-                size: Layout.smallButtonSize,
+                size: 15,
                 target: .previous,
                 accessibilityLabel: "Previous track",
                 accessibilityHint: "Double tap to go to previous track",
@@ -99,7 +71,7 @@ struct PlayingView: View {
             
             controlButton(
                 systemName: musicInteractor.currentState == .playing ? "pause.fill" : "play.fill",
-                size: Layout.playButtonSize,
+                size: 20,
                 target: .playPause,
                 accessibilityLabel: musicInteractor.currentState == .playing ? "Pause" : "Play",
                 accessibilityHint: musicInteractor.currentState == .playing ? "Double tap to pause playback" : "Double tap to start playback",
@@ -109,14 +81,14 @@ struct PlayingView: View {
             
             controlButton(
                 systemName: "forward.fill",
-                size: Layout.smallButtonSize,
+                size: 15,
                 target: .next,
                 accessibilityLabel: "Next track",
                 accessibilityHint: "Double tap to go to next track",
                 action: musicInteractor.nextTrack
             )
         }
-        .padding(.horizontal, 12)
+        .padding(.horizontal, 16)
         .padding(.vertical, 8)
     }
     
@@ -130,9 +102,9 @@ struct PlayingView: View {
     ) -> some View {
         Image(systemName: systemName)
             .frame(width: size, height: size)
-            .font(size == Layout.playButtonSize ? .title2 : .body)
-            .padding(Layout.buttonPadding)
-            .background(Color.primary.opacity(hoverTarget == target ? Layout.hoverOpacity : Layout.defaultOpacity))
+            .font(size == 20 ? .title2 : .body)
+            .padding(10)
+            .background(Color.primary.opacity(hoverTarget == target ? 0.3 : 0.1))
             .clipShape(Circle())
             .scaleEffect(hoverTarget == target ? 1.1 : 1.0)
             .shadow(color: .primary.opacity(0.2), radius: hoverTarget == target ? 4 : 0)
@@ -148,12 +120,14 @@ struct PlayingView: View {
     }
 }
 
+// MARK: - PlayerHoverTarget
 private extension PlayingView {
     enum PlayerHoverTarget {
         case none, previous, playPause, next
     }
 }
 
+// MARK: - CustomProgressView
 struct CustomProgressView: View {
     @ObservedObject var musicInteractor: MusicInteractor
     @State private var isDragging = false
@@ -174,9 +148,12 @@ struct CustomProgressView: View {
                     
                     Rectangle()
                         .fill(.white.gradient)
-                        .frame(width: geometry.size.width * CGFloat(displayProgress), height: isDragging ? 6 : 3)
+                        .frame(
+                            width: geometry.size.width * CGFloat(displayProgress), 
+                            height: isDragging ? 6 : 3
+                        )
                         .cornerRadius(isDragging ? 3 : 1.5)
-                        .shadow(color: .white.opacity(0.3), radius: 1)
+                        .shadow(color: .white.opacity(0.3), radius: 2)
                 }
                 .animation(.easeInOut(duration: 0.2), value: isDragging)
                 .contentShape(Rectangle())

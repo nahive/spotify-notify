@@ -3,10 +3,11 @@ import UserNotifications
 import AppKit
 import SwiftData
 
+// MARK: - Main App
 @main
 struct NotifyApp: App {
     
-    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     
     @StateObject private var musicInteractor: MusicInteractor
     @StateObject private var defaultsInteractor: DefaultsInteractor
@@ -66,8 +67,9 @@ struct NotifyApp: App {
     }
 }
 
+// MARK: - App Delegate
 class AppDelegate: NSObject, NSApplicationDelegate {
-    @Environment(\.openSettings) var openSettings
+    @Environment(\.openSettings) private var openSettings
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         System.log("Notify application started", level: .info)
@@ -87,9 +89,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
+// MARK: - MenuBarLabel
 private struct MenuBarLabel: View {
-    @EnvironmentObject var musicInteractor: MusicInteractor
-    @EnvironmentObject var defaultsInteractor: DefaultsInteractor
+    @EnvironmentObject private var musicInteractor: MusicInteractor
+    @EnvironmentObject private var defaultsInteractor: DefaultsInteractor
     
     var body: some View {
         HStack(spacing: 6) {
@@ -99,7 +102,7 @@ private struct MenuBarLabel: View {
                     .font(.system(size: 16, weight: .medium))
                     .foregroundColor(.primary)
             } else {
-                Image(defaultsInteractor.isMenuIconColored ? "IconStatusBarColor" : "IconStatusBarMonochrome")
+                Image("IconStatusBarMonochrome")
             }
 
             if defaultsInteractor.shouldShowSongInMenuBar {
