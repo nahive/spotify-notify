@@ -10,10 +10,8 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     
     private var player: (any MusicPlayerProtocol)?
     var currentApplication: SupportedMusicApplication?
-    private var lastSavedTrackId: String?
     
-    // Track saving
-    private var currentSavedTrack: MusicTrack?
+
     
     @Published var permissionStatus: MusicPlayerPermissionStatus = .denied
 
@@ -55,8 +53,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         currentProgressPercent = 0.0
         currentTrackProgress = "--:--"
         fullTrackDuration = "--:--"
-        lastSavedTrackId = nil
-        currentSavedTrack = nil
+
         
         stopProgressTimer()
         cancellables.removeAll()
@@ -100,7 +97,6 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
                     self.currentState = player.currentState
                     self.isPlayingRadio = player.isPlayingRadio
                     
-                    // Only validate track if not playing radio
                     if self.isPlayingRadio {
                         self.currentTrack = nil
                     } else {
@@ -116,17 +112,10 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
             })
             .store(in: &cancellables)
         
-        // Track song changes for history
         $currentTrack
             .sink(receiveValue: { [weak self] track in
                 guard let self, let track, let app = self.currentApplication else { return }
-                
-                // Only save if it's a different track and we haven't saved it yet
-                if track.id != self.currentSavedTrack?.id && track.id != self.lastSavedTrackId {
-                    self.historyInteractor.saveSong(from: track, musicApp: app)
-                    self.currentSavedTrack = track
-                    self.lastSavedTrackId = track.id
-                }
+                self.historyInteractor.saveSongIfNeeded(from: track, musicApp: app)
             })
             .store(in: &cancellables)
         
@@ -173,6 +162,23 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     func playPause() {
         guard canControlPlayer() else { return }
         player?.playPause()
+    }
+    
+    func seek(to percentage: Double) {
+        guard canControlPlayer() else { return }
+        guard let duration = currentTrack?.duration else { return }
+        let position = Double(duration) * percentage
+        player?.seek(to: position)
+        
+        stopProgressTimer()
+        
+        currentProgressPercent = percentage
+        currentTrackProgress = Duration.seconds(position).formatted(.time(pattern: .minuteSecond))
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self, let player = self.player else { return }
+            self.startProgressTimer(for: player)
+        }
     }
     
     private func canControlPlayer() -> Bool {

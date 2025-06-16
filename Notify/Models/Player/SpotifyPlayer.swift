@@ -60,6 +60,10 @@ final class SpotifyPlayer: NSObject, MusicPlayerProtocol {
     func playPause() {
         application?.playpause?()
     }
+    
+    func seek(to position: Double) {
+        application?.setPlayerPosition?(position)
+    }
 }
 
 private extension SpotifyTrack {

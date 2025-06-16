@@ -156,6 +156,12 @@ private extension PlayingView {
 
 struct CustomProgressView: View {
     @ObservedObject var musicInteractor: MusicInteractor
+    @State private var isDragging = false
+    @State private var dragProgress: Double = 0
+    
+    private var displayProgress: Double {
+        isDragging ? dragProgress : musicInteractor.currentProgressPercent
+    }
     
     var body: some View {
         VStack(spacing: 2) {
@@ -163,18 +169,31 @@ struct CustomProgressView: View {
                 ZStack(alignment: .leading) {
                     Rectangle()
                         .fill(Color.gray.opacity(0.3))
-                        .frame(height: 3)
-                        .cornerRadius(1.5)
+                        .frame(height: isDragging ? 6 : 3)
+                        .cornerRadius(isDragging ? 3 : 1.5)
                     
                     Rectangle()
                         .fill(.white.gradient)
-                        .frame(width: geometry.size.width * CGFloat(musicInteractor.currentProgressPercent), height: 3)
-                        .cornerRadius(1.5)
+                        .frame(width: geometry.size.width * CGFloat(displayProgress), height: isDragging ? 6 : 3)
+                        .cornerRadius(isDragging ? 3 : 1.5)
                         .shadow(color: .white.opacity(0.3), radius: 1)
                 }
+                .animation(.easeInOut(duration: 0.2), value: isDragging)
+                .contentShape(Rectangle())
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { value in
+                            let progress = max(0, min(1, value.location.x / geometry.size.width))
+                            dragProgress = progress
+                            isDragging = true
+                        }
+                        .onEnded { _ in
+                            musicInteractor.seek(to: dragProgress)
+                            isDragging = false
+                        }
+                )
             }
-            .frame(height: 3)
-            .frame(width: 150)
+            .frame(width: 150, height: 6)
             
             HStack {
                 Text(musicInteractor.currentTrackProgress)

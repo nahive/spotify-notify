@@ -16,6 +16,7 @@ protocol MusicPlayerProtocol: Sendable {
     func nextTrack()
     func previousTrack()
     func playPause()
+    func seek(to position: Double)
 }
 
 extension MusicPlayerProtocol {

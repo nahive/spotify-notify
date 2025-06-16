@@ -14,6 +14,61 @@ final class HistoryInteractor: ObservableObject {
         loadRecentHistory()
     }
     
+    func saveSongIfNeeded(from track: MusicTrack, musicApp: SupportedMusicApplication) {
+        guard track.id != lastSavedTrackId else { return }
+        
+        Task {
+            var artworkData: Data?
+            
+            if let artwork = track.artwork {
+                switch artwork {
+                case .image(let image):
+                    artworkData = image.tiffRepresentation
+                case .url(let url):
+                    if let image = await downloadArtwork(from: url) {
+                        artworkData = image.tiffRepresentation
+                    }
+                }
+            }
+            
+            let historyEntry = SongHistory(
+                trackId: track.id,
+                trackName: track.name,
+                artist: track.artist,
+                album: track.album,
+                albumArtist: track.albumArtist,
+                duration: track.duration,
+                playedAt: Date(),
+                musicApp: musicApp.appName,
+                artworkData: artworkData,
+                genre: track.genre,
+                year: track.year,
+                trackNumber: track.trackNumber,
+                discNumber: track.discNumber,
+                playedCount: track.playedCount,
+                rating: track.rating,
+                bpm: track.bpm,
+                bitRate: track.bitRate,
+                isLoved: track.isLoved,
+                isStarred: track.isStarred,
+                composer: track.composer,
+                spotifyUrl: track.spotifyUrl,
+                releaseDate: track.releaseDate
+            )
+            
+            modelContext.insert(historyEntry)
+            
+            do {
+                try modelContext.save()
+                lastSavedTrackId = track.id
+                loadRecentHistory()
+                System.log("Saved song to history: \(track.name) by \(track.artist)", level: .info)
+            } catch {
+                System.log("Failed to save song history: \(error)", level: .error)
+            }
+        }
+    }
+    
     func saveSong(from track: MusicTrack, musicApp: SupportedMusicApplication) {
         Task {
             var artworkData: Data?
@@ -60,7 +115,7 @@ final class HistoryInteractor: ObservableObject {
             do {
                 try modelContext.save()
                 lastSavedTrackId = track.id
-                loadRecentHistory() // Refresh the list
+                loadRecentHistory()
                 System.log("Saved song to history: \(track.name) by \(track.artist)", level: .info)
             } catch {
                 System.log("Failed to save song history: \(error)", level: .error)

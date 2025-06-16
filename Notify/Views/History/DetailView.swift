@@ -120,7 +120,6 @@ struct DetailStatsView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 24)
             
-            // Essential info - 4 columns, smaller cards
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 4), spacing: 10) {
                 CompactStatView(title: "Duration", value: entry.formattedDuration, icon: "clock.fill")
                 CompactStatView(title: "Song Plays", value: "\(playCounts.songPlays)", icon: "repeat")
@@ -129,8 +128,7 @@ struct DetailStatsView: View {
             }
             .padding(.horizontal, 24)
             
-            // Album plays if available
-            if let album = entry.album {
+            if entry.album != nil {
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 2), spacing: 10) {
                     CompactStatView(title: "Album Plays", value: "\(playCounts.albumPlays)", icon: "square.stack.fill")
                     CompactStatView(title: "Played At", value: entry.formattedPlayedAt, icon: "calendar")
@@ -138,7 +136,6 @@ struct DetailStatsView: View {
                 .padding(.horizontal, 24)
             }
             
-            // Extended metadata if available
             if hasExtendedMetadata {
                 VStack(spacing: 12) {
                     Text("Metadata")
@@ -195,7 +192,6 @@ struct DetailEmptyStateView: View {
                 .font(.system(size: 60))
                 .foregroundColor(.secondary)
                 .scaleEffect(0.8)
-                .animation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true))
             
             Text("Select a song to view details")
                 .font(.title2)
