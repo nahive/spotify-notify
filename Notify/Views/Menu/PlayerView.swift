@@ -142,18 +142,18 @@ struct CustomProgressView: View {
         VStack(spacing: 2) {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
-                    Rectangle()
+                    // Background track
+                    RoundedRectangle(cornerRadius: isDragging ? 3 : 1.5)
                         .fill(Color.gray.opacity(0.3))
                         .frame(height: isDragging ? 6 : 3)
-                        .cornerRadius(isDragging ? 3 : 1.5)
                     
-                    Rectangle()
+                    // Progress fill
+                    RoundedRectangle(cornerRadius: isDragging ? 3 : 1.5)
                         .fill(.white.gradient)
                         .frame(
                             width: geometry.size.width * CGFloat(displayProgress), 
                             height: isDragging ? 6 : 3
                         )
-                        .cornerRadius(isDragging ? 3 : 1.5)
                         .shadow(color: .white.opacity(0.3), radius: 2)
                 }
                 .animation(.easeInOut(duration: 0.2), value: isDragging)
@@ -261,8 +261,37 @@ private struct MarqueeText: View {
                     }
                 }
         }
-        .clipped()
+        .mask(
+            shouldAnimate ? AnyView(gradientMask) : AnyView(Rectangle())
+        )
         .frame(height: textSize.height)
+    }
+    
+    private var gradientMask: some View {
+        HStack(spacing: 0) {
+            LinearGradient(
+                gradient: Gradient(stops: [
+                    .init(color: .clear, location: 0),
+                    .init(color: .black, location: 1)
+                ]),
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+            .frame(width: 15)
+            
+            Rectangle()
+                .fill(.black)
+            
+            LinearGradient(
+                gradient: Gradient(stops: [
+                    .init(color: .black, location: 0),
+                    .init(color: .clear, location: 1)
+                ]),
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+            .frame(width: 15)
+        }
     }
     
     private func updateAnimation() {

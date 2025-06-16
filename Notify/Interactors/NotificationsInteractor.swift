@@ -35,7 +35,7 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
     func registerForNotifications() {
         Task {
             do {
-                let _ = try await UNUserNotificationCenter.current().requestAuthorization()
+                let _ = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
             } catch {
                 showSettingsAlert(message: "Missing notification permissions") {
                     openNotificationsSettings()
@@ -81,7 +81,16 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
             return
         }
 
-        let model = MusicNotification(track: track, style: .simple)
+        let model = MusicNotification(
+            track: track, 
+            style: defaultsInteractor.shouldShowSongProgress ? 
+                .progress(
+                    currentTime: musicInteractor.currentTrackProgress,
+                    totalTime: musicInteractor.fullTrackDuration,
+                    percentage: musicInteractor.currentProgressPercent
+                ) : 
+                .simple
+        )
         let notification = UNMutableNotificationContent()
     
         notification.title = model.title
@@ -141,22 +150,17 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
 
     private func deliverNotification(identifier: String, notification: UNMutableNotificationContent) {
         UNUserNotificationCenter.current().add(.init(identifier: identifier, content: notification, trigger: nil))
-
-        if !defaultsInteractor.shouldKeepNotificationsOnScreen {
-            Task {
-                try await Task.sleep(for: .seconds(defaultsInteractor.notificationLength))
-                await MainActor.run {
-                    UNUserNotificationCenter.current().removeAllDeliveredNotifications()
-                }
-            }
-        }
     }
 }
 
 // MARK: notification delegate
 extension NotificationsInteractor: @preconcurrency UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
-        [.banner, .sound]
+        var options: UNNotificationPresentationOptions = [.banner]
+        if defaultsInteractor.shouldPlayNotificationsSound {
+            options.insert(.sound)
+        }
+        return options
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {

@@ -32,25 +32,13 @@ struct MusicNotification: Sendable {
             switch style {
             case .simple:
                 return track.artist
-            case .progress(let progress):
-                guard let duration = track.duration else {
-                    return "--:--/--:--"
-                }
+            case .progress(let currentTime, let totalTime, let percentage):
+                let progressMax = 10
+                let currentProgress = max(0, min(progressMax, Int(Double(progressMax) * percentage)))
+                let remaining = progressMax - currentProgress
+                let progressString = "●".repeated(currentProgress) + "○".repeated(remaining)
 
-                let percentage = progress / (Double(duration) / 1000.0)
-
-                let progressMax = 14
-                let currentProgress = Int(Double(progressMax) * percentage)
-
-                let progressString = "⁃".repeated(currentProgress) +  "-".repeated(progressMax - currentProgress)
-
-                let now = Int(progress).minutesSeconds
-                let length = (duration / 1000).minutesSeconds
-
-                let nowS = "\(now.minutes)".withLeadingZeroes + ":" + "\(now.seconds)".withLeadingZeroes
-                let lengthS = "\(length.minutes)".withLeadingZeroes + ":" + "\(length.seconds)".withLeadingZeroes
-
-                return "\(nowS)  \(progressString)  \(lengthS)"
+                return "\(currentTime) \(progressString) \(totalTime)"
             }
             
         }()
@@ -61,6 +49,6 @@ struct MusicNotification: Sendable {
 
 extension MusicNotification {
     enum Style {
-        case simple, progress(Double)
+        case simple, progress(currentTime: String, totalTime: String, percentage: Double)
     }
 }

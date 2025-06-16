@@ -33,7 +33,8 @@ final class DefaultsInteractor: ObservableObject {
     @AppStorage(Key.isFirstRun) var isFirstRun = true
     
     @AppStorage(Key.notificationsEnabled) var areNotificationsEnabled = true
-    @AppStorage(Key.notificationsKeep) var shouldKeepNotificationsOnScreen = false
+    // deprecated - doesn't work reliably with modern macOS notification system
+    // @AppStorage(Key.notificationsKeep) var shouldKeepNotificationsOnScreen = false
     @AppStorage(Key.notificationsPlayPause) var shouldShowNotificationOnPlayPause = true
     @AppStorage(Key.notificationsSound) var shouldPlayNotificationsSound = false
     @AppStorage(Key.notificationsDisableOnFocus) var shouldDisableNotificationsOnFocus = true

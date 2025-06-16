@@ -31,6 +31,11 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         player?.isFrontmost ?? false
     }
     
+    var currentPositionSeconds: Double {
+        guard let duration = currentTrack?.duration else { return 0 }
+        return currentProgressPercent * Double(duration)
+    }
+    
     // MARK: - Initialization
     init(historyInteractor: HistoryInteractor) {
         self.historyInteractor = historyInteractor
