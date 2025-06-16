@@ -22,7 +22,6 @@ struct RadioPlayingView: View {
     }
     
     private func startAnimations() {
-        // Start radio wave animation immediately
         animationTrigger = true
     }
     
@@ -38,7 +37,7 @@ struct RadioPlayingView: View {
     private func radioWaveBar(index: Int) -> some View {
         let baseHeight: CGFloat = 20
         let animationDelay = Double(index) * 0.2
-        let scaleFactors: [CGFloat] = [0.4, 0.8, 0.6] // Different heights for each bar
+        let scaleFactors: [CGFloat] = [0.4, 0.8, 0.6]
         
         return RoundedRectangle(cornerRadius: 2)
             .fill(Color.primary.gradient)

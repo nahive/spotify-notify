@@ -180,14 +180,14 @@ struct CustomProgressView: View {
                 Text(musicInteractor.currentTrackProgress)
                     .font(.caption2)
                     .lineLimit(1)
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.white.opacity(0.3))
                 
                 Spacer()
                 
                 Text(musicInteractor.fullTrackDuration)
                     .font(.caption2)
                     .lineLimit(1)
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.white.opacity(0.3))
             }
             .frame(width: 150)
         }
