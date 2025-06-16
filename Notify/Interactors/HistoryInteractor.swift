@@ -63,9 +63,13 @@ final class HistoryInteractor: ObservableObject {
                 try modelContext.save()
                 lastSavedTrackId = track.id
                 loadRecentHistory()
+
+                forceCheckpoint()
                 
                 let sizeAfter = getCurrentDatabaseSize()
                 let artworkNote = artworkData != nil ? " (with \(formatFileSize(Int64(artworkData!.count))) artwork)" : " (no artwork - duplicate album)"
+                
+                System.log("Size before: \(sizeBefore), Size after: \(sizeAfter), Diff: \(sizeAfter - sizeBefore)", level: .info)
                 logDatabaseSizeChange(operation: "Added song '\(track.name)'\(artworkNote)", sizeBefore: sizeBefore, sizeAfter: sizeAfter)
                 
                 System.log("Saved song to history: \(track.name) by \(track.artist)", level: .info)
@@ -298,6 +302,8 @@ final class HistoryInteractor: ObservableObject {
         var totalSize: Int64 = 0
         let fileManager = FileManager.default
         
+        System.log("Checking database files at base path: \(baseURL.path)", level: .info)
+        
         do {
             let attributes = try fileManager.attributesOfItem(atPath: baseURL.path)
             if let size = attributes[.size] as? Int64 {
@@ -308,7 +314,8 @@ final class HistoryInteractor: ObservableObject {
             System.log("Failed to get main DB size: \(error)", level: .warning)
         }
         
-        let walURL = baseURL.appendingPathExtension("wal")
+        let walURL = URL(fileURLWithPath: baseURL.path + "-wal")
+        System.log("Checking WAL file: \(walURL.path)", level: .info)
         if fileManager.fileExists(atPath: walURL.path) {
             do {
                 let attributes = try fileManager.attributesOfItem(atPath: walURL.path)
@@ -319,10 +326,12 @@ final class HistoryInteractor: ObservableObject {
             } catch {
                 System.log("Failed to get WAL size: \(error)", level: .warning)
             }
+        } else {
+            System.log("WAL file does not exist", level: .info)
         }
-
-
-        let shmURL = baseURL.appendingPathExtension("shm")
+        
+        let shmURL = URL(fileURLWithPath: baseURL.path + "-shm")
+        System.log("Checking SHM file: \(shmURL.path)", level: .info)
         if fileManager.fileExists(atPath: shmURL.path) {
             do {
                 let attributes = try fileManager.attributesOfItem(atPath: shmURL.path)
@@ -333,8 +342,11 @@ final class HistoryInteractor: ObservableObject {
             } catch {
                 System.log("Failed to get SHM size: \(error)", level: .warning)
             }
+        } else {
+            System.log("SHM file does not exist", level: .info)
         }
         
+        System.log("Total calculated size: \(formatFileSize(totalSize))", level: .info)
         return totalSize
     }
     
@@ -436,6 +448,16 @@ final class HistoryInteractor: ObservableObject {
             } catch {
                 System.log("Failed to compress existing artwork: \(error)", level: .error)
             }
+        }
+    }
+    
+    private func forceCheckpoint() {
+        do {
+            try modelContext.save()
+            
+            Thread.sleep(forTimeInterval: 0.1)
+        } catch {
+            System.log("Failed to force checkpoint: \(error)", level: .error)
         }
     }
 } 

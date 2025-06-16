@@ -18,7 +18,15 @@ struct NotifyApp: App {
     
     init() {
         do {
-            modelContainer = try ModelContainer(for: SongHistory.self)
+            let appSupportURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+            let notifyURL = appSupportURL.appendingPathComponent("Notify")
+            
+            try FileManager.default.createDirectory(at: notifyURL, withIntermediateDirectories: true)
+            
+            let storeURL = notifyURL.appendingPathComponent("SongHistory.sqlite")
+            let configuration = ModelConfiguration(url: storeURL)
+            
+            modelContainer = try ModelContainer(for: SongHistory.self, configurations: configuration)
         } catch {
             fatalError("Failed to initialize ModelContainer: \(error)")
         }
