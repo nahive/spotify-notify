@@ -38,21 +38,22 @@ struct PlayingView: View {
     
     private var trackInfoView: some View {
         VStack(spacing: 4) {
-            Text(track.name)
-                .font(.title2)
-                .fontWeight(.semibold)
-                .foregroundStyle(.primary)
-                .minimumScaleFactor(0.7)
-                .lineLimit(1)
-                .animation(.default, value: track.name)
-                .accessibilityLabel("Track name")
-                .accessibilityValue(track.name)
-            Text(track.artist)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .animation(.default, value: musicInteractor.currentTrack)
-                .accessibilityLabel("Artist name")
-                .accessibilityValue(track.artist)
+            MarqueeText(
+                text: track.name,
+                font: .title2.weight(.semibold),
+                color: .primary
+            )
+            .accessibilityLabel("Track name")
+            .accessibilityValue(track.name)
+            
+            MarqueeText(
+                text: track.artist,
+                font: .subheadline,
+                color: .secondary
+            )
+            .accessibilityLabel("Artist name")
+            .accessibilityValue(track.artist)
+            
             CustomProgressView(musicInteractor: musicInteractor)
                 .padding(.top, 12)
         }
@@ -189,3 +190,127 @@ struct CustomProgressView: View {
         }
     }
 }
+
+// MARK: - MarqueeText
+private struct MarqueeText: View {
+    let text: String
+    let font: Font
+    let color: Color
+    
+    @State private var offset: CGFloat = 0
+    @State private var shouldAnimate = false
+    @State private var animationTask: Task<Void, Never>?
+    @State private var containerWidth: CGFloat = 0
+    @State private var lastText: String = ""
+    
+    private let animationSpeed: Double = 30
+    private let pauseDuration: Double = 1.5
+    
+    private var textSize: CGSize {
+        let nsFont: NSFont
+        switch font {
+        case .title2:
+            nsFont = NSFont.preferredFont(forTextStyle: .title2)
+        case .subheadline:
+            nsFont = NSFont.preferredFont(forTextStyle: .subheadline)
+        default:
+            if font == .title2.weight(.semibold) {
+                nsFont = NSFont.systemFont(ofSize: NSFont.preferredFont(forTextStyle: .title2).pointSize, weight: .semibold)
+            } else {
+                nsFont = NSFont.systemFont(ofSize: 17)
+            }
+        }
+        
+        let attributes = [NSAttributedString.Key.font: nsFont]
+        let size = (text as NSString).size(withAttributes: attributes)
+        return size
+    }
+    
+    private var textWidth: CGFloat {
+        textSize.width
+    }
+    
+    var body: some View {
+        GeometryReader { geometry in
+            Text(text)
+                .font(font)
+                .foregroundColor(color)
+                .fixedSize(horizontal: true, vertical: false)
+                .offset(x: offset)
+                .frame(maxWidth: .infinity, alignment: shouldAnimate ? .leading : .center)
+                .onAppear {
+                    containerWidth = geometry.size.width
+                    lastText = text
+                    updateAnimation()
+                }
+                .onChange(of: text) { _, newText in
+                    if newText != lastText {
+                        lastText = newText
+                        updateAnimation()
+                    }
+                }
+                .onChange(of: geometry.size.width) { _, newWidth in
+                    containerWidth = newWidth
+                    updateAnimation()
+                }
+                .task(id: text) {
+                    try? await Task.sleep(nanoseconds: 100_000_000)
+                    if text != lastText {
+                        lastText = text
+                        updateAnimation()
+                    }
+                }
+        }
+        .clipped()
+        .frame(height: textSize.height)
+    }
+    
+    private func updateAnimation() {
+        let needsAnimation = textWidth > containerWidth
+        
+        animationTask?.cancel()
+        offset = 0
+        shouldAnimate = needsAnimation
+        
+        if shouldAnimate {
+            startMarqueeAnimation()
+        }
+    }
+    
+    private func startMarqueeAnimation() {
+        guard shouldAnimate, textWidth > containerWidth else { return }
+        
+        animationTask = Task {
+            while shouldAnimate && !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: UInt64(pauseDuration * 1_000_000_000))
+                guard shouldAnimate && !Task.isCancelled else { break }
+                
+                let scrollDistance = max(0, textWidth - containerWidth + 10)
+                let duration = scrollDistance / animationSpeed
+                
+                await MainActor.run {
+                    withAnimation(.linear(duration: duration)) {
+                        offset = -scrollDistance
+                    }
+                }
+                
+                try? await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))
+                guard shouldAnimate && !Task.isCancelled else { break }
+                
+                try? await Task.sleep(nanoseconds: UInt64(pauseDuration * 1_000_000_000))
+                guard shouldAnimate && !Task.isCancelled else { break }
+                
+                await MainActor.run {
+                    withAnimation(.linear(duration: duration)) {
+                        offset = 0
+                    }
+                }
+                
+                try? await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))
+                guard shouldAnimate && !Task.isCancelled else { break }
+            }
+        }
+    }
+}
+
+
