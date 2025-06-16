@@ -12,11 +12,6 @@ struct DetailView: View {
                         DetailStatsView(entry: entry)
                     }
                 }
-                .transition(.asymmetric(
-                    insertion: .opacity.combined(with: .move(edge: .trailing)),
-                    removal: .opacity.combined(with: .move(edge: .leading))
-                ))
-                .id(entry.id)
             } else {
                 DetailEmptyStateView()
             }
@@ -29,13 +24,13 @@ struct DetailHeaderView: View {
     let entry: SongHistory
     
     var body: some View {
-        VStack(spacing: 20) {
-            Spacer(minLength: 30)
+        VStack(spacing: 16) {
+            Spacer(minLength: 20)
             
             DetailArtworkView(entry: entry)
             DetailSongInfoView(entry: entry)
             
-            Spacer(minLength: 40)
+            Spacer(minLength: 24)
         }
         .frame(maxWidth: .infinity)
         .background(
@@ -60,19 +55,18 @@ struct DetailArtworkView: View {
                     .aspectRatio(contentMode: .fill)
             } else {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: 14)
                         .fill(Color(NSColor.controlBackgroundColor))
                     
                     Image(systemName: "music.note")
-                        .font(.system(size: 60))
+                        .font(.system(size: 40))
                         .foregroundColor(.secondary)
                 }
             }
         }
-        .frame(width: 220, height: 220)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.2), radius: 12, x: 0, y: 6)
-        .scaleEffect(1.0)
+        .frame(width: 140, height: 140)
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .shadow(color: .black.opacity(0.18), radius: 8, x: 0, y: 4)
         .animation(.spring(response: 0.6, dampingFraction: 0.8), value: entry.id)
     }
 }
@@ -81,7 +75,7 @@ struct DetailSongInfoView: View {
     let entry: SongHistory
     
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 6) {
             Text(entry.trackName)
                 .font(.title)
                 .fontWeight(.bold)
@@ -102,7 +96,7 @@ struct DetailSongInfoView: View {
                     .transition(.opacity.combined(with: .slide))
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, 20)
     }
 }
 
@@ -113,38 +107,38 @@ struct DetailStatsView: View {
     var body: some View {
         let playCounts = historyInteractor.getPlayCounts(for: entry)
         
-        VStack(spacing: 16) {
+        VStack(spacing: 12) {
             Text("Details")
                 .font(.headline)
                 .foregroundColor(.secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 24)
+                .padding(.horizontal, 20)
             
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 4), spacing: 10) {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 4), spacing: 8) {
                 CompactStatView(title: "Duration", value: entry.formattedDuration, icon: "clock.fill")
                 CompactStatView(title: "Song Plays", value: "\(playCounts.songPlays)", icon: "repeat")
                 CompactStatView(title: "Artist Plays", value: "\(playCounts.artistPlays)", icon: "person.fill")
                 CompactStatView(title: "App", value: entry.musicApp, icon: "music.note.tv.fill")
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, 20)
             
             if entry.album != nil {
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 2), spacing: 10) {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 2), spacing: 8) {
                     CompactStatView(title: "Album Plays", value: "\(playCounts.albumPlays)", icon: "square.stack.fill")
                     CompactStatView(title: "Played At", value: entry.formattedPlayedAt, icon: "calendar")
                 }
-                .padding(.horizontal, 24)
+                .padding(.horizontal, 20)
             }
             
             if hasExtendedMetadata {
-                VStack(spacing: 12) {
+                VStack(spacing: 10) {
                     Text("Metadata")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 24)
+                        .padding(.horizontal, 20)
                     
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 4), spacing: 8) {
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: 4), spacing: 6) {
                         if let genre = entry.genre {
                             MiniStatView(title: "Genre", value: genre, icon: "music.quarternote.3")
                         }
@@ -170,11 +164,11 @@ struct DetailStatsView: View {
                             MiniStatView(title: "Album Artist", value: albumArtist, icon: "person.2.fill")
                         }
                     }
-                    .padding(.horizontal, 24)
+                    .padding(.horizontal, 20)
                 }
             }
             
-            Spacer(minLength: 20)
+            Spacer(minLength: 12)
         }
     }
     
@@ -208,7 +202,7 @@ struct CompactStatView: View {
     let icon: String
     
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 6) {
             Image(systemName: icon)
                 .font(.title3)
                 .foregroundColor(.appAccent)
@@ -226,8 +220,8 @@ struct CompactStatView: View {
                 .tracking(0.3)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 12)
-        .padding(.horizontal, 8)
+        .padding(.vertical, 10)
+        .padding(.horizontal, 6)
         .background(Color(NSColor.controlBackgroundColor).opacity(0.6))
         .cornerRadius(8)
         .overlay(
@@ -244,7 +238,7 @@ struct MiniStatView: View {
     let icon: String
     
     var body: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 3) {
             Image(systemName: icon)
                 .font(.caption)
                 .foregroundColor(.appAccent)
@@ -262,8 +256,8 @@ struct MiniStatView: View {
                 .tracking(0.2)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 8)
-        .padding(.horizontal, 4)
+        .padding(.vertical, 6)
+        .padding(.horizontal, 3)
         .background(Color(NSColor.controlBackgroundColor).opacity(0.4))
         .cornerRadius(6)
         .transition(.scale.combined(with: .opacity))

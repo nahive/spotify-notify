@@ -6,6 +6,7 @@ struct HistoryView: View {
     @EnvironmentObject var musicInteractor: MusicInteractor
     @State private var showingClearAlert = false
     @State private var selectedEntry: SongHistory?
+    @State private var databaseSize = "Calculating..."
     
     var body: some View {
         NavigationView {
@@ -40,6 +41,7 @@ struct HistoryView: View {
                                                 selectedEntry = nil
                                             }
                                         }
+                                        updateDatabaseSize()
                                     }
                                 }
                             }
@@ -50,6 +52,10 @@ struct HistoryView: View {
                             if let firstEntry = newHistory.first {
                                 withAnimation(.easeInOut(duration: 0.5)) {
                                     proxy.scrollTo(firstEntry.id, anchor: .top)
+                                }
+
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    updateDatabaseSize()
                                 }
                             }
                         }
@@ -65,6 +71,10 @@ struct HistoryView: View {
                     .foregroundColor(.red)
                     
                     Spacer()
+
+                    Text("Database: \(databaseSize)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
                 .padding()
                 .background(Color(NSColor.controlBackgroundColor))
@@ -83,6 +93,7 @@ struct HistoryView: View {
                     historyInteractor.clearAllHistory()
                     selectedEntry = nil
                 }
+                updateDatabaseSize()
             }
         } message: {
             Text("This will permanently delete all song history. This action cannot be undone.")
@@ -91,6 +102,7 @@ struct HistoryView: View {
             if selectedEntry == nil && !historyInteractor.recentHistory.isEmpty {
                 selectedEntry = historyInteractor.recentHistory.first
             }
+            updateDatabaseSize()
         }
         .onChange(of: historyInteractor.recentHistory) { _, newHistory in
             if let selected = selectedEntry,
@@ -99,6 +111,7 @@ struct HistoryView: View {
             } else if selectedEntry == nil && !newHistory.isEmpty {
                 selectedEntry = newHistory.first
             }
+            updateDatabaseSize()
         }
     }
     
@@ -117,5 +130,15 @@ struct HistoryView: View {
             .max(by: { $0.playedAt < $1.playedAt })
         
         return entry.id == mostRecentEntry?.id
+    }
+    
+    private func updateDatabaseSize() {
+        Task {
+            try? await Task.sleep(nanoseconds: 100_000_000)
+            let size = historyInteractor.getDatabaseSize()
+            await MainActor.run {
+                databaseSize = size
+            }
+        }
     }
 }
