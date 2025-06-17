@@ -76,7 +76,6 @@ struct MusicTrack: Sendable, Equatable {
     let artwork: MusicArtwork?
     let duration: Int?
     
-    // Extended metadata
     let albumArtist: String?
     let genre: String?
     let year: Int?

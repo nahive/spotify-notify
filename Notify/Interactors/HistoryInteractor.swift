@@ -4,7 +4,7 @@ import AppKit
 
 @MainActor
 final class HistoryInteractor: ObservableObject {
-    private let modelContext: ModelContext
+    private var modelContext: ModelContext
     private var lastSavedTrackId: String?
     
     @Published var recentHistory: [SongHistory] = []
@@ -14,52 +14,18 @@ final class HistoryInteractor: ObservableObject {
         loadRecentHistory()
     }
     
-    func saveSongIfNeeded(from track: MusicTrack, musicApp: SupportedMusicApplication) {
-        guard track.id != lastSavedTrackId else { return }
-        
-        Task {
-            let albumArtwork = await getOrCreateAlbumArtwork(for: track)
-            
-            let historyEntry = SongHistory(
-                trackId: track.id,
-                trackName: track.name,
-                artist: track.artist,
-                album: track.album,
-                albumArtist: track.albumArtist,
-                duration: track.duration,
-                playedAt: Date(),
-                musicApp: musicApp.appName,
-                artwork: albumArtwork,
-                genre: track.genre,
-                year: track.year,
-                trackNumber: track.trackNumber,
-                discNumber: track.discNumber,
-                playedCount: track.playedCount,
-                rating: track.rating,
-                bpm: track.bpm,
-                bitRate: track.bitRate,
-                isLoved: track.isLoved,
-                isStarred: track.isStarred,
-                composer: track.composer,
-                spotifyUrl: track.spotifyUrl,
-                releaseDate: track.releaseDate
-            )
-            
-            modelContext.insert(historyEntry)
-            
-            do {
-                try modelContext.save()
-                lastSavedTrackId = track.id
-                loadRecentHistory()
-                System.log("Saved song to history: \(track.name) by \(track.artist)", level: .info)
-            } catch {
-                System.log("Failed to save song history: \(error)", level: .error)
-            }
-        }
+    func updateModelContext(_ modelContext: ModelContext) {
+        self.modelContext = modelContext
+        loadRecentHistory()
     }
     
-    func saveSong(from track: MusicTrack, musicApp: SupportedMusicApplication) {
-        Task {
+    func saveSongIfNeeded(from track: MusicTrack, musicApp: SupportedMusicApplication) async {
+        guard track.id != lastSavedTrackId else { return }
+        await saveSong(from: track, musicApp: musicApp)
+    }
+    
+    func saveSong(from track: MusicTrack, musicApp: SupportedMusicApplication) async {
+        do {
             let albumArtwork = await getOrCreateAlbumArtwork(for: track)
             
             let historyEntry = SongHistory(
@@ -88,15 +54,14 @@ final class HistoryInteractor: ObservableObject {
             )
             
             modelContext.insert(historyEntry)
+            try modelContext.save()
             
-            do {
-                try modelContext.save()
-                lastSavedTrackId = track.id
-                loadRecentHistory()
-                System.log("Saved song to history: \(track.name) by \(track.artist)", level: .info)
-            } catch {
-                System.log("Failed to save song history: \(error)", level: .error)
-            }
+            lastSavedTrackId = track.id
+            loadRecentHistory()
+            System.log("Saved song to history: \(track.name) by \(track.artist)", level: .info)
+            
+        } catch {
+            System.log("Failed to save song history: \(error)", level: .error)
         }
     }
     
@@ -125,10 +90,10 @@ final class HistoryInteractor: ObservableObject {
         }
     }
     
-    private func downloadArtwork(from url: URL) async -> NSImage? {
+    private func downloadArtworkData(from url: URL) async -> Data? {
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            return NSImage(data: data)
+            return data
         } catch {
             System.log("Failed to download artwork from \(url): \(error)", level: .warning)
             return nil
@@ -163,9 +128,6 @@ final class HistoryInteractor: ObservableObject {
     func clearAllHistory() {
         do {
             try modelContext.delete(model: SongHistory.self)
-            try modelContext.save()
-            
-            // Force a second save to ensure changes are persisted
             try modelContext.save()
             
             loadRecentHistory()
@@ -255,49 +217,46 @@ final class HistoryInteractor: ObservableObject {
     private func getOrCreateAlbumArtwork(for track: MusicTrack) async -> AlbumArtwork? {
         guard let album = track.album else { return nil }
         
-        // Check if we already have artwork for this album
-        let artist = track.artist
+        // Check if artwork already exists
+        let trackArtist = track.artist
         let descriptor = FetchDescriptor<AlbumArtwork>(
             predicate: #Predicate<AlbumArtwork> { artwork in
-                artwork.album == album && artwork.artist == artist
+                artwork.album == album && artwork.artist == trackArtist
             }
         )
         
         do {
-            let existingArtwork = try modelContext.fetch(descriptor)
-            if let existing = existingArtwork.first {
-                return existing
+            if let existingArtwork = try modelContext.fetch(descriptor).first {
+                return existingArtwork
             }
-        } catch {
-            System.log("Failed to fetch existing artwork: \(error)", level: .error)
-        }
-        
-        // No existing artwork, create new one if we have artwork data
-        guard let trackArtwork = track.artwork else { return nil }
-        
-        var artworkData: Data?
-        switch trackArtwork {
-        case .image(let image):
-            artworkData = compressArtwork(image)
-        case .url(let url):
-            if let image = await downloadArtwork(from: url) {
-                artworkData = compressArtwork(image)
+            
+            // Download and create new artwork
+            if let artwork = track.artwork {
+                let artworkData: Data?
+                
+                switch artwork {
+                case .url(let url):
+                    artworkData = await downloadArtworkData(from: url)
+                case .image(let image):
+                    artworkData = compressArtwork(image)
+                }
+                
+                if let artworkData = artworkData {
+                    let newArtwork = AlbumArtwork(
+                        album: album,
+                        artist: track.artist,
+                        artworkData: artworkData
+                    )
+                    modelContext.insert(newArtwork)
+                    return newArtwork
+                }
             }
-        }
-        
-        guard let data = artworkData else { return nil }
-        
-        let albumArtwork = AlbumArtwork(album: album, artist: track.artist, artworkData: data)
-        modelContext.insert(albumArtwork)
-        
-        do {
-            try modelContext.save()
-            System.log("Created new album artwork for: \(album) by \(track.artist)", level: .info)
-            return albumArtwork
+            
         } catch {
-            System.log("Failed to save album artwork: \(error)", level: .error)
-            return nil
+            System.log("Failed to fetch/create artwork: \(error)", level: .error)
         }
+        
+        return nil
     }
     
     func getArtworkData(for entry: SongHistory) -> Data? {

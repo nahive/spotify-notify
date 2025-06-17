@@ -166,7 +166,9 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         $currentTrack
             .sink(receiveValue: { [weak self] track in
                 guard let self, let track, let app = self.currentApplication else { return }
-                self.historyInteractor.saveSongIfNeeded(from: track, musicApp: app)
+                Task {
+                    await self.historyInteractor.saveSongIfNeeded(from: track, musicApp: app)
+                }
             })
             .store(in: &cancellables)
         

@@ -3,11 +3,13 @@ import SwiftData
 
 @Model
 final class AlbumArtwork {
-    var id: UUID
+    @Attribute(.unique) var id: UUID
     var album: String
     var artist: String
-    var artworkData: Data
+    @Attribute(.externalStorage) var artworkData: Data
     var createdAt: Date
+    
+    @Relationship(inverse: \SongHistory.artwork) var songs: [SongHistory] = []
     
     init(album: String, artist: String, artworkData: Data) {
         self.id = UUID()
@@ -20,18 +22,17 @@ final class AlbumArtwork {
 
 @Model
 final class SongHistory {
-    var id: UUID
+    @Attribute(.unique) var id: UUID
     var trackId: String
     var trackName: String
-    var artist: String
+    @Attribute(.spotlight) var artist: String
     var album: String?
     var albumArtist: String?
     var duration: Int?
     var playedAt: Date
     var musicApp: String
     
-    // Relationship to artwork
-    var artwork: AlbumArtwork?
+    @Relationship var artwork: AlbumArtwork?
     
     // Additional track information
     var genre: String?
