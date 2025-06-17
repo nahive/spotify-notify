@@ -39,6 +39,11 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     // MARK: - Initialization
     init(historyInteractor: HistoryInteractor) {
         self.historyInteractor = historyInteractor
+        setupNotificationObservers()
+    }
+    
+    deinit {
+        cleanup()
     }
     
     // MARK: - Public Methods
@@ -54,7 +59,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     }
     
     func updateControlPermissions() {
-        permissionStatus = {
+        let newStatus: MusicPlayerPermissionStatus = {
             guard let player, player.isOpen else {
                 return .closed
             }
@@ -63,41 +68,107 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
             }
             return .granted
         }()
+        
+        if permissionStatus != newStatus {
+            permissionStatus = newStatus
+        }
     }
     
     func nextTrack() {
         guard canControlPlayer() else { return }
-        player?.nextTrack()
+        
+        Task {
+            let player = await MainActor.run { self.player }
+            await performPlayerAction {
+                player?.nextTrack()
+            }
+        }
     }
     
     func previousTrack() {
         guard canControlPlayer() else { return }
-        player?.previousTrack()
+        
+        Task {
+            let player = await MainActor.run { self.player }
+            await performPlayerAction {
+                player?.previousTrack()
+            }
+        }
     }
     
     func playPause() {
         guard canControlPlayer() else { return }
-        player?.playPause()
+        
+        Task {
+            let player = await MainActor.run { self.player }
+            await performPlayerAction {
+                player?.playPause()
+            }
+        }
     }
     
     func seek(to percentage: Double) {
         guard canControlPlayer() else { return }
         guard let duration = currentTrack?.duration else { return }
+        
         let position = Double(duration) * percentage
-        player?.seek(to: position)
         
-        stopProgressTimer()
-        
-        currentProgressPercent = percentage
-        currentTrackProgress = Duration.seconds(position).formatted(.time(pattern: .minuteSecond))
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            guard let self, let player = self.player else { return }
-            self.startProgressTimer(for: player)
+        Task {
+            let player = await MainActor.run { self.player }
+            await performPlayerAction {
+                player?.seek(to: position)
+            }
+            
+            await stopProgressTimer()
+            
+            await MainActor.run {
+                currentProgressPercent = percentage
+                currentTrackProgress = Duration.seconds(position).formatted(.time(pattern: .minuteSecond))
+            }
+            
+            // Resume progress tracking after seek
+            try? await Task.sleep(for: .milliseconds(500))
+            
+            if let player = player {
+                await startProgressTimer(for: player)
+            }
         }
     }
     
     // MARK: - Private Methods
+    private func setupNotificationObservers() {
+        // Observe system sleep/wake notifications
+        NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.willSleepNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                await self?.stopProgressTimer()
+            }
+        }
+        
+        NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didWakeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                if let self, let player = self.player, self.currentState == .playing {
+                    await self.startProgressTimer(for: player)
+                }
+            }
+        }
+    }
+    
+    nonisolated private func cleanup() {
+        Task { @MainActor in
+            stopProgressTimer()
+            cancellables.removeAll()
+        }
+        NSWorkspace.shared.notificationCenter.removeObserver(self)
+    }
+    
     private func unbind() {
         currentState = nil
         currentTrack = nil
@@ -110,16 +181,19 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         cancellables.removeAll()
     }
     
+    @MainActor
     private func startProgressTimer(for player: any MusicPlayerProtocol) {
         stopProgressTimer()
+        
         progressTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             Task { @MainActor in
                 guard let self, self.currentState == .playing else { return }
-                self.calculateProgress(player: player)
+                await self.updateProgress(player: player)
             }
         }
     }
     
+    @MainActor
     private func stopProgressTimer() {
         progressTimer?.invalidate()
         progressTimer = nil
@@ -136,57 +210,92 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
             currentTrack = MusicTrack.validated(from: player.currentTrack)
         }
         
-        calculateProgress(player: player)
+        Task {
+            await updateProgress(player: player)
+        }
         
+        // Bind to playback changes
         DistributedNotificationCenter.default().publisher(for: .init(player.playbackChangedName))
             .compactMap { $0.userInfo?["Player State"] as? String }
+            .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] state in
+            .sink { [weak self] state in
                 guard let self else { return }
-                switch state {
-                case "Paused", "Playing":
-                    self.currentState = player.currentState
-                    self.isPlayingRadio = player.isPlayingRadio
-                    
-                    if self.isPlayingRadio {
-                        self.currentTrack = nil
-                    } else {
-                        self.currentTrack = MusicTrack.validated(from: player.currentTrack)
-                    }
-                default:
-                    self.currentState = nil
-                    self.currentTrack = nil
-                    self.isPlayingRadio = false
-                    self.currentProgressPercent = 0.0
-                    self.fullTrackDuration = "--:--"
+                
+                Task { @MainActor in
+                    await self.handlePlaybackStateChange(state, player: player)
                 }
-            })
+            }
             .store(in: &cancellables)
         
+        // Save track history
         $currentTrack
-            .sink(receiveValue: { [weak self] track in
-                guard let self, let track, let app = self.currentApplication else { return }
+            .compactMap { $0 }
+            .removeDuplicates { $0.id == $1.id }
+            .debounce(for: .seconds(2), scheduler: DispatchQueue.main)
+            .sink { [weak self] track in
+                guard let self, let app = self.currentApplication else { return }
+                
                 Task {
                     await self.historyInteractor.saveSongIfNeeded(from: track, musicApp: app)
                 }
-            })
+            }
             .store(in: &cancellables)
         
         startProgressTimer(for: player)
         updateControlPermissions()
     }
-
-    private func calculateProgress(player: any MusicPlayerProtocol) {
-        guard let duration = currentTrack?.duration, duration != 0, let position = player.playerPosition else {
+    
+    private func handlePlaybackStateChange(_ state: String, player: any MusicPlayerProtocol) async {
+        switch state {
+        case "Paused", "Playing":
+            currentState = player.currentState
+            isPlayingRadio = player.isPlayingRadio
+            
+            if isPlayingRadio {
+                currentTrack = nil
+            } else {
+                currentTrack = MusicTrack.validated(from: player.currentTrack)
+            }
+            
+            if currentState == .playing {
+                startProgressTimer(for: player)
+            } else {
+                stopProgressTimer()
+            }
+        default:
+            currentState = nil
+            currentTrack = nil
+            isPlayingRadio = false
             currentProgressPercent = 0.0
-            currentTrackProgress = "--:--"
             fullTrackDuration = "--:--"
+            stopProgressTimer()
+        }
+    }
+
+    private func updateProgress(player: any MusicPlayerProtocol) async {
+        guard let duration = currentTrack?.duration, duration != 0 else {
+            await MainActor.run {
+                currentProgressPercent = 0.0
+                currentTrackProgress = "--:--"
+                fullTrackDuration = "--:--"
+            }
             return
         }
-    
-        currentProgressPercent = position / Double(duration)
-        currentTrackProgress = Duration.seconds(position).formatted(.time(pattern: .minuteSecond))
-        fullTrackDuration = Duration.seconds(duration).formatted(.time(pattern: .minuteSecond))
+        
+        let position = await withCheckedContinuation { continuation in
+            // Perform potentially blocking operation off main thread
+            Task.detached {
+                let pos = player.playerPosition ?? 0
+                continuation.resume(returning: pos)
+            }
+        }
+        
+        await MainActor.run {
+            currentProgressPercent = position / Double(duration)
+            currentTrackProgress = Duration.seconds(position).formatted(.time(pattern: .minuteSecond))
+            fullTrackDuration = Duration.seconds(duration).formatted(.time(pattern: .minuteSecond))
+        }
     }
     
     private func canControlPlayer() -> Bool {
@@ -196,6 +305,15 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
             return false
         }
         return true
+    }
+    
+    private func performPlayerAction(_ action: @escaping @Sendable () -> Void) async {
+        await withCheckedContinuation { continuation in
+            Task.detached {
+                action()
+                continuation.resume()
+            }
+        }
     }
 }
 

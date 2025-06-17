@@ -64,7 +64,8 @@ struct NotifyApp: App {
                 .environmentObject(historyInteractor)
                 .environmentObject(musicInteractor)
         }
-        .windowResizability(.contentSize)
+        .windowResizability(.contentMinSize)
+        .windowToolbarStyle(.unifiedCompact)
         
         Settings {
             SettingsView()
@@ -72,12 +73,14 @@ struct NotifyApp: App {
                 .environmentObject(notificationsInteractor)
                 .environmentObject(defaultsInteractor)
         }
+        .windowResizability(.contentMinSize)
+        .windowResizability(.contentMinSize)
     }
 }
 
 // MARK: - App Delegate
-class AppDelegate: NSObject, NSApplicationDelegate {
-    @Environment(\.openSettings) private var openSettings
+@MainActor
+final class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         System.log("Notify application started", level: .info)
@@ -87,13 +90,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard !flag else {
             return true
         }
-        // TODO: fix opening settings - maybe someday
-        openSettings()
+        Task {
+            await openSettings()
+        }
         return true
     }
     
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         false
+    }
+    
+    @MainActor
+    private func openSettings() async {
+        if let settingsWindow = NSApp.windows.first(where: { $0.identifier?.rawValue == "settings" }) {
+            settingsWindow.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+        } else {
+            // Fallback to opening settings via environment
+            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+        }
     }
 }
 
@@ -104,28 +119,42 @@ private struct MenuBarLabel: View {
     
     var body: some View {
         HStack(spacing: 6) {
-            if musicInteractor.currentTrack != nil || musicInteractor.isPlayingRadio {
-                let isPlaying = musicInteractor.currentState == .playing
-                Image(systemName: isPlaying ? "music.quarternote.3" : "music.note")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.primary)
-            } else {
-                Image("IconStatusBarMonochrome")
-            }
-
+            statusIcon
+            
             if defaultsInteractor.shouldShowSongInMenuBar {
-                if let track = musicInteractor.currentTrack {
-                    Text(track.name)
-                        .font(.system(size: 13, weight: .medium))
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                        .frame(maxWidth: 180)
-                } else if musicInteractor.isPlayingRadio {
-                    Text("Radio")
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundColor(.secondary)
-                }
+                statusText
             }
+        }
+        .contentTransition(.symbolEffect(.replace))
+    }
+    
+    @ViewBuilder
+    private var statusIcon: some View {
+        if musicInteractor.currentTrack != nil || musicInteractor.isPlayingRadio {
+            let isPlaying = musicInteractor.currentState == .playing
+            Image(systemName: isPlaying ? "music.quarternote.3" : "music.note")
+                .font(.system(size: 16, weight: .medium))
+                .foregroundStyle(.primary)
+                .symbolEffect(.bounce, value: isPlaying)
+        } else {
+            Image("IconStatusBarMonochrome")
+        }
+    }
+    
+    @ViewBuilder
+    private var statusText: some View {
+        if let track = musicInteractor.currentTrack {
+            Text(track.name)
+                .font(.system(size: 13, weight: .medium))
+                .lineLimit(1)
+                .truncationMode(.tail)
+                .frame(maxWidth: 180)
+                .contentTransition(.interpolate)
+        } else if musicInteractor.isPlayingRadio {
+            Text("Radio")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(.secondary)
+                .contentTransition(.interpolate)
         }
     }
 }
