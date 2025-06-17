@@ -73,14 +73,15 @@ struct NotifyApp: App {
                 .environmentObject(notificationsInteractor)
                 .environmentObject(defaultsInteractor)
         }
-        .windowResizability(.contentMinSize)
-        .windowResizability(.contentMinSize)
+        .windowToolbarStyle(.unifiedCompact)
     }
 }
 
 // MARK: - App Delegate
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
+        @Environment(\.openSettings) private var openSettings
+
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         System.log("Notify application started", level: .info)
@@ -90,25 +91,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         guard !flag else {
             return true
         }
-        Task {
-            await openSettings()
-        }
+        openSettings()
         return true
     }
     
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         false
-    }
-    
-    @MainActor
-    private func openSettings() async {
-        if let settingsWindow = NSApp.windows.first(where: { $0.identifier?.rawValue == "settings" }) {
-            settingsWindow.makeKeyAndOrderFront(nil)
-            NSApp.activate(ignoringOtherApps: true)
-        } else {
-            // Fallback to opening settings via environment
-            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-        }
     }
 }
 

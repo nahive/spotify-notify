@@ -198,73 +198,76 @@ private struct MarqueeText: View {
     let color: Color
     
     @State private var offset: CGFloat = 0
+    @State private var containerWidth: CGFloat = 0
+    @State private var textWidth: CGFloat = 0
     @State private var shouldAnimate = false
     @State private var animationTask: Task<Void, Never>?
-    @State private var containerWidth: CGFloat = 0
-    @State private var lastText: String = ""
     
     private let animationSpeed: Double = 30
     private let pauseDuration: Double = 1.5
     
-    private var textSize: CGSize {
-        let nsFont: NSFont
-        switch font {
-        case .title2:
-            nsFont = NSFont.preferredFont(forTextStyle: .title2)
-        case .subheadline:
-            nsFont = NSFont.preferredFont(forTextStyle: .subheadline)
-        default:
-            if font == .title2.weight(.semibold) {
-                nsFont = NSFont.systemFont(ofSize: NSFont.preferredFont(forTextStyle: .title2).pointSize, weight: .semibold)
-            } else {
-                nsFont = NSFont.systemFont(ofSize: 17)
-            }
-        }
-        
-        let attributes = [NSAttributedString.Key.font: nsFont]
-        let size = (text as NSString).size(withAttributes: attributes)
-        return size
-    }
-    
-    private var textWidth: CGFloat {
-        textSize.width
-    }
-    
     var body: some View {
         GeometryReader { geometry in
-            Text(text)
-                .font(font)
-                .foregroundColor(color)
-                .fixedSize(horizontal: true, vertical: false)
-                .offset(x: offset)
-                .frame(maxWidth: .infinity, alignment: shouldAnimate ? .leading : .center)
-                .onAppear {
-                    containerWidth = geometry.size.width
-                    lastText = text
-                    updateAnimation()
+            if shouldAnimate {
+                TimelineView(.animation(minimumInterval: 1.0/60.0)) { _ in
+                    textView(alignment: .leading)
+                        .offset(x: offset)
                 }
-                .onChange(of: text) { _, newText in
-                    if newText != lastText {
-                        lastText = newText
-                        updateAnimation()
-                    }
-                }
-                .onChange(of: geometry.size.width) { _, newWidth in
-                    containerWidth = newWidth
-                    updateAnimation()
-                }
-                .task(id: text) {
-                    try? await Task.sleep(nanoseconds: 100_000_000)
-                    if text != lastText {
-                        lastText = text
-                        updateAnimation()
-                    }
-                }
+                .mask(gradientMask)
+            } else {
+                textView(alignment: .center)
+            }
         }
-        .mask(
-            shouldAnimate ? AnyView(gradientMask) : AnyView(Rectangle())
-        )
-        .frame(height: textSize.height)
+        .frame(height: nsFont.capHeight + nsFont.leading)
+        .onAppear {
+            Task {
+                await measureTextWidth()
+                updateAnimation()
+            }
+        }
+        .onChange(of: text) { _, _ in
+            Task {
+                await measureTextWidth()
+                updateAnimation()
+            }
+        }
+        .onDisappear {
+            animationTask?.cancel()
+        }
+    }
+    
+    private func textView(alignment: Alignment) -> some View {
+        Text(text)
+            .font(font)
+            .foregroundStyle(color)
+            .fixedSize(horizontal: true, vertical: false)
+            .frame(maxWidth: .infinity, alignment: alignment)
+            .background(
+                GeometryReader { textGeometry in
+                    Color.clear
+                        .onAppear {
+                            handleGeometryChange(textGeometry.size.width)
+                        }
+                        .onChange(of: textGeometry.size.width) { _, newWidth in
+                            handleGeometryChange(newWidth)
+                        }
+                }
+            )
+    }
+    
+    private var nsFont: NSFont {
+        switch font {
+        case .title2:
+            return NSFont.preferredFont(forTextStyle: .title2)
+        case .subheadline:
+            return NSFont.preferredFont(forTextStyle: .subheadline)
+        default:
+            if font == .title2.weight(.semibold) {
+                return NSFont.systemFont(ofSize: NSFont.preferredFont(forTextStyle: .title2).pointSize, weight: .semibold)
+            } else {
+                return NSFont.systemFont(ofSize: 17)
+            }
+        }
     }
     
     private var gradientMask: some View {
@@ -272,30 +275,42 @@ private struct MarqueeText: View {
             LinearGradient(
                 gradient: Gradient(stops: [
                     .init(color: .clear, location: 0),
-                    .init(color: .black, location: 1)
+                    .init(color: .black, location: 0.1)
                 ]),
                 startPoint: .leading,
                 endPoint: .trailing
             )
-            .frame(width: 15)
+            .frame(width: 20)
             
             Rectangle()
                 .fill(.black)
             
             LinearGradient(
                 gradient: Gradient(stops: [
-                    .init(color: .black, location: 0),
+                    .init(color: .black, location: 0.9),
                     .init(color: .clear, location: 1)
                 ]),
                 startPoint: .leading,
                 endPoint: .trailing
             )
-            .frame(width: 15)
+            .frame(width: 20)
         }
     }
     
+    @MainActor
+    private func measureTextWidth() async {
+        let attributes = [NSAttributedString.Key.font: nsFont]
+        let size = (text as NSString).size(withAttributes: attributes)
+        textWidth = size.width
+    }
+    
+    private func handleGeometryChange(_ width: CGFloat) {
+        containerWidth = width
+        updateAnimation()
+    }
+    
     private func updateAnimation() {
-        let needsAnimation = textWidth > containerWidth
+        let needsAnimation = textWidth > containerWidth && containerWidth > 0
         
         animationTask?.cancel()
         offset = 0
@@ -309,33 +324,29 @@ private struct MarqueeText: View {
     private func startMarqueeAnimation() {
         guard shouldAnimate, textWidth > containerWidth else { return }
         
-        animationTask = Task {
+        animationTask = Task { @MainActor in
+            let scrollDistance = max(0, textWidth - containerWidth + 30)
+            let duration = scrollDistance / animationSpeed
+            
             while shouldAnimate && !Task.isCancelled {
-                try? await Task.sleep(nanoseconds: UInt64(pauseDuration * 1_000_000_000))
+                try? await Task.sleep(for: .seconds(pauseDuration))
                 guard shouldAnimate && !Task.isCancelled else { break }
                 
-                let scrollDistance = max(0, textWidth - containerWidth + 10)
-                let duration = scrollDistance / animationSpeed
-                
-                await MainActor.run {
-                    withAnimation(.linear(duration: duration)) {
-                        offset = -scrollDistance
-                    }
+                withAnimation(.linear(duration: duration)) {
+                    offset = -scrollDistance
                 }
                 
-                try? await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))
+                try? await Task.sleep(for: .seconds(duration))
                 guard shouldAnimate && !Task.isCancelled else { break }
                 
-                try? await Task.sleep(nanoseconds: UInt64(pauseDuration * 1_000_000_000))
+                try? await Task.sleep(for: .seconds(pauseDuration))
                 guard shouldAnimate && !Task.isCancelled else { break }
                 
-                await MainActor.run {
-                    withAnimation(.linear(duration: duration)) {
-                        offset = 0
-                    }
+                withAnimation(.linear(duration: duration)) {
+                    offset = 0
                 }
                 
-                try? await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))
+                try? await Task.sleep(for: .seconds(duration))
                 guard shouldAnimate && !Task.isCancelled else { break }
             }
         }

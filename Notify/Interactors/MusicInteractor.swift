@@ -135,9 +135,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         }
     }
     
-    // MARK: - Private Methods
     private func setupNotificationObservers() {
-        // Observe system sleep/wake notifications
         NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.willSleepNotification,
             object: nil,
