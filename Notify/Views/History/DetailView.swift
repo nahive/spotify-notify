@@ -45,10 +45,11 @@ struct DetailHeaderView: View {
 
 struct DetailArtworkView: View {
     let entry: SongHistory
+    @EnvironmentObject var historyInteractor: HistoryInteractor
     
     var body: some View {
         Group {
-            if let artworkData = entry.artworkData,
+            if let artworkData = historyInteractor.getArtworkData(for: entry),
                let image = NSImage(data: artworkData) {
                 Image(nsImage: image)
                     .resizable()

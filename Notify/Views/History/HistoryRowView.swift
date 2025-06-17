@@ -5,12 +5,24 @@ struct HistoryRowView: View {
     let entry: SongHistory
     let isSelected: Bool
     let isCurrentlyPlaying: Bool
+    @EnvironmentObject var historyInteractor: HistoryInteractor
+    
+    private var musicAppColor: Color {
+        switch entry.musicApp {
+        case "Spotify":
+            return .spotify
+        case "Apple Music", "Music":
+            return .appleMusic
+        default:
+            return .appAccent
+        }
+    }
     
     var body: some View {
         HStack(spacing: 12) {
             ZStack {
                 Group {
-                    if let artworkData = entry.artworkData,
+                    if let artworkData = historyInteractor.getArtworkData(for: entry),
                        let image = NSImage(data: artworkData) {
                         Image(nsImage: image)
                             .resizable()
@@ -21,7 +33,6 @@ struct HistoryRowView: View {
                     }
                 }
                 .frame(width: 40, height: 40)
-                .background(Color(NSColor.controlBackgroundColor))
                 .cornerRadius(6)
                 .scaleEffect(isSelected ? 1.05 : 1.0)
                 .animation(.easeInOut(duration: 0.2), value: isSelected)
@@ -33,7 +44,7 @@ struct HistoryRowView: View {
                             Spacer()
                             Image(systemName: "waveform")
                                 .font(.caption2)
-                                .foregroundColor(.appAccent)
+                                .foregroundColor(musicAppColor)
                                 .background(
                                     Circle()
                                         .fill(Color.black.opacity(0.7))
@@ -50,12 +61,12 @@ struct HistoryRowView: View {
                     Text(entry.trackName)
                         .font(.headline)
                         .lineLimit(1)
-                        .foregroundColor(isCurrentlyPlaying ? .appAccent : .primary)
+                        .foregroundColor(isCurrentlyPlaying ? musicAppColor : .primary)
                     
                     if isCurrentlyPlaying {
                         Image(systemName: "speaker.wave.2.fill")
                             .font(.caption)
-                            .foregroundColor(.appAccent)
+                            .foregroundColor(musicAppColor)
                             .symbolEffect(.pulse, options: .repeating)
                     }
                 }
@@ -84,7 +95,7 @@ struct HistoryRowView: View {
                     .font(.caption2)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
-                    .background(entry.musicApp == "Spotify" ? Color.appAccent.opacity(0.2) : Color.blue.opacity(0.2))
+                    .background(musicAppColor.opacity(0.2))
                     .cornerRadius(4)
                     .scaleEffect(isSelected ? 1.1 : 1.0)
                     .animation(.easeInOut(duration: 0.2), value: isSelected)
@@ -95,7 +106,7 @@ struct HistoryRowView: View {
         .background(
             Group {
                 if isCurrentlyPlaying || isSelected {
-                    Color.appAccent.opacity(0.1)
+                    musicAppColor.opacity(0.1)
                 } else {
                     Color.clear
                 }
@@ -104,7 +115,7 @@ struct HistoryRowView: View {
         .cornerRadius(8)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(isCurrentlyPlaying ? Color.appAccent.opacity(0.3) : Color.clear, lineWidth: 1)
+                .stroke(isCurrentlyPlaying ? musicAppColor.opacity(0.3) : Color.clear, lineWidth: 1)
         )
         .animation(.easeInOut(duration: 0.2), value: isSelected)
         .animation(.easeInOut(duration: 0.2), value: isCurrentlyPlaying)

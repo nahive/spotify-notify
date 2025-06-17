@@ -2,6 +2,23 @@ import Foundation
 import SwiftData
 
 @Model
+final class AlbumArtwork {
+    var id: UUID
+    var album: String
+    var artist: String
+    var artworkData: Data
+    var createdAt: Date
+    
+    init(album: String, artist: String, artworkData: Data) {
+        self.id = UUID()
+        self.album = album
+        self.artist = artist
+        self.artworkData = artworkData
+        self.createdAt = Date()
+    }
+}
+
+@Model
 final class SongHistory {
     var id: UUID
     var trackId: String
@@ -12,8 +29,9 @@ final class SongHistory {
     var duration: Int?
     var playedAt: Date
     var musicApp: String
-    var artworkData: Data?
-    var actualListeningTime: Int? // Actual time listened in seconds
+    
+    // Relationship to artwork
+    var artwork: AlbumArtwork?
     
     // Additional track information
     var genre: String?
@@ -39,8 +57,7 @@ final class SongHistory {
         duration: Int? = nil,
         playedAt: Date = Date(),
         musicApp: String,
-        artworkData: Data? = nil,
-        actualListeningTime: Int? = nil,
+        artwork: AlbumArtwork? = nil,
         genre: String? = nil,
         year: Int? = nil,
         trackNumber: Int? = nil,
@@ -64,8 +81,7 @@ final class SongHistory {
         self.duration = duration
         self.playedAt = playedAt
         self.musicApp = musicApp
-        self.artworkData = artworkData
-        self.actualListeningTime = actualListeningTime
+        self.artwork = artwork
         self.genre = genre
         self.year = year
         self.trackNumber = trackNumber
@@ -84,18 +100,6 @@ final class SongHistory {
     var formattedDuration: String {
         guard let duration = duration else { return "--:--" }
         return Duration.seconds(duration).formatted(.time(pattern: .minuteSecond))
-    }
-    
-    var formattedActualListeningTime: String {
-        guard let actualListeningTime = actualListeningTime else { return "--:--" }
-        return Duration.seconds(actualListeningTime).formatted(.time(pattern: .minuteSecond))
-    }
-    
-    var listeningCompletionPercentage: Double {
-        guard let duration = duration, 
-              let actualListeningTime = actualListeningTime,
-              duration > 0 else { return 0.0 }
-        return min(Double(actualListeningTime) / Double(duration), 1.0) * 100
     }
     
     var formattedPlayedAt: String {

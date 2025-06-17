@@ -10,48 +10,53 @@ struct HistoryView: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
-                HeaderStatsView()
-                    .padding()
-                    .background(Color(NSColor.controlBackgroundColor))
-                
-                Divider()
-                
+            ZStack {
                 if historyInteractor.recentHistory.isEmpty {
                     EmptyHistoryView()
+                        .padding(.top, 80)
+                        .padding(.bottom, 60)
                 } else {
                     ScrollViewReader { proxy in
-                        List(selection: $selectedEntry) {
-                            ForEach(historyInteractor.recentHistory, id: \.id) { entry in
-                                HistoryRowView(
-                                    entry: entry, 
-                                    isSelected: selectedEntry?.id == entry.id,
-                                    isCurrentlyPlaying: isCurrentlyPlaying(entry)
-                                )
-                                .tag(entry)
-                                .id(entry.id)
-                                .onTapGesture {
-                                    selectedEntry = entry
-                                }
-                                .contextMenu {
-                                    Button("Delete") {
+                        ScrollView {
+                            LazyVStack(spacing: 0) {
+                                Color.clear.frame(height: 80)
+                                    .id("topSpacer")
+                                
+                                ForEach(historyInteractor.recentHistory, id: \.id) { entry in
+                                    HistoryRowView(
+                                        entry: entry, 
+                                        isSelected: selectedEntry?.id == entry.id,
+                                        isCurrentlyPlaying: isCurrentlyPlaying(entry)
+                                    )
+                                    .id(entry.id)
+                                    .contentShape(Rectangle())
+                                    .onTapGesture {
                                         withAnimation(.easeInOut(duration: 0.2)) {
-                                            historyInteractor.deleteHistoryEntry(entry)
-                                            if selectedEntry?.id == entry.id {
-                                                selectedEntry = nil
-                                            }
+                                            selectedEntry = entry
                                         }
-                                        updateDatabaseSize()
+                                    }
+                                    .contextMenu {
+                                        Button("Delete") {
+                                            withAnimation(.easeInOut(duration: 0.2)) {
+                                                historyInteractor.deleteHistoryEntry(entry)
+                                                if selectedEntry?.id == entry.id {
+                                                    selectedEntry = nil
+                                                }
+                                            }
+                                            updateDatabaseSize()
+                                        }
                                     }
                                 }
+                                
+                                Color.clear.frame(height: 60)
                             }
                         }
-                        .listStyle(PlainListStyle())
+                        .scrollIndicators(.hidden)
                         .animation(.easeInOut(duration: 0.3), value: historyInteractor.recentHistory)
                         .onChange(of: historyInteractor.recentHistory) { _, newHistory in
-                            if let firstEntry = newHistory.first {
+                            if !newHistory.isEmpty {
                                 withAnimation(.easeInOut(duration: 0.5)) {
-                                    proxy.scrollTo(firstEntry.id, anchor: .top)
+                                    proxy.scrollTo("topSpacer", anchor: .top)
                                 }
 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -62,22 +67,35 @@ struct HistoryView: View {
                     }
                 }
                 
-                Spacer()
-                
-                HStack {
-                    Button("Clear All") {
-                        showingClearAlert = true
+                VStack {
+                    VStack(spacing: 0) {
+                        HeaderStatsView()
+                            .padding()
+                        Divider()
                     }
-                    .foregroundColor(.red)
+                    .background(.ultraThinMaterial, in: Rectangle())
                     
                     Spacer()
-
-                    Text("Database: \(databaseSize)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
                 }
-                .padding()
-                .background(Color(NSColor.controlBackgroundColor))
+                
+                VStack {
+                    Spacer()
+                    
+                    HStack {
+                        Button("Clear All") {
+                            showingClearAlert = true
+                        }
+                        .foregroundColor(.red)
+                        
+                        Spacer()
+
+                        Text("Database: \(databaseSize)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding()
+                    .background(.ultraThinMaterial, in: Rectangle())
+                }
             }
             .frame(minWidth: 320)
             
@@ -134,7 +152,6 @@ struct HistoryView: View {
     
     private func updateDatabaseSize() {
         Task {
-            try? await Task.sleep(nanoseconds: 100_000_000)
             let size = historyInteractor.getDatabaseSize()
             await MainActor.run {
                 databaseSize = size

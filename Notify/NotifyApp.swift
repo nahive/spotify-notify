@@ -26,7 +26,7 @@ struct NotifyApp: App {
             let storeURL = notifyURL.appendingPathComponent("SongHistory.sqlite")
             let configuration = ModelConfiguration(url: storeURL)
             
-            modelContainer = try ModelContainer(for: SongHistory.self, configurations: configuration)
+            modelContainer = try ModelContainer(for: SongHistory.self, AlbumArtwork.self, configurations: configuration)
         } catch {
             fatalError("Failed to initialize ModelContainer: \(error)")
         }

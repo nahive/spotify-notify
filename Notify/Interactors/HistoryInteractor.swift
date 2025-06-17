@@ -18,19 +18,7 @@ final class HistoryInteractor: ObservableObject {
         guard track.id != lastSavedTrackId else { return }
         
         Task {
-            let sizeBefore = getCurrentDatabaseSize()
-            var artworkData: Data?
-            
-            if let artwork = track.artwork, shouldStoreArtwork(for: track) {
-                switch artwork {
-                case .image(let image):
-                    artworkData = compressArtwork(image)
-                case .url(let url):
-                    if let image = await downloadArtwork(from: url) {
-                        artworkData = compressArtwork(image)
-                    }
-                }
-            }
+            let albumArtwork = await getOrCreateAlbumArtwork(for: track)
             
             let historyEntry = SongHistory(
                 trackId: track.id,
@@ -41,7 +29,7 @@ final class HistoryInteractor: ObservableObject {
                 duration: track.duration,
                 playedAt: Date(),
                 musicApp: musicApp.appName,
-                artworkData: artworkData,
+                artwork: albumArtwork,
                 genre: track.genre,
                 year: track.year,
                 trackNumber: track.trackNumber,
@@ -63,15 +51,6 @@ final class HistoryInteractor: ObservableObject {
                 try modelContext.save()
                 lastSavedTrackId = track.id
                 loadRecentHistory()
-
-                forceCheckpoint()
-                
-                let sizeAfter = getCurrentDatabaseSize()
-                let artworkNote = artworkData != nil ? " (with \(formatFileSize(Int64(artworkData!.count))) artwork)" : " (no artwork - duplicate album)"
-                
-                System.log("Size before: \(sizeBefore), Size after: \(sizeAfter), Diff: \(sizeAfter - sizeBefore)", level: .info)
-                logDatabaseSizeChange(operation: "Added song '\(track.name)'\(artworkNote)", sizeBefore: sizeBefore, sizeAfter: sizeAfter)
-                
                 System.log("Saved song to history: \(track.name) by \(track.artist)", level: .info)
             } catch {
                 System.log("Failed to save song history: \(error)", level: .error)
@@ -81,18 +60,7 @@ final class HistoryInteractor: ObservableObject {
     
     func saveSong(from track: MusicTrack, musicApp: SupportedMusicApplication) {
         Task {
-            var artworkData: Data?
-            
-            if let artwork = track.artwork, shouldStoreArtwork(for: track) {
-                switch artwork {
-                case .image(let image):
-                    artworkData = compressArtwork(image)
-                case .url(let url):
-                    if let image = await downloadArtwork(from: url) {
-                        artworkData = compressArtwork(image)
-                    }
-                }
-            }
+            let albumArtwork = await getOrCreateAlbumArtwork(for: track)
             
             let historyEntry = SongHistory(
                 trackId: track.id,
@@ -103,7 +71,7 @@ final class HistoryInteractor: ObservableObject {
                 duration: track.duration,
                 playedAt: Date(),
                 musicApp: musicApp.appName,
-                artworkData: artworkData,
+                artwork: albumArtwork,
                 genre: track.genre,
                 year: track.year,
                 trackNumber: track.trackNumber,
@@ -182,38 +150,25 @@ final class HistoryInteractor: ObservableObject {
     }
     
     func deleteHistoryEntry(_ entry: SongHistory) {
-        let sizeBefore = getCurrentDatabaseSize()
-        let entryName = entry.trackName
-        let hasArtwork = entry.artworkData != nil
-        
         modelContext.delete(entry)
         
         do {
             try modelContext.save()
             loadRecentHistory()
-            
-            let sizeAfter = getCurrentDatabaseSize()
-            let artworkNote = hasArtwork ? " (with artwork)" : " (no artwork)"
-            logDatabaseSizeChange(operation: "Deleted song '\(entryName)'\(artworkNote)", sizeBefore: sizeBefore, sizeAfter: sizeAfter)
         } catch {
             System.log("Failed to delete history entry: \(error)", level: .error)
         }
     }
     
     func clearAllHistory() {
-        let sizeBefore = getCurrentDatabaseSize()
-        
         do {
             try modelContext.delete(model: SongHistory.self)
             try modelContext.save()
             
+            // Force a second save to ensure changes are persisted
             try modelContext.save()
             
             loadRecentHistory()
-            
-            let sizeAfter = getCurrentDatabaseSize()
-            logDatabaseSizeChange(operation: "Cleared all history", sizeBefore: sizeBefore, sizeAfter: sizeAfter)
-            
             System.log("Cleared all song history", level: .info)
         } catch {
             System.log("Failed to clear history: \(error)", level: .error)
@@ -241,10 +196,10 @@ final class HistoryInteractor: ObservableObject {
         do {
             let container = modelContext.container
             if let url = container.configurations.first?.url {
-                let _ = try FileManager.default.attributesOfItem(atPath: url.path)
-                
-                let totalSize = getTotalDatabaseSize(baseURL: url)
-                return formatFileSize(totalSize)
+                let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
+                if let fileSize = attributes[.size] as? Int64 {
+                    return formatFileSize(fileSize)
+                }
             }
         } catch {
             System.log("Failed to get database size: \(error)", level: .error)
@@ -256,98 +211,6 @@ final class HistoryInteractor: ObservableObject {
         let formatter = ByteCountFormatter()
         formatter.countStyle = .file
         return formatter.string(fromByteCount: bytes)
-    }
-    
-    private func logDatabaseSizeChange(operation: String, sizeBefore: Int64, sizeAfter: Int64) {
-        let beforeStr = formatFileSize(sizeBefore)
-        let afterStr = formatFileSize(sizeAfter)
-        let diff = sizeAfter - sizeBefore
-        let diffStr = formatFileSize(abs(diff))
-        
-        if diff > 0 {
-            System.log("\(operation): Database grew from \(beforeStr) to \(afterStr) (+\(diffStr))", level: .info)
-        } else if diff < 0 {
-            System.log("\(operation): Database shrank from \(beforeStr) to \(afterStr) (-\(diffStr))", level: .info)
-        } else {
-            System.log("\(operation): Database size unchanged at \(beforeStr)", level: .info)
-        }
-    }
-    
-    private func getCurrentDatabaseSize() -> Int64 {
-        do {
-            let container = modelContext.container
-            if let url = container.configurations.first?.url {
-                System.log("Database URL: \(url.path)", level: .info)
-                
-                let fileExists = FileManager.default.fileExists(atPath: url.path)
-                System.log("Database file exists: \(fileExists)", level: .info)
-                
-                if fileExists {
-                    let totalSize = getTotalDatabaseSize(baseURL: url)
-                    System.log("Total database size: \(totalSize) bytes (\(formatFileSize(totalSize)))", level: .info)
-                    return totalSize
-                } else {
-                    System.log("Database file does not exist at path: \(url.path)", level: .warning)
-                }
-            } else {
-                System.log("Could not get database URL from container", level: .error)
-            }
-        } catch {
-            System.log("Failed to get current database size: \(error)", level: .error)
-        }
-        return 0
-    }
-    
-    private func getTotalDatabaseSize(baseURL: URL) -> Int64 {
-        var totalSize: Int64 = 0
-        let fileManager = FileManager.default
-        
-        System.log("Checking database files at base path: \(baseURL.path)", level: .info)
-        
-        do {
-            let attributes = try fileManager.attributesOfItem(atPath: baseURL.path)
-            if let size = attributes[.size] as? Int64 {
-                totalSize += size
-                System.log("Main DB file: \(formatFileSize(size))", level: .info)
-            }
-        } catch {
-            System.log("Failed to get main DB size: \(error)", level: .warning)
-        }
-        
-        let walURL = URL(fileURLWithPath: baseURL.path + "-wal")
-        System.log("Checking WAL file: \(walURL.path)", level: .info)
-        if fileManager.fileExists(atPath: walURL.path) {
-            do {
-                let attributes = try fileManager.attributesOfItem(atPath: walURL.path)
-                if let size = attributes[.size] as? Int64 {
-                    totalSize += size
-                    System.log("WAL file: \(formatFileSize(size))", level: .info)
-                }
-            } catch {
-                System.log("Failed to get WAL size: \(error)", level: .warning)
-            }
-        } else {
-            System.log("WAL file does not exist", level: .info)
-        }
-        
-        let shmURL = URL(fileURLWithPath: baseURL.path + "-shm")
-        System.log("Checking SHM file: \(shmURL.path)", level: .info)
-        if fileManager.fileExists(atPath: shmURL.path) {
-            do {
-                let attributes = try fileManager.attributesOfItem(atPath: shmURL.path)
-                if let size = attributes[.size] as? Int64 {
-                    totalSize += size
-                    System.log("SHM file: \(formatFileSize(size))", level: .info)
-                }
-            } catch {
-                System.log("Failed to get SHM size: \(error)", level: .warning)
-            }
-        } else {
-            System.log("SHM file does not exist", level: .info)
-        }
-        
-        System.log("Total calculated size: \(formatFileSize(totalSize))", level: .info)
-        return totalSize
     }
     
     private func compressArtwork(_ image: NSImage) -> Data? {
@@ -389,75 +252,55 @@ final class HistoryInteractor: ObservableObject {
         return resizedImage
     }
     
-    private func shouldStoreArtwork(for track: MusicTrack) -> Bool {
-        guard let album = track.album else { return true }
+    private func getOrCreateAlbumArtwork(for track: MusicTrack) async -> AlbumArtwork? {
+        guard let album = track.album else { return nil }
         
-        let descriptor = FetchDescriptor<SongHistory>()
+        // Check if we already have artwork for this album
+        let artist = track.artist
+        let descriptor = FetchDescriptor<AlbumArtwork>(
+            predicate: #Predicate<AlbumArtwork> { artwork in
+                artwork.album == album && artwork.artist == artist
+            }
+        )
         
         do {
-            let existingHistory = try modelContext.fetch(descriptor)
-            let hasArtworkForAlbum = existingHistory.contains { entry in
-                entry.album == album && 
-                entry.artist == track.artist && 
-                entry.artworkData != nil
+            let existingArtwork = try modelContext.fetch(descriptor)
+            if let existing = existingArtwork.first {
+                return existing
             }
-            
-            return !hasArtworkForAlbum
         } catch {
-            return true
+            System.log("Failed to fetch existing artwork: \(error)", level: .error)
         }
-    }
-    
-    func compressExistingArtwork() {
-        Task {
-            let sizeBefore = getCurrentDatabaseSize()
-            let descriptor = FetchDescriptor<SongHistory>()
-            
-            do {
-                let allHistory = try modelContext.fetch(descriptor)
-                var compressedCount = 0
-                var totalSizeSaved: Int64 = 0
-                
-                for entry in allHistory {
-                    if let artworkData = entry.artworkData,
-                       let image = NSImage(data: artworkData) {
-                        if artworkData.count > 15000 {
-                            if let compressedData = compressArtwork(image) {
-                                let sizeSaved = artworkData.count - compressedData.count
-                                totalSizeSaved += Int64(sizeSaved)
-                                entry.artworkData = compressedData
-                                compressedCount += 1
-                            }
-                        }
-                    }
-                }
-                
-                if compressedCount > 0 {
-                    try modelContext.save()
-                    
-                    let sizeAfter = getCurrentDatabaseSize()
-                    logDatabaseSizeChange(operation: "Compressed \(compressedCount) artworks (saved ~\(formatFileSize(totalSizeSaved)) in images)", sizeBefore: sizeBefore, sizeAfter: sizeAfter)
-                    
-                    System.log("Compressed artwork for \(compressedCount) entries", level: .info)
-                    await MainActor.run {
-                        loadRecentHistory()
-                    }
-                } else {
-                    System.log("No artwork needed compression", level: .info)
-                }
-            } catch {
-                System.log("Failed to compress existing artwork: \(error)", level: .error)
+        
+        // No existing artwork, create new one if we have artwork data
+        guard let trackArtwork = track.artwork else { return nil }
+        
+        var artworkData: Data?
+        switch trackArtwork {
+        case .image(let image):
+            artworkData = compressArtwork(image)
+        case .url(let url):
+            if let image = await downloadArtwork(from: url) {
+                artworkData = compressArtwork(image)
             }
         }
-    }
-    
-    private func forceCheckpoint() {
+        
+        guard let data = artworkData else { return nil }
+        
+        let albumArtwork = AlbumArtwork(album: album, artist: track.artist, artworkData: data)
+        modelContext.insert(albumArtwork)
+        
         do {
             try modelContext.save()
-            
-            Thread.sleep(forTimeInterval: 0.1)
+            System.log("Created new album artwork for: \(album) by \(track.artist)", level: .info)
+            return albumArtwork
         } catch {
-            System.log("Failed to force checkpoint: \(error)", level: .error)
+            System.log("Failed to save album artwork: \(error)", level: .error)
+            return nil
         }
+    }
+    
+    func getArtworkData(for entry: SongHistory) -> Data? {
+        return entry.artwork?.artworkData
     }
 } 
