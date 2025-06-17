@@ -10,13 +10,6 @@ extension String {
         return String(repeating: self, count: times)
     }
     
-    var withLeadingZeroes: String {
-        if self.count == 1 {
-            return "0" + self
-        }
-        return self
-    }
-    
     var asURL: URL? {
         URL(string: self)
     }

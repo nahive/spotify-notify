@@ -1,8 +1,6 @@
 import Foundation
 import SwiftUI
 import Magnet
-import LaunchAtLogin
-import Combine
 
 @MainActor
 final class DefaultsInteractor: ObservableObject {
@@ -17,7 +15,6 @@ final class DefaultsInteractor: ObservableObject {
         static let notificationsDisableOnFocus = "notifications.focus.key"
         static let notificationsLength = "notifications.length.key"
         
-        static let startOnLogin = "startonlogin.key"
         static let showAlbumArt = "showalbumart.key"
         static let roundAlbumArt = "roundalbumart.key"
         static let showSongProgress = "songprogress.key"
@@ -53,10 +50,8 @@ final class DefaultsInteractor: ObservableObject {
     // @AppStorage(Key.menuIconColored) var isMenuIconColored = false
     @AppStorage(Key.menuBarShowSong) var shouldShowSongInMenuBar = true
     
-    
     @AppStorage(Key.shortcutKeyCode) private var shortcutKeyCode = 0
     @AppStorage(Key.shortcutModifiers) private var shortcutModifier = 0
-    
     
     var shortcut: KeyCombo? {
         get {

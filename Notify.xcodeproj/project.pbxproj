@@ -10,7 +10,7 @@
 		4C3FB6F02D2D1A210073EE24 /* AppleMusicApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3FB6EF2D2D1A210073EE24 /* AppleMusicApplication.swift */; };
 		4C3FB6F42D2D1D4D0073EE24 /* MusicPlayerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3FB6F32D2D1D4D0073EE24 /* MusicPlayerProtocol.swift */; };
 		4C4E199E2DFF079F00989540 /* RadioPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E199D2DFF079F00989540 /* RadioPlayingView.swift */; };
-		4C4E19A52E002C6C00989540 /* Int+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19A42E002C6C00989540 /* Int+Ext.swift */; };
+
 		4C4E19AA2E00300500989540 /* HeaderStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19A82E00300500989540 /* HeaderStatsView.swift */; };
 		4C4E19AB2E00300500989540 /* EmptyHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19A72E00300500989540 /* EmptyHistoryView.swift */; };
 		4C4E19AD2E00300500989540 /* HistoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19A92E00300500989540 /* HistoryRowView.swift */; };
@@ -55,7 +55,7 @@
 		4C3FB6EF2D2D1A210073EE24 /* AppleMusicApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicApplication.swift; sourceTree = "<group>"; };
 		4C3FB6F32D2D1D4D0073EE24 /* MusicPlayerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerProtocol.swift; sourceTree = "<group>"; };
 		4C4E199D2DFF079F00989540 /* RadioPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioPlayingView.swift; sourceTree = "<group>"; };
-		4C4E19A42E002C6C00989540 /* Int+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Ext.swift"; sourceTree = "<group>"; };
+
 		4C4E19A72E00300500989540 /* EmptyHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyHistoryView.swift; sourceTree = "<group>"; };
 		4C4E19A82E00300500989540 /* HeaderStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderStatsView.swift; sourceTree = "<group>"; };
 		4C4E19A92E00300500989540 /* HistoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRowView.swift; sourceTree = "<group>"; };
@@ -217,7 +217,7 @@
 			children = (
 				4CAD3BD62DFEBC3400D6BF22 /* MusicTrack+Validation.swift */,
 				4CDE08B22A35B3CD009609E7 /* String+Ext.swift */,
-				4C4E19A42E002C6C00989540 /* Int+Ext.swift */,
+
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -387,7 +387,7 @@
 				4CAD3BD52DFEB59400D6BF22 /* NothingPlayingView.swift in Sources */,
 				4CF74EBF2D412E38009E8B00 /* ShortcutView.swift in Sources */,
 				4CF74EBB2D412D83009E8B00 /* NotificationsSettingsView.swift in Sources */,
-				4C4E19A52E002C6C00989540 /* Int+Ext.swift in Sources */,
+
 				4CDE08B32A35B3CD009609E7 /* String+Ext.swift in Sources */,
 				4CFE1ED52DFEDD7000E52A47 /* HistoryInteractor.swift in Sources */,
 				4C3FB6F02D2D1A210073EE24 /* AppleMusicApplication.swift in Sources */,

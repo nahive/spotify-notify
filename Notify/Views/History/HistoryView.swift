@@ -1,5 +1,4 @@
 import SwiftUI
-import AppKit
 
 struct HistoryView: View {
     @EnvironmentObject var historyInteractor: HistoryInteractor
