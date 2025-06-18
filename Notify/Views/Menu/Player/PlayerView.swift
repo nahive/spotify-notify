@@ -18,6 +18,10 @@ struct PlayerView: View {
 
 // MARK: - PlayingView
 struct PlayingView: View {
+    private enum PlayerHoverTarget {
+        case none, previous, playPause, next
+    }
+    
     @StateObject var musicInteractor: MusicInteractor
     let track: MusicTrack
     
@@ -121,15 +125,8 @@ struct PlayingView: View {
     }
 }
 
-// MARK: - PlayerHoverTarget
-private extension PlayingView {
-    enum PlayerHoverTarget {
-        case none, previous, playPause, next
-    }
-}
-
 // MARK: - CustomProgressView
-struct CustomProgressView: View {
+private struct CustomProgressView: View {
     @ObservedObject var musicInteractor: MusicInteractor
     @State private var isDragging = false
     @State private var dragProgress: Double = 0
@@ -142,12 +139,10 @@ struct CustomProgressView: View {
         VStack(spacing: 2) {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
-                    // Background track
                     RoundedRectangle(cornerRadius: isDragging ? 3 : 1.5)
                         .fill(Color.gray.opacity(0.3))
                         .frame(height: isDragging ? 6 : 3)
                     
-                    // Progress fill
                     RoundedRectangle(cornerRadius: isDragging ? 3 : 1.5)
                         .fill(.white.gradient)
                         .frame(
@@ -353,4 +348,85 @@ private struct MarqueeText: View {
     }
 }
 
+// MARK: - AlbumArtworkView
+struct AlbumArtworkView: View {
+    let track: MusicTrack
+    
+    var body: some View {
+        Group {
+            if let artwork = track.artwork {
+                switch artwork {
+                case .url(let url):
+                    AsyncImage(url: url) { phase in
+                        CoverImageView(image: phase.image ?? Image("IconSettings"), album: track.album)
+                    }
+                    .albumArtworkModifier()
+                    .accessibilityLabel("Album artwork for \(track.album ?? track.name)")
+                    
+                case .image(let image):
+                    CoverImageView(image: Image(nsImage: image), album: track.album)
+                    .albumArtworkModifier()
+                    .accessibilityLabel("Album artwork for \(track.album ?? track.name)")
+                }
+            }
+        }
+    }
+}
 
+// MARK: - View Extensions
+private extension View {
+    func albumArtworkModifier() -> some View {
+        self
+            .padding(8)
+            .frame(width: 100, height: 100)
+            .shadow(color: .black.opacity(0.15), radius: 8, y: 4)
+    }
+}
+
+// MARK: - CoverImageView
+private struct CoverImageView: View {
+    @State private var shouldShowAlbumName = false
+    @State private var isHovering = false
+    
+    let image: Image
+    let album: String?
+    
+    var body: some View {
+        ZStack {
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .blur(radius: 100)
+                .offset(x: 0, y: 5)
+                .opacity(shouldShowAlbumName ? 0.3 : 1)
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .blur(radius: 20)
+                .offset(x: 0, y: 5)
+                .opacity(shouldShowAlbumName ? 0.3 : 1)
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .opacity(shouldShowAlbumName ? 0.3 : 1)
+                .blur(radius: isHovering ? 2 : 0)
+            
+            if let album = album {
+                Text(album)
+                    .padding()
+                    .font(.body)
+                    .minimumScaleFactor(0.8)
+                    .shadow(color: Color.black, radius: 3)
+                    .opacity(shouldShowAlbumName ? 1 : 0)
+            }
+        }
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isHovering = hovering
+                shouldShowAlbumName = hovering
+            }
+        }
+        .animation(.default, value: image)
+    }
+}
