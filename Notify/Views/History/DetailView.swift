@@ -20,7 +20,7 @@ struct DetailView: View {
     }
 }
 
-struct DetailHeaderView: View {
+private struct DetailHeaderView: View {
     let entry: SongHistory
     
     var body: some View {
@@ -33,17 +33,10 @@ struct DetailHeaderView: View {
             Spacer(minLength: 24)
         }
         .frame(maxWidth: .infinity)
-        .background(
-            LinearGradient(
-                colors: [Color(NSColor.controlBackgroundColor).opacity(0.3), Color.clear],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        )
     }
 }
 
-struct DetailArtworkView: View {
+private struct DetailArtworkView: View {
     let entry: SongHistory
     @EnvironmentObject var historyInteractor: HistoryInteractor
     
@@ -55,14 +48,9 @@ struct DetailArtworkView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
             } else {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 14)
-                        .fill(Color(NSColor.controlBackgroundColor))
-                    
-                    Image(systemName: "music.note")
-                        .font(.system(size: 40))
-                        .foregroundColor(.secondary)
-                }
+                Image(systemName: "music.note")
+                    .font(.system(size: 40))
+                    .foregroundColor(.secondary)
             }
         }
         .frame(width: 140, height: 140)
@@ -72,7 +60,7 @@ struct DetailArtworkView: View {
     }
 }
 
-struct DetailSongInfoView: View {
+private struct DetailSongInfoView: View {
     let entry: SongHistory
     
     var body: some View {
@@ -81,27 +69,24 @@ struct DetailSongInfoView: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
-                .transition(.opacity.combined(with: .slide))
             
             Text(entry.artist)
                 .font(.title2)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
-                .transition(.opacity.combined(with: .slide))
             
             if let album = entry.album {
                 Text(album)
                     .font(.headline)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
-                    .transition(.opacity.combined(with: .slide))
             }
         }
         .padding(.horizontal, 20)
     }
 }
 
-struct DetailStatsView: View {
+private struct DetailStatsView: View {
     let entry: SongHistory
     @EnvironmentObject var historyInteractor: HistoryInteractor
     
@@ -180,7 +165,7 @@ struct DetailStatsView: View {
     }
 }
 
-struct DetailEmptyStateView: View {
+private struct DetailEmptyStateView: View {
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "music.note.list")
@@ -193,11 +178,10 @@ struct DetailEmptyStateView: View {
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .transition(.opacity)
     }
 }
 
-struct CompactStatView: View {
+private struct CompactStatView: View {
     let title: String
     let value: String
     let icon: String
@@ -223,17 +207,15 @@ struct CompactStatView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 10)
         .padding(.horizontal, 6)
-        .background(Color(NSColor.controlBackgroundColor).opacity(0.6))
         .cornerRadius(8)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.secondary.opacity(0.1), lineWidth: 0.5)
         )
-        .transition(.scale.combined(with: .opacity))
     }
 }
 
-struct MiniStatView: View {
+private struct MiniStatView: View {
     let title: String
     let value: String
     let icon: String
@@ -259,8 +241,6 @@ struct MiniStatView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 6)
         .padding(.horizontal, 3)
-        .background(Color(NSColor.controlBackgroundColor).opacity(0.4))
         .cornerRadius(6)
-        .transition(.scale.combined(with: .opacity))
     }
 }

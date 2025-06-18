@@ -10,13 +10,9 @@
 		4C3FB6F02D2D1A210073EE24 /* AppleMusicApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3FB6EF2D2D1A210073EE24 /* AppleMusicApplication.swift */; };
 		4C3FB6F42D2D1D4D0073EE24 /* MusicPlayerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3FB6F32D2D1D4D0073EE24 /* MusicPlayerProtocol.swift */; };
 		4C4E199E2DFF079F00989540 /* RadioPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E199D2DFF079F00989540 /* RadioPlayingView.swift */; };
-
-		4C4E19AA2E00300500989540 /* HeaderStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19A82E00300500989540 /* HeaderStatsView.swift */; };
-		4C4E19AB2E00300500989540 /* EmptyHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19A72E00300500989540 /* EmptyHistoryView.swift */; };
 		4C4E19AD2E00300500989540 /* HistoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19A92E00300500989540 /* HistoryRowView.swift */; };
 		4C4E19B12E00308F00989540 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19B02E00308F00989540 /* HistoryView.swift */; };
 		4C4E19B32E0030F800989540 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19B22E0030F800989540 /* DetailView.swift */; };
-		4C4E19B52E0041A500989540 /* AlbumArtworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19B42E0041A500989540 /* AlbumArtworkView.swift */; };
 		4C5764C91C982DC900364AFE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C5764C81C982DC900364AFE /* Assets.xcassets */; };
 		4C858885203F218800ED1692 /* SpotifyApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C858884203F218800ED1692 /* SpotifyApplication.swift */; };
 		4C926D4C288043F40008809E /* KeyHolder in Frameworks */ = {isa = PBXBuildFile; productRef = 4C926D4B288043F40008809E /* KeyHolder */; };
@@ -42,7 +38,6 @@
 		4CF74EBD2D412DCA009E8B00 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EBC2D412DCA009E8B00 /* GeneralSettingsView.swift */; };
 		4CF74EBF2D412E38009E8B00 /* ShortcutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EBE2D412E38009E8B00 /* ShortcutView.swift */; };
 		4CF74EC12D412E7A009E8B00 /* AboutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC02D412E7A009E8B00 /* AboutSettingsView.swift */; };
-		4CF74EC42D413302009E8B00 /* CoverImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC32D413302009E8B00 /* CoverImageView.swift */; };
 		4CF74EC62D413325009E8B00 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC52D413325009E8B00 /* PlayerView.swift */; };
 		4CFE1ED32DFEDD6000E52A47 /* SongHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED22DFEDD6000E52A47 /* SongHistory.swift */; };
 		4CFE1ED52DFEDD7000E52A47 /* HistoryInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED42DFEDD7000E52A47 /* HistoryInteractor.swift */; };
@@ -55,13 +50,9 @@
 		4C3FB6EF2D2D1A210073EE24 /* AppleMusicApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicApplication.swift; sourceTree = "<group>"; };
 		4C3FB6F32D2D1D4D0073EE24 /* MusicPlayerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerProtocol.swift; sourceTree = "<group>"; };
 		4C4E199D2DFF079F00989540 /* RadioPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioPlayingView.swift; sourceTree = "<group>"; };
-
-		4C4E19A72E00300500989540 /* EmptyHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyHistoryView.swift; sourceTree = "<group>"; };
-		4C4E19A82E00300500989540 /* HeaderStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderStatsView.swift; sourceTree = "<group>"; };
 		4C4E19A92E00300500989540 /* HistoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRowView.swift; sourceTree = "<group>"; };
 		4C4E19B02E00308F00989540 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		4C4E19B22E0030F800989540 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
-		4C4E19B42E0041A500989540 /* AlbumArtworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumArtworkView.swift; sourceTree = "<group>"; };
 		4C5764C31C982DC800364AFE /* Notify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5764C81C982DC900364AFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4C5764CD1C982DC900364AFE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -86,7 +77,6 @@
 		4CF74EBC2D412DCA009E8B00 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		4CF74EBE2D412E38009E8B00 /* ShortcutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutView.swift; sourceTree = "<group>"; };
 		4CF74EC02D412E7A009E8B00 /* AboutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSettingsView.swift; sourceTree = "<group>"; };
-		4CF74EC32D413302009E8B00 /* CoverImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoverImageView.swift; sourceTree = "<group>"; };
 		4CF74EC52D413325009E8B00 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		4CFE1ED22DFEDD6000E52A47 /* SongHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongHistory.swift; sourceTree = "<group>"; };
 		4CFE1ED42DFEDD7000E52A47 /* HistoryInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryInteractor.swift; sourceTree = "<group>"; };
@@ -181,6 +171,16 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		4C9FDB6B2E02E4C90045C310 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				4CF74EC52D413325009E8B00 /* PlayerView.swift */,
+				4CAD3BD42DFEB59400D6BF22 /* NothingPlayingView.swift */,
+				4C4E199D2DFF079F00989540 /* RadioPlayingView.swift */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
 		4CDE08A82A35AEEE009609E7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -217,7 +217,6 @@
 			children = (
 				4CAD3BD62DFEBC3400D6BF22 /* MusicTrack+Validation.swift */,
 				4CDE08B22A35B3CD009609E7 /* String+Ext.swift */,
-
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -247,12 +246,8 @@
 		4CF74EC22D4132F0009E8B00 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
-				4C4E19B42E0041A500989540 /* AlbumArtworkView.swift */,
-				4C4E199D2DFF079F00989540 /* RadioPlayingView.swift */,
-				4CAD3BD42DFEB59400D6BF22 /* NothingPlayingView.swift */,
+				4C9FDB6B2E02E4C90045C310 /* Player */,
 				4CDE08A92A35AEF6009609E7 /* MenuView.swift */,
-				4CF74EC32D413302009E8B00 /* CoverImageView.swift */,
-				4CF74EC52D413325009E8B00 /* PlayerView.swift */,
 			);
 			path = Menu;
 			sourceTree = "<group>";
@@ -262,8 +257,6 @@
 			children = (
 				4C4E19B22E0030F800989540 /* DetailView.swift */,
 				4C4E19B02E00308F00989540 /* HistoryView.swift */,
-				4C4E19A72E00300500989540 /* EmptyHistoryView.swift */,
-				4C4E19A82E00300500989540 /* HeaderStatsView.swift */,
 				4C4E19A92E00300500989540 /* HistoryRowView.swift */,
 			);
 			path = History;
@@ -387,14 +380,12 @@
 				4CAD3BD52DFEB59400D6BF22 /* NothingPlayingView.swift in Sources */,
 				4CF74EBF2D412E38009E8B00 /* ShortcutView.swift in Sources */,
 				4CF74EBB2D412D83009E8B00 /* NotificationsSettingsView.swift in Sources */,
-
 				4CDE08B32A35B3CD009609E7 /* String+Ext.swift in Sources */,
 				4CFE1ED52DFEDD7000E52A47 /* HistoryInteractor.swift in Sources */,
 				4C3FB6F02D2D1A210073EE24 /* AppleMusicApplication.swift in Sources */,
 				4CFE1ED32DFEDD6000E52A47 /* SongHistory.swift in Sources */,
 				4C858885203F218800ED1692 /* SpotifyApplication.swift in Sources */,
 				4CF74EC62D413325009E8B00 /* PlayerView.swift in Sources */,
-				4CF74EC42D413302009E8B00 /* CoverImageView.swift in Sources */,
 				4CDE08A62A35AB9B009609E7 /* NotifyApp.swift in Sources */,
 				4C3FB6F42D2D1D4D0073EE24 /* MusicPlayerProtocol.swift in Sources */,
 				4CDE08AA2A35AEF6009609E7 /* MenuView.swift in Sources */,
@@ -406,9 +397,6 @@
 				4CE2617A2D390A3900C8B9D1 /* MusicModels.swift in Sources */,
 				4C4E199E2DFF079F00989540 /* RadioPlayingView.swift in Sources */,
 				4CF74EBD2D412DCA009E8B00 /* GeneralSettingsView.swift in Sources */,
-				4C4E19B52E0041A500989540 /* AlbumArtworkView.swift in Sources */,
-				4C4E19AA2E00300500989540 /* HeaderStatsView.swift in Sources */,
-				4C4E19AB2E00300500989540 /* EmptyHistoryView.swift in Sources */,
 				4C4E19AD2E00300500989540 /* HistoryRowView.swift in Sources */,
 				4CE2617C2D390A8100C8B9D1 /* SpotifyPlayer.swift in Sources */,
 				4CDE08BF2A35CC68009609E7 /* MusicNotification.swift in Sources */,

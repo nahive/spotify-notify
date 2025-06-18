@@ -19,9 +19,11 @@ final class HistoryInteractor: ObservableObject {
         loadRecentHistory()
     }
     
-    func saveSongIfNeeded(from track: MusicTrack, musicApp: SupportedMusicApplication) async {
+    func saveSongIfNeeded(from track: MusicTrack, musicApp: SupportedMusicApplication) {
         guard track.id != lastSavedTrackId else { return }
-        await saveSong(from: track, musicApp: musicApp)
+        Task {
+            await saveSong(from: track, musicApp: musicApp)
+        }
     }
     
     func saveSong(from track: MusicTrack, musicApp: SupportedMusicApplication) async {
@@ -217,7 +219,6 @@ final class HistoryInteractor: ObservableObject {
     private func getOrCreateAlbumArtwork(for track: MusicTrack) async -> AlbumArtwork? {
         guard let album = track.album else { return nil }
         
-        // Check if artwork already exists
         let trackArtist = track.artist
         let descriptor = FetchDescriptor<AlbumArtwork>(
             predicate: #Predicate<AlbumArtwork> { artwork in
@@ -230,7 +231,6 @@ final class HistoryInteractor: ObservableObject {
                 return existingArtwork
             }
             
-            // Download and create new artwork
             if let artwork = track.artwork {
                 let artworkData: Data?
                 

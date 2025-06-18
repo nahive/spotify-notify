@@ -6,10 +6,12 @@ final class AlbumArtwork {
     @Attribute(.unique) var id: UUID
     var album: String
     var artist: String
-    @Attribute(.externalStorage) var artworkData: Data
+    @Attribute(.externalStorage)
+    var artworkData: Data
     var createdAt: Date
     
-    @Relationship(inverse: \SongHistory.artwork) var songs: [SongHistory] = []
+    @Relationship(inverse: \SongHistory.artwork)
+    var songs: [SongHistory] = []
     
     init(album: String, artist: String, artworkData: Data) {
         self.id = UUID()
@@ -22,17 +24,20 @@ final class AlbumArtwork {
 
 @Model
 final class SongHistory {
-    @Attribute(.unique) var id: UUID
+    @Attribute(.unique)
+    var id: UUID
     var trackId: String
     var trackName: String
-    @Attribute(.spotlight) var artist: String
+    @Attribute(.spotlight)
+    var artist: String
     var album: String?
     var albumArtist: String?
     var duration: Int?
     var playedAt: Date
     var musicApp: String
     
-    @Relationship var artwork: AlbumArtwork?
+    @Relationship
+    var artwork: AlbumArtwork?
     
     // Additional track information
     var genre: String?
