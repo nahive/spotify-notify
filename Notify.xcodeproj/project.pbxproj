@@ -42,10 +42,12 @@
 		4CFE1ED32DFEDD6000E52A47 /* SongHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED22DFEDD6000E52A47 /* SongHistory.swift */; };
 		4CFE1ED52DFEDD7000E52A47 /* HistoryInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED42DFEDD7000E52A47 /* HistoryInteractor.swift */; };
 		4CFE1EDA2DFEDE9C00E52A47 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED82DFEDE9C00E52A47 /* Localizable.strings */; };
+		BEC2CCCCEA06A23CC9C49759 /* MonitorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD46608047B63615C7DD9FE /* MonitorInfo.swift */; };
 		FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1AD46608047B63615C7DD9FE /* MonitorInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MonitorInfo.swift; sourceTree = "<group>"; };
 		4C3340EC2A370EE90045B06B /* Notify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Notify.entitlements; sourceTree = "<group>"; };
 		4C3FB6EF2D2D1A210073EE24 /* AppleMusicApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicApplication.swift; sourceTree = "<group>"; };
 		4C3FB6F32D2D1D4D0073EE24 /* MusicPlayerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerProtocol.swift; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 				4C4E19A12E002C3700989540 /* Player */,
 				4C4E19A02E002C2200989540 /* Database */,
 				4C4E199F2E002C1A00989540 /* Music */,
+				1AD46608047B63615C7DD9FE /* MonitorInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -405,6 +408,7 @@
 				4CDE08AD2A35B34D009609E7 /* MusicInteractor.swift in Sources */,
 				4CDE08B92A35C238009609E7 /* DefaultsInteractor.swift in Sources */,
 				4CDE08B52A35BC9B009609E7 /* SettingsView.swift in Sources */,
+				BEC2CCCCEA06A23CC9C49759 /* MonitorInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

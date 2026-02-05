@@ -24,6 +24,7 @@ final class DefaultsInteractor: ObservableObject {
         static let menuBarShowSong = "menubarshowsong.key"
         static let shortcutKeyCode = "shortcut.keycode.key"
         static let shortcutModifiers = "shortcut.modifiers.key"
+        static let monitorBlacklist = "monitor.blacklist.key"
     }
     
     @AppStorage(Key.selectedApplication) var selectedApplication: SupportedMusicApplication?
@@ -52,7 +53,30 @@ final class DefaultsInteractor: ObservableObject {
     
     @AppStorage(Key.shortcutKeyCode) private var shortcutKeyCode = 0
     @AppStorage(Key.shortcutModifiers) private var shortcutModifier = 0
-    
+    @AppStorage(Key.monitorBlacklist) private var monitorBlacklistData: Data = Data()
+
+    var blacklistedMonitors: Set<String> {
+        get {
+            (try? JSONDecoder().decode(Set<String>.self, from: monitorBlacklistData)) ?? []
+        }
+        set {
+            monitorBlacklistData = (try? JSONEncoder().encode(newValue)) ?? Data()
+            objectWillChange.send()
+        }
+    }
+
+    func isMonitorBlacklisted(_ monitorName: String) -> Bool {
+        blacklistedMonitors.contains(monitorName)
+    }
+
+    func toggleMonitorBlacklist(_ monitorName: String) {
+        if blacklistedMonitors.contains(monitorName) {
+            blacklistedMonitors.remove(monitorName)
+        } else {
+            blacklistedMonitors.insert(monitorName)
+        }
+    }
+
     var shortcut: KeyCombo? {
         get {
             guard shortcutKeyCode != 0, shortcutModifier != 0 else { return nil }
