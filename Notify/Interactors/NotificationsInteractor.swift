@@ -81,6 +81,10 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
             return
         }
 
+        if isMainMonitorBlacklisted() {
+            return
+        }
+
         let model = MusicNotification(
             track: track, 
             style: defaultsInteractor.shouldShowSongProgress ? 
@@ -111,7 +115,12 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
             deliverNotification(identifier: model.identifier, notification: notification)
         }
     }
-    
+
+    private func isMainMonitorBlacklisted() -> Bool {
+        guard let mainScreen = NSScreen.main else { return false }
+        return defaultsInteractor.isMonitorBlacklisted(mainScreen.localizedName)
+    }
+
     private func createArtworkAttachment(artwork: MusicArtwork) async -> UNNotificationAttachment? {
         let image: NSImage?
         
