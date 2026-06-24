@@ -136,13 +136,12 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
         
         do {
             try FileManager.default.createDirectory(at: bundleURL, withIntermediateDirectories: true)
-            let fileURL = bundleURL.appendingPathComponent("artwork" + ".png")
-
+            let fileURL = bundleURL.appendingPathComponent("artwork.png")
+            try? FileManager.default.removeItem(at: fileURL)
             try NSBitmapImageRep(data: data)?.representation(using: .png, properties: [:])?.write(to: fileURL)
-
             return fileURL
         } catch {
-            print("couldn't save file")
+            System.log("Failed to save artwork to disk: \(error)", level: .error)
         }
 
         return nil
@@ -175,7 +174,11 @@ extension NotificationsInteractor: @preconcurrency UNUserNotificationCenterDeleg
 
 extension NotificationsInteractor {
     func openNotificationsSettings() {
-        NSWorkspace.shared.open("x-apple.systempreferences:com.apple.preference.notifications".asURL!)
+        guard let url = "x-apple.systempreferences:com.apple.preference.notifications".asURL else {
+            System.log("Failed to construct notifications settings URL", level: .warning)
+            return
+        }
+        NSWorkspace.shared.open(url)
     }
 }
 

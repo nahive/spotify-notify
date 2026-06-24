@@ -18,7 +18,9 @@ struct NotifyApp: App {
     
     init() {
         do {
-            let appSupportURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+            guard let appSupportURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+                fatalError("Could not locate Application Support directory")
+            }
             let notifyURL = appSupportURL.appendingPathComponent("Notify")
             
             try FileManager.default.createDirectory(at: notifyURL, withIntermediateDirectories: true)

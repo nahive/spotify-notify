@@ -637,24 +637,24 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Clipy/KeyHolder";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.0;
 			};
 		};
 		4C926D4D288044010008809E /* XCRemoteSwiftPackageReference "Magnet" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Clipy/Magnet";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.0;
 			};
 		};
 		4CDE08C22A35F53B009609E7 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin-Modern";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

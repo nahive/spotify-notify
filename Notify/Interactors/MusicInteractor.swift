@@ -209,9 +209,14 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         updateControlPermissions()
     }
     
+    private enum PlayerStateNotificationValue {
+        static let paused = "Paused"
+        static let playing = "Playing"
+    }
+
     private func handlePlaybackStateChange(_ state: String, player: any MusicPlayerProtocol) {
         switch state {
-        case "Paused", "Playing":
+        case PlayerStateNotificationValue.paused, PlayerStateNotificationValue.playing:
             currentState = player.currentState
             isPlayingRadio = player.isPlayingRadio
             
@@ -302,6 +307,10 @@ extension MusicInteractor {
     }
     
     func openAutomationSettings() {
-        NSWorkspace.shared.open("x-apple.systempreferences:com.apple.preference.security?Privacy_Automation".asURL!)
+        guard let url = "x-apple.systempreferences:com.apple.preference.security?Privacy_Automation".asURL else {
+            System.log("Failed to construct automation settings URL", level: .warning)
+            return
+        }
+        NSWorkspace.shared.open(url)
     }
 }

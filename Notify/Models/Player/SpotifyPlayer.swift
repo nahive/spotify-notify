@@ -9,19 +9,20 @@ final class SpotifyPlayer: NSObject, MusicPlayerProtocol {
         self.bundleId = bundleId
     }
     
-    private nonisolated(unsafe) var storedApplication: (any SpotifyApplication)?
-    
+    private let lock = NSLock()
+    private nonisolated(unsafe) var _storedApplication: (any SpotifyApplication)?
+
     private var application: (any SpotifyApplication)? {
-        get {
-            if isOpen {
-                if storedApplication == nil {
-                    storedApplication = SBApplication(bundleIdentifier: bundleId)
-                }
-            } else {
-                storedApplication = nil
+        lock.lock()
+        defer { lock.unlock() }
+        if isOpen {
+            if _storedApplication == nil {
+                _storedApplication = SBApplication(bundleIdentifier: bundleId)
             }
-            return storedApplication
+        } else {
+            _storedApplication = nil
         }
+        return _storedApplication
     }
 
     var playbackChangedName: String {

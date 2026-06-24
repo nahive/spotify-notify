@@ -1,12 +1,21 @@
 import Foundation
 import os
 
-enum LogLevel: String, CaseIterable, Comparable, Sendable {
-    case debug = "DEBUG"
-    case info = "INFO"
-    case warning = "WARNING"
-    case error = "ERROR"
-    
+enum LogLevel: Int, CaseIterable, Comparable, Sendable {
+    case debug = 0
+    case info = 1
+    case warning = 2
+    case error = 3
+
+    var displayName: String {
+        switch self {
+        case .debug: return "DEBUG"
+        case .info: return "INFO"
+        case .warning: return "WARNING"
+        case .error: return "ERROR"
+        }
+    }
+
     var osLogType: OSLogType {
         switch self {
         case .debug: return .debug
@@ -15,10 +24,9 @@ enum LogLevel: String, CaseIterable, Comparable, Sendable {
         case .error: return .error
         }
     }
-    
+
     static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
-        let order: [LogLevel] = [.debug, .info, .warning, .error]
-        return order.firstIndex(of: lhs)! < order.firstIndex(of: rhs)!
+        lhs.rawValue < rhs.rawValue
     }
 }
 
@@ -77,7 +85,7 @@ actor System {
         }
         
         #if DEBUG
-        print("[\(level.rawValue)] \(contextMessage)")
+        print("[\(level.displayName)] \(contextMessage)")
         #endif
     }
 }
