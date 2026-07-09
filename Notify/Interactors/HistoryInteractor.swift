@@ -68,23 +68,24 @@ final class HistoryInteractor: ObservableObject {
     }
     
     func getPlayCounts(for entry: SongHistory) -> (songPlays: Int, artistPlays: Int, albumPlays: Int) {
-        let descriptor = FetchDescriptor<SongHistory>()
-        
+        // #Predicate can't traverse the model instance, so capture plain values.
+        let trackName = entry.trackName
+        let artist = entry.artist
+        let album = entry.album
+
         do {
-            let allHistory = try modelContext.fetch(descriptor)
-            
-            let songPlays = allHistory.filter { 
-                $0.trackName == entry.trackName && $0.artist == entry.artist 
-            }.count
-            
-            let artistPlays = allHistory.filter { 
-                $0.artist == entry.artist 
-            }.count
-            
-            let albumPlays = allHistory.filter { 
-                $0.album == entry.album && $0.artist == entry.artist 
-            }.count
-            
+            let songPlays = try modelContext.fetchCount(FetchDescriptor<SongHistory>(
+                predicate: #Predicate { $0.trackName == trackName && $0.artist == artist }
+            ))
+
+            let artistPlays = try modelContext.fetchCount(FetchDescriptor<SongHistory>(
+                predicate: #Predicate { $0.artist == artist }
+            ))
+
+            let albumPlays = try modelContext.fetchCount(FetchDescriptor<SongHistory>(
+                predicate: #Predicate { $0.album == album && $0.artist == artist }
+            ))
+
             return (songPlays, artistPlays, albumPlays)
         } catch {
             System.log("Failed to get play counts: \(error)", level: .error)
@@ -140,15 +141,17 @@ final class HistoryInteractor: ObservableObject {
     }
     
     func getHistoryStats() -> (totalSongs: Int, uniqueArtists: Set<String>, totalDuration: Int) {
-        let descriptor = FetchDescriptor<SongHistory>()
-        
+        // Only artist and duration are needed; skip materializing artwork and
+        // the rest of the row.
+        var descriptor = FetchDescriptor<SongHistory>()
+        descriptor.propertiesToFetch = [\.artist, \.duration]
+
         do {
             let allHistory = try modelContext.fetch(descriptor)
             let totalSongs = allHistory.count
             let uniqueArtists = Set(allHistory.map { $0.artist })
-            
             let totalDuration = allHistory.compactMap { $0.duration }.reduce(0, +)
-            
+
             return (totalSongs, uniqueArtists, totalDuration)
         } catch {
             System.log("Failed to get history stats: \(error)", level: .error)

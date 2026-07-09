@@ -13,8 +13,9 @@
 
 # Notify
 ![Build Version](https://img.shields.io/github/release/nahive/spotify-notify.svg)
-<!-- [![Build Status](https://travis-ci.org/nahive/spotify-notify.png?branch=master)](https://travis-ci.org/nahive/spotify-notify) -->
 ##### *Inspired by [Spotify Notifications](https://github.com/citruspi/Spotify-Notifications) written in Swift*
+
+Menu bar app that shows what's playing in **Spotify or Apple Music** — as native notifications, in the menu bar, and (on macOS 26+) around the notch.
 
 ## [Download latest release here](https://github.com/nahive/spotify-notify/releases)
 
@@ -27,16 +28,19 @@ brew install --cask spotify-notify --no-quarantine
 
 ## Features
 
+- [x] Spotify and Apple Music support
 - [x] Notification sounds (toggle)
 - [x] Notification on play/pause (toggle)
 - [x] Customizable status bar icon (default, dark and none)
 - [x] Launch on login (toggle)
 - [x] Album artwork (toggle)
-- [x] Toggle disabling of notifications when Spotify is focused (toggle)
+- [x] Toggle disabling of notifications when player is focused (toggle)
 - [x] Shortcuts for showing notification (customizable) ✨
 - [x] Show progress of a song in notification ✨
 - [x] Ability to skip song from notification ✨
-- [x] Options to control Spotify from menu bar ✨
+- [x] Options to control player from menu bar ✨
+- [x] Song history with play counts and stats
+- [x] Now-playing pill around the notch with hover controls (macOS 26+) ✨
 - [ ] Customizable options in notification
 - [ ] Add localizations
 

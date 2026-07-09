@@ -42,6 +42,7 @@ enum SupportedMusicApplication: String, CaseIterable {
         }
     }
     
+    @MainActor
     var player: any MusicPlayerProtocol {
         switch self {
         case .spotify:

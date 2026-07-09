@@ -2,54 +2,63 @@ import Foundation
 import SwiftUI
 import Magnet
 
+enum NotchVisibilityMode: String, CaseIterable, Identifiable {
+    case off, always, whilePlaying, onHover
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .off: "Off"
+        case .always: "Always"
+        case .whilePlaying: "While Playing"
+        case .onHover: "On Hover"
+        }
+    }
+}
+
 @MainActor
 final class DefaultsInteractor: ObservableObject {
     enum Key {
         static let selectedApplication = "selected.application.key"
-        static let isFirstRun = "is.first.run.key"
-        
+
         static let notificationsEnabled = "notifications.enabled.key"
-        static let notificationsKeep = "notifications.keep.key"
         static let notificationsPlayPause = "notifications.playpause.key"
         static let notificationsSound = "notifications.sound.key"
         static let notificationsDisableOnFocus = "notifications.focus.key"
         static let notificationsLength = "notifications.length.key"
-        
+
         static let showAlbumArt = "showalbumart.key"
-        static let roundAlbumArt = "roundalbumart.key"
         static let showSongProgress = "songprogress.key"
-        
-        static let menuIconVisible = "menuiconvisible.key"
-        static let menuIconColored = "menuiconcolored.key"
+
         static let menuBarShowSong = "menubarshowsong.key"
         static let shortcutKeyCode = "shortcut.keycode.key"
         static let shortcutModifiers = "shortcut.modifiers.key"
+
+        static let notchVisibility = "notch.visibility.key"
+        static let notchScreen = "notch.screen.key"
     }
-    
+
+    static let automaticScreen = "auto"
+
     @AppStorage(Key.selectedApplication) var selectedApplication: SupportedMusicApplication?
-    @AppStorage(Key.isFirstRun) var isFirstRun = true
-    
+
     @AppStorage(Key.notificationsEnabled) var areNotificationsEnabled = true
-    // deprecated - doesn't work reliably with modern macOS notification system
-    // @AppStorage(Key.notificationsKeep) var shouldKeepNotificationsOnScreen = false
     @AppStorage(Key.notificationsPlayPause) var shouldShowNotificationOnPlayPause = true
     @AppStorage(Key.notificationsSound) var shouldPlayNotificationsSound = false
     @AppStorage(Key.notificationsDisableOnFocus) var shouldDisableNotificationsOnFocus = true
     @AppStorage(Key.notificationsLength) var notificationLength = 5
-    
+
     @AppStorage(Key.showAlbumArt) var shouldShowAlbumArt = true
-    
-    // deprecated for now
-    // @AppStorage(Key.roundAlbumArt) var shouldRoundAlbumArt = false
     @AppStorage(Key.showSongProgress) var shouldShowSongProgress = false
-    
-    // deprecated for now due to MenuBarExtra not respecting bindings properly
-    // @AppStorage(Key.menuIconVisible) var isMenuIconVisible = true
-    
-    // deprecated - colored menu bar icon feature removed
-    // @AppStorage(Key.menuIconColored) var isMenuIconColored = false
+
     @AppStorage(Key.menuBarShowSong) var shouldShowSongInMenuBar = true
-    
+
+    // The notch overlay is only available on macOS 26+, but the setting itself
+    // must compile and persist on the macOS 14 floor.
+    @AppStorage(Key.notchVisibility) var notchVisibility: NotchVisibilityMode = .off
+    @AppStorage(Key.notchScreen) var notchPreferredScreen = DefaultsInteractor.automaticScreen
+
     @AppStorage(Key.shortcutKeyCode) private var shortcutKeyCode = 0
     @AppStorage(Key.shortcutModifiers) private var shortcutModifier = 0
     

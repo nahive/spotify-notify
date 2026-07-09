@@ -13,6 +13,8 @@ struct NotifyApp: App {
     @StateObject private var defaultsInteractor: DefaultsInteractor
     @StateObject private var notificationsInteractor: NotificationsInteractor
     @StateObject private var historyInteractor: HistoryInteractor
+    @StateObject private var shortcutsInteractor: ShortcutsInteractor
+    @StateObject private var notchInteractor: NotchInteractor
     
     private let modelContainer: ModelContainer
     
@@ -35,13 +37,18 @@ struct NotifyApp: App {
         let musicInteractor = MusicInteractor(historyInteractor: historyInteractor)
         let defaultsInteractor = DefaultsInteractor()
         let notificationsInteractor = NotificationsInteractor(defaultsInteractor: defaultsInteractor, musicInteractor: musicInteractor)
-        
+        let shortcutsInteractor = ShortcutsInteractor(defaultsInteractor: defaultsInteractor, notificationsInteractor: notificationsInteractor)
+        let notchInteractor = NotchInteractor(musicInteractor: musicInteractor, defaultsInteractor: defaultsInteractor)
+
         self._musicInteractor = StateObject(wrappedValue: musicInteractor)
         self._defaultsInteractor = StateObject(wrappedValue: defaultsInteractor)
         self._notificationsInteractor = StateObject(wrappedValue: notificationsInteractor)
         self._historyInteractor = StateObject(wrappedValue: historyInteractor)
-        
+        self._shortcutsInteractor = StateObject(wrappedValue: shortcutsInteractor)
+        self._notchInteractor = StateObject(wrappedValue: notchInteractor)
+
         musicInteractor.set(application: defaultsInteractor.selectedApplication)
+        shortcutsInteractor.registerSavedShortcut()
     }
     
     var body: some Scene {
@@ -72,6 +79,7 @@ struct NotifyApp: App {
                 .environmentObject(musicInteractor)
                 .environmentObject(notificationsInteractor)
                 .environmentObject(defaultsInteractor)
+                .environmentObject(shortcutsInteractor)
         }
         .windowToolbarStyle(.unifiedCompact)
     }
@@ -80,9 +88,8 @@ struct NotifyApp: App {
 // MARK: - App Delegate
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
-        @Environment(\.openSettings) private var openSettings
+    @Environment(\.openSettings) private var openSettings
 
-    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         System.log("Notify application started", level: .info)
     }
@@ -146,7 +153,3 @@ private struct MenuBarLabel: View {
         }
     }
 }
-
-
-
-

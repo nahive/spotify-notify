@@ -2,8 +2,8 @@ import SwiftUI
 import LaunchAtLogin
 
 struct NotificationSettingsView: View {
-    @StateObject var defaultsInteractor: DefaultsInteractor
-    let notificationsInteractor: NotificationsInteractor
+    @ObservedObject var defaultsInteractor: DefaultsInteractor
+    let shortcutsInteractor: ShortcutsInteractor
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -39,7 +39,7 @@ struct NotificationSettingsView: View {
                 .padding()
             HStack() {
                 Text("Display notification on")
-                ShortcutView(notificationsInteractor: notificationsInteractor, defaultsInteractor: defaultsInteractor)
+                ShortcutView(shortcutsInteractor: shortcutsInteractor, defaultsInteractor: defaultsInteractor)
                     .frame(height: 30)
             }
         }

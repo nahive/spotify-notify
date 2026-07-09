@@ -3,8 +3,8 @@ import Combine
 
 struct GeneralSettingsView: View {
     let defaultsInteractor: DefaultsInteractor
-    @StateObject var musicInteractor: MusicInteractor
-    @StateObject var notificationsInteractor: NotificationsInteractor
+    @ObservedObject var musicInteractor: MusicInteractor
+    @ObservedObject var notificationsInteractor: NotificationsInteractor
     
     @State private var timerCancellable: AnyCancellable?
     
@@ -25,6 +25,7 @@ struct GeneralSettingsView: View {
             musicInteractor.set(application: new)
         }
         .onAppear {
+            refreshPermissions()
             startTimer()
         }
         .onDisappear {
@@ -104,12 +105,18 @@ struct GeneralSettingsView: View {
         }
     }
 
+    private func refreshPermissions() {
+        notificationsInteractor.updateNotificationsPermissions()
+        musicInteractor.updateControlPermissions()
+    }
+
     private func startTimer() {
-        timerCancellable = Timer.publish(every: 1.0, on: .main, in: .common)
+        // Each poll fires a live AppleEvent at the player (permission check),
+        // so keep the cadence low while the tab is visible.
+        timerCancellable = Timer.publish(every: 5.0, on: .main, in: .common)
             .autoconnect()
             .sink { _ in
-                notificationsInteractor.updateNotificationsPermissions()
-                musicInteractor.updateControlPermissions()
+                refreshPermissions()
             }
     }
 

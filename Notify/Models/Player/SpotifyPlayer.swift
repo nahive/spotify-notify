@@ -9,7 +9,7 @@ final class SpotifyPlayer: NSObject, MusicPlayerProtocol {
         self.bundleId = bundleId
     }
     
-    private nonisolated(unsafe) var storedApplication: (any SpotifyApplication)?
+    private var storedApplication: (any SpotifyApplication)?
     
     private var application: (any SpotifyApplication)? {
         get {

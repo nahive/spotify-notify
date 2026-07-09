@@ -13,6 +13,9 @@ struct MenuView: View {
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
+            PlayerView(musicInteractor: musicInteractor, track: musicInteractor.currentTrack)
+                .padding()
+
             Menu {
                 if let selectedApplication = defaultsInteractor.selectedApplication {
                     Button {
@@ -50,9 +53,6 @@ struct MenuView: View {
             .menuStyle(.borderlessButton)
             .frame(width: 25, height: 20)
             .padding()
-            
-            PlayerView(musicInteractor: musicInteractor, track: musicInteractor.currentTrack)
-                .padding()
         }
     }
 }

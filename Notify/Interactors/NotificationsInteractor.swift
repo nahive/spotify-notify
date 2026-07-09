@@ -142,7 +142,7 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
 
             return fileURL
         } catch {
-            print("couldn't save file")
+            System.log("Failed to save artwork to temp file: \(error)", level: .warning)
         }
 
         return nil
@@ -204,7 +204,3 @@ private extension Data {
         NSImage(data: self)
     }
 }
-                
-// NSImage is not inherently Sendable, but we ensure thread-safe usage
-// by only accessing it on MainActor-isolated contexts
-extension NSImage: @unchecked @retroactive Sendable {}

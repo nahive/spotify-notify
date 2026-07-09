@@ -22,9 +22,9 @@ struct PlayingView: View {
         case none, previous, playPause, next
     }
     
-    @StateObject var musicInteractor: MusicInteractor
+    @ObservedObject var musicInteractor: MusicInteractor
     let track: MusicTrack
-    
+
     @State private var hoverTarget: PlayerHoverTarget = .none
     
     var body: some View {

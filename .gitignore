@@ -118,3 +118,6 @@ Temporary Items
 
 # LSP/Build Server
 buildServer.json
+
+# Claude Code
+CLAUDE.md

@@ -6,7 +6,7 @@ import Magnet
 struct ShortcutView: NSViewRepresentable {
     typealias NSViewType = RecordView
 
-    let notificationsInteractor: NotificationsInteractor
+    let shortcutsInteractor: ShortcutsInteractor
     let defaultsInteractor: DefaultsInteractor
 
     func makeNSView(context: Context) -> RecordView {
@@ -33,16 +33,7 @@ struct ShortcutView: NSViewRepresentable {
         }
 
         func recordView(_ recordView: RecordView, didChangeKeyCombo keyCombo: KeyCombo?) {
-            self.parent.defaultsInteractor.shortcut = keyCombo
-
-            if let keyCombo {
-                let hotKey = HotKey(identifier: "showKey", keyCombo: keyCombo) { key in
-                    self.parent.notificationsInteractor.forceShowNotification()
-                }
-                HotKeyCenter.shared.register(with: hotKey)
-            } else {
-                HotKeyCenter.shared.unregisterAll()
-            }
+            parent.shortcutsInteractor.update(keyCombo: keyCombo)
         }
 
         func recordViewShouldBeginRecording(_ recordView: RecordView) -> Bool {

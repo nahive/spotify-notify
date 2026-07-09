@@ -1,7 +1,8 @@
 import Foundation
 import AppKit
 
-protocol MusicPlayerProtocol: Sendable {
+@MainActor
+protocol MusicPlayerProtocol: AnyObject {
     var bundleId: String { get }
     
     var playbackChangedName: String { get }

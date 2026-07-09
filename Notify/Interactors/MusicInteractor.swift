@@ -16,6 +16,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     var currentApplication: SupportedMusicApplication?
     private var progressTimer: Timer?
     private var cancellables = Set<AnyCancellable>()
+    private var workspaceObservers: [any NSObjectProtocol] = []
     
     // MARK: - Published Properties
     @Published var permissionStatus: MusicPlayerPermissionStatus = .denied
@@ -40,10 +41,6 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
     init(historyInteractor: HistoryInteractor) {
         self.historyInteractor = historyInteractor
         setupNotificationObservers()
-    }
-    
-    deinit {
-        cleanup()
     }
     
     // MARK: - Public Methods
@@ -105,15 +102,12 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         // Resume progress tracking after seek
         Task {
             try? await Task.sleep(for: .milliseconds(500))
-            
-            if let player = player {
-                startProgressTimer(for: player)
-            }
+            startProgressTimer()
         }
     }
     
     private func setupNotificationObservers() {
-        NSWorkspace.shared.notificationCenter.addObserver(
+        let willSleep = NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.willSleepNotification,
             object: nil,
             queue: .main
@@ -122,26 +116,29 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
                 self?.stopProgressTimer()
             }
         }
-        
-        NSWorkspace.shared.notificationCenter.addObserver(
+
+        let didWake = NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.didWakeNotification,
             object: nil,
             queue: .main
         ) { [weak self] _ in
             Task { @MainActor in
-                if let self, let player = self.player, self.currentState == .playing {
-                    self.startProgressTimer(for: player)
+                if let self, self.currentState == .playing {
+                    self.startProgressTimer()
                 }
             }
         }
+
+        workspaceObservers = [willSleep, didWake]
     }
-    
-    nonisolated private func cleanup() {
-        Task { @MainActor in
-            stopProgressTimer()
-            cancellables.removeAll()
-        }
-        NSWorkspace.shared.notificationCenter.removeObserver(self)
+
+    // Owned as a @StateObject on the App for the process lifetime, so nothing
+    // calls this today; it exists so teardown is explicit and testable.
+    func tearDown() {
+        stopProgressTimer()
+        cancellables.removeAll()
+        workspaceObservers.forEach { NSWorkspace.shared.notificationCenter.removeObserver($0) }
+        workspaceObservers.removeAll()
     }
     
     private func unbind() {
@@ -156,12 +153,12 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
         cancellables.removeAll()
     }
     
-    private func startProgressTimer(for player: any MusicPlayerProtocol) {
+    private func startProgressTimer() {
         stopProgressTimer()
-        
+
         progressTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             Task { @MainActor in
-                guard let self, self.currentState == .playing else { return }
+                guard let self, let player = self.player, self.currentState == .playing else { return }
                 self.updateProgress(player: player)
             }
         }
@@ -205,7 +202,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
             }
             .store(in: &cancellables)
         
-        startProgressTimer(for: player)
+        startProgressTimer()
         updateControlPermissions()
     }
     
@@ -222,7 +219,7 @@ final class MusicInteractor: ObservableObject, AlertDisplayable {
             }
             
             if currentState == .playing {
-                startProgressTimer(for: player)
+                startProgressTimer()
             } else {
                 stopProgressTimer()
             }

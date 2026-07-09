@@ -4,26 +4,22 @@ import AppKit
 
 final class AppleMusicPlayer: NSObject, MusicPlayerProtocol {
     let bundleId: String
-    private let lock = NSLock()
-    private nonisolated(unsafe) var _storedApplication: (any AppleMusicApplication)?
-    
+    private var storedApplication: (any AppleMusicApplication)?
+
     init(bundleId: String) {
         self.bundleId = bundleId
     }
-    
+
     private var application: (any AppleMusicApplication)? {
         get {
-            lock.lock()
-            defer { lock.unlock() }
-            
             if isOpen {
-                if _storedApplication == nil {
-                    _storedApplication = SBApplication(bundleIdentifier: bundleId)
+                if storedApplication == nil {
+                    storedApplication = SBApplication(bundleIdentifier: bundleId)
                 }
             } else {
-                _storedApplication = nil
+                storedApplication = nil
             }
-            return _storedApplication
+            return storedApplication
         }
     }
     
