@@ -1,78 +1,47 @@
 import SwiftUI
 
-/// Pill content for screens without a physical notch: everything can sit in
-/// one centered row since there is no camera housing to avoid.
+/// Minimal pill row for screens without a physical notch: a single centered
+/// line of track text with an equalizer.
 @available(macOS 26.0, *)
 struct CenteredPill: View {
     @ObservedObject var notch: NotchInteractor
-    var inline: Bool
     var accent: Color
 
     var body: some View {
-        if inline {
-            HStack(spacing: 10) {
-                if let track = notch.track {
-                    ArtworkThumb(image: track.artwork, size: 30, cornerRadius: 7)
-                    VStack(alignment: .leading, spacing: 1) {
-                        NotchMarqueeText(
-                            text: track.title,
-                            font: .system(size: 11.5, weight: .semibold),
-                            maxWidth: 170
-                        )
-                        .id("title-\(track.id)")
-                        if let artist = track.artist {
-                            NotchMarqueeText(
-                                text: artist,
-                                font: .system(size: 9.5),
-                                maxWidth: 170
-                            )
-                            .foregroundStyle(.white.opacity(0.55))
-                            .id("artist-\(track.id)")
-                        }
-                    }
-                    Spacer(minLength: 6)
-                    MediaButton(icon: "backward.fill", size: 10) { notch.previousTrack() }
-                    MediaButton(icon: track.isPlaying ? "pause.fill" : "play.fill", size: 13) {
-                        notch.togglePlayPause()
-                    }
-                    MediaButton(icon: "forward.fill", size: 10) { notch.nextTrack() }
-                    WaveformIcon(color: accent, isPlaying: track.isPlaying, size: 13)
-                } else {
-                    Text("Nothing playing")
-                        .font(.system(size: 11))
-                        .foregroundStyle(.white.opacity(0.55))
-                }
-            }
-            .padding(.horizontal, 14)
-        } else if let track = notch.track {
-            HStack(spacing: 8) {
+        HStack(spacing: 8) {
+            if let track = notch.track {
                 NotchMarqueeText(
                     text: track.artist.map { "\(track.title) — \($0)" } ?? track.title,
                     font: .system(size: 11, weight: .medium),
-                    maxWidth: 270
+                    maxWidth: 260
                 )
                 .foregroundStyle(.white.opacity(0.85))
                 .id("mini-\(track.id)")
                 WaveformIcon(color: accent, isPlaying: track.isPlaying, size: 11)
+            } else {
+                Text("Nothing playing")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.white.opacity(0.55))
             }
         }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 14)
     }
 }
 
-/// Pill content for screens with a physical notch: wings on either side of
-/// the camera housing.
+/// Minimal pill row for screens with a physical notch: track text and an
+/// equalizer on wings either side of the camera housing.
 @available(macOS 26.0, *)
 struct PillWings: View {
     @ObservedObject var notch: NotchInteractor
     var metrics: NotchMetrics
     var wingWidth: CGFloat
-    var inline: Bool
     var accent: Color
 
     var body: some View {
         let height = metrics.notchSize.height
         HStack(spacing: 0) {
-            leftWing(height: height)
+            leftWing
                 .frame(width: wingWidth, height: height)
             Color.clear
                 .frame(width: metrics.notchSize.width, height: height)
@@ -81,70 +50,71 @@ struct PillWings: View {
         }
     }
 
-    @ViewBuilder
-    private func leftWing(height: CGFloat) -> some View {
-        let artSize = height - 8
+    private var leftWing: some View {
         HStack(spacing: 7) {
             if let track = notch.track {
-                if inline {
-                    ArtworkThumb(image: track.artwork, size: artSize)
-                    VStack(alignment: .leading, spacing: 0) {
-                        NotchMarqueeText(
-                            text: track.title,
-                            font: .system(size: 11, weight: .semibold),
-                            maxWidth: wingWidth - artSize - 30
-                        )
-                        .id("title-\(track.id)")
-                        if let artist = track.artist, height >= 30 {
-                            NotchMarqueeText(
-                                text: artist,
-                                font: .system(size: 9.5),
-                                maxWidth: wingWidth - artSize - 30
-                            )
-                            .foregroundStyle(.white.opacity(0.6))
-                            .id("artist-\(track.id)")
-                        }
-                    }
-                } else {
-                    NotchMarqueeText(
-                        text: track.artist.map { "\(track.title) — \($0)" } ?? track.title,
-                        font: .system(size: 10.5, weight: .medium),
-                        maxWidth: wingWidth - 20
-                    )
-                    .foregroundStyle(.white.opacity(0.85))
-                    .id("mini-\(track.id)")
-                }
-            } else if inline {
-                Text("Nothing playing")
-                    .font(.system(size: 11))
-                    .foregroundStyle(.white.opacity(0.55))
-                    .lineLimit(1)
+                NotchMarqueeText(
+                    text: track.artist.map { "\(track.title) — \($0)" } ?? track.title,
+                    font: .system(size: 10.5, weight: .medium),
+                    maxWidth: wingWidth - 20
+                )
+                .foregroundStyle(.white.opacity(0.85))
+                .id("mini-\(track.id)")
             }
             Spacer(minLength: 0)
         }
-        .padding(.leading, 9)
+        .padding(.leading, 12)
     }
 
-    @ViewBuilder
     private func rightWing(height: CGFloat) -> some View {
         HStack(spacing: 10) {
             Spacer(minLength: 0)
-            if inline, let track = notch.track {
-                MediaButton(icon: "backward.fill", size: 10) { notch.previousTrack() }
-                MediaButton(icon: track.isPlaying ? "pause.fill" : "play.fill", size: 12) {
-                    notch.togglePlayPause()
-                }
-                MediaButton(icon: "forward.fill", size: 10) { notch.nextTrack() }
-            }
             if let track = notch.track {
-                WaveformIcon(
-                    color: inline ? accent : .white.opacity(0.5),
-                    isPlaying: track.isPlaying,
-                    size: height * 0.42
-                )
+                WaveformIcon(color: .white.opacity(0.5), isPlaying: track.isPlaying, size: height * 0.42)
             }
         }
-        .padding(.trailing, 11)
+        .padding(.trailing, 12)
+    }
+}
+
+/// The card of artwork, track detail and playback controls revealed beneath the
+/// pill on hover.
+@available(macOS 26.0, *)
+struct ExpandedCard: View {
+    @ObservedObject var notch: NotchInteractor
+    var accent: Color
+
+    var body: some View {
+        HStack(spacing: 12) {
+            if let track = notch.track {
+                ArtworkThumb(image: track.artwork, size: 54, cornerRadius: 10)
+                VStack(alignment: .leading, spacing: 2) {
+                    NotchMarqueeText(
+                        text: track.title,
+                        font: .system(size: 12.5, weight: .semibold),
+                        maxWidth: 150
+                    )
+                    .id("card-title-\(track.id)")
+                    if let artist = track.artist {
+                        NotchMarqueeText(
+                            text: artist,
+                            font: .system(size: 10.5),
+                            maxWidth: 150
+                        )
+                        .foregroundStyle(.white.opacity(0.6))
+                        .id("card-artist-\(track.id)")
+                    }
+                }
+                Spacer(minLength: 4)
+                MediaButton(icon: "backward.fill", size: 13) { notch.previousTrack() }
+                MediaButton(icon: track.isPlaying ? "pause.fill" : "play.fill", size: 17) {
+                    notch.togglePlayPause()
+                }
+                MediaButton(icon: "forward.fill", size: 13) { notch.nextTrack() }
+            }
+        }
+        .padding(.horizontal, 16)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

@@ -8,10 +8,10 @@ enum NotchDisplayState: Equatable {
     case hidden
     /// Just the black notch shape (invisible on a real notch).
     case shape
-    /// Artwork and equalizer wings beside the notch.
+    /// The minimal pill: track text beside the notch and an equalizer.
     case pill
-    /// Pill plus playback controls.
-    case inline
+    /// The minimal pill with a card of artwork + controls slid out beneath it.
+    case expanded
 }
 
 @available(macOS 26.0, *)
@@ -28,8 +28,14 @@ final class NotchViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
 
     static let glowPadding: CGFloat = 14
-    private static let pillWing: CGFloat = 120
-    private static let inlineWing: CGFloat = 170
+    /// Width of each track-text wing beside a physical notch.
+    private static let wingWidth: CGFloat = 140
+    /// Pill width on screens without a physical notch.
+    private static let syntheticWidth: CGFloat = 340
+    /// Pill-row height on screens without a physical notch.
+    private static let syntheticPillHeight: CGFloat = 34
+    /// Height of the artwork + controls card revealed on hover.
+    static let cardHeight: CGFloat = 82
 
     init(notch: NotchInteractor, defaults: DefaultsInteractor) {
         self.notch = notch
@@ -100,8 +106,8 @@ final class NotchViewModel: ObservableObject {
         }
 
         var next = base
-        if hovering {
-            next = .inline
+        if hovering, track != nil {
+            next = .expanded
         }
 
         if next != state {
@@ -112,32 +118,33 @@ final class NotchViewModel: ObservableObject {
     private static let forcedState: NotchDisplayState? = {
         switch ProcessInfo.processInfo.environment["NOTIFY_NOTCH_FORCE_STATE"] {
         case "pill": .pill
-        case "inline": .inline
+        case "inline", "expanded": .expanded
         default: nil
         }
     }()
 
     // MARK: - Sizing
 
+    /// Height of the minimal pill row. The expanded card grows below it, so this
+    /// stays fixed whether collapsed or expanded — only the total height changes.
+    var pillRowHeight: CGFloat {
+        metrics.hasNotch ? metrics.notchSize.height : Self.syntheticPillHeight
+    }
+
+    var cardHeight: CGFloat { Self.cardHeight }
+
     var contentSize: CGSize {
         let notchSize = metrics.notchSize
-        if metrics.hasNotch {
-            switch state {
-            case .hidden, .shape:
-                return notchSize
-            case .pill:
-                return CGSize(width: notchSize.width + 2 * Self.pillWing, height: notchSize.height)
-            case .inline:
-                return CGSize(width: notchSize.width + 2 * Self.inlineWing, height: notchSize.height)
-            }
-        }
+        // Pill width is constant between .pill and .expanded so hover only slides
+        // the card down — the top row never reflows.
+        let width = metrics.hasNotch ? notchSize.width + 2 * Self.wingWidth : Self.syntheticWidth
         switch state {
         case .hidden, .shape:
             return notchSize
         case .pill:
-            return CGSize(width: 330, height: 32)
-        case .inline:
-            return CGSize(width: 450, height: 48)
+            return CGSize(width: width, height: pillRowHeight)
+        case .expanded:
+            return CGSize(width: width, height: pillRowHeight + Self.cardHeight)
         }
     }
 

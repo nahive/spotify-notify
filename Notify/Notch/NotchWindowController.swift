@@ -1,5 +1,6 @@
 import AppKit
 import Combine
+import QuartzCore
 import SwiftUI
 
 @available(macOS 26.0, *)
@@ -8,7 +9,6 @@ final class NotchWindowController {
     private let panel: NSPanel
     private let viewModel: NotchViewModel
     private var cancellables: Set<AnyCancellable> = []
-    private var lastSize: CGSize = .zero
 
     init(viewModel: NotchViewModel) {
         self.viewModel = viewModel
@@ -74,18 +74,23 @@ final class NotchWindowController {
             height: size.height
         )
 
-        let shrinking = size.width < lastSize.width || size.height < lastSize.height
-        lastSize = size
+        guard panel.frame != frame else { return }
 
-        if shrinking {
-            // Let the SwiftUI collapse animation finish before clipping the window.
-            Task { @MainActor [weak self] in
-                try? await Task.sleep(for: .milliseconds(400))
-                guard let self, self.viewModel.windowSize == size else { return }
-                self.panel.setFrame(frame, display: true)
-            }
-        } else {
+        // On first layout, or when the pill jumps to a different screen (its
+        // center moves), snap into place. State transitions keep the same center,
+        // so they animate: the frame extends/collapses in lockstep with the
+        // SwiftUI content that fills it.
+        let recentred = abs(panel.frame.midX - frame.midX) > 50
+        if panel.frame == .zero || recentred {
             panel.setFrame(frame, display: true)
+            return
+        }
+
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = 0.35
+            context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            context.allowsImplicitAnimation = true
+            panel.animator().setFrame(frame, display: true)
         }
     }
 }

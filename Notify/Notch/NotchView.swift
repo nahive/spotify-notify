@@ -4,6 +4,7 @@ import SwiftUI
 struct NotchView: View {
     @ObservedObject var viewModel: NotchViewModel
     @ObservedObject private var notch: NotchInteractor
+    @Namespace private var glassNamespace
 
     init(viewModel: NotchViewModel) {
         self.viewModel = viewModel
@@ -17,83 +18,105 @@ struct NotchView: View {
     private var shape: NotchShape {
         let hasNotch = viewModel.metrics.hasNotch
         return switch viewModel.state {
-        case .inline: NotchShape(topRadius: 10, bottomRadius: hasNotch ? 13 : 24)
-        default: NotchShape(topRadius: 8, bottomRadius: hasNotch ? 13 : 14)
+        case .expanded: NotchShape(topRadius: 12, bottomRadius: hasNotch ? 16 : 28)
+        default: NotchShape(topRadius: 10, bottomRadius: hasNotch ? 13 : 22)
         }
     }
 
     var body: some View {
-        let state = viewModel.state
-        let size = viewModel.contentSize
-
+        // Size comes from the window bounds, which the controller animates. The
+        // content just fills them (inset by the glow margin) so it extends in
+        // lockstep with the window instead of the window snapping ahead of it.
         ZStack(alignment: .top) {
             background
             content
         }
-        .frame(width: size.width, height: size.height)
         .contentShape(Rectangle())
         .onHover { viewModel.hoverChanged($0) }
-        .animation(.smooth(duration: 0.35), value: state)
+        .padding(EdgeInsets(
+            top: 0,
+            leading: NotchViewModel.glowPadding,
+            bottom: NotchViewModel.glowPadding * 1.6,
+            trailing: NotchViewModel.glowPadding
+        ))
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .animation(.smooth(duration: 0.35), value: viewModel.state)
         .environment(\.colorScheme, .dark)
     }
 
     @ViewBuilder
     private var content: some View {
-        let state = viewModel.state
-        let size = viewModel.contentSize
-        let metrics = viewModel.metrics
+        let expanded = viewModel.state == .expanded
 
-        switch state {
-        case .pill, .inline:
-            Group {
-                if metrics.hasNotch {
-                    PillWings(
-                        notch: notch,
-                        metrics: metrics,
-                        wingWidth: (size.width - metrics.notchSize.width) / 2,
-                        inline: state == .inline,
-                        accent: accent
-                    )
-                } else {
-                    CenteredPill(notch: notch, inline: state == .inline, accent: accent)
-                        .frame(width: size.width, height: size.height)
-                }
+        switch viewModel.state {
+        case .pill, .expanded:
+            VStack(spacing: 0) {
+                topRow
+                    .frame(height: viewModel.pillRowHeight)
+                ExpandedCard(notch: notch, accent: accent)
+                    .frame(height: viewModel.cardHeight)
+                    .opacity(expanded ? 1 : 0)
+                    // Tucked up behind the pill when collapsed; slides down into
+                    // place as the panel opens.
+                    .offset(y: expanded ? 0 : -18)
             }
-            .transition(.opacity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .clipShape(shape)
         case .hidden, .shape:
             EmptyView()
         }
     }
 
-    /// One persistent surface for every state. Layer opacities and shape radii
-    /// animate, so state changes morph instead of cross-fading view trees.
+    @ViewBuilder
+    private var topRow: some View {
+        let metrics = viewModel.metrics
+        if metrics.hasNotch {
+            PillWings(
+                notch: notch,
+                metrics: metrics,
+                wingWidth: (viewModel.contentSize.width - metrics.notchSize.width) / 2,
+                accent: accent
+            )
+        } else {
+            CenteredPill(notch: notch, accent: accent)
+        }
+    }
+
+    /// Liquid Glass material for the pill. The glass refracts and lenses the
+    /// desktop behind it; the darkness comes from a black *tint on the glass*
+    /// (not an opaque fill over it) so the refraction stays visible, and
+    /// `.interactive()` lets the material respond to the pointer. On a physical
+    /// notch the camera strip stays opaque black so it blends with the real bezel.
     private var background: some View {
         let metrics = viewModel.metrics
-        let (glass, solid, gradient): (Double, Double, Double) = switch viewModel.state {
-        case .hidden: (0, 0, 0)
-        case .shape: (0, 1, 0)
-        case .pill: metrics.hasNotch ? (0, 1, 0) : (1, 0.75, 0)
-        case .inline: (1, metrics.hasNotch ? 0.6 : 0.3, 0)
-        }
+        let state = viewModel.state
+        let visible = state != .hidden
 
-        return ZStack {
-            shape
-                .fill(.black.opacity(0.01))
-                .glassEffect(.regular, in: shape)
-                .opacity(glass)
-            shape
-                .fill(.black)
-                .opacity(solid)
-            shape
-                .fill(
-                    LinearGradient(
-                        colors: [.black.opacity(0.92), .black.opacity(0.6), .black.opacity(0.15)],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
-                .opacity(gradient)
+        // `.clear` lenses (sharp refraction) rather than frosts; the darkness is
+        // a black tint on the glass so the refraction stays visible. Darker on a
+        // physical notch so the wings blend toward the black bezel.
+        let tint = metrics.hasNotch ? 0.62 : 0.5
+        let glass: Glass = .clear.tint(.black.opacity(tint)).interactive()
+
+        return ZStack(alignment: .top) {
+            // The container gives the glass a shared sampling region, so the
+            // pill morphs like liquid as it extends/collapses instead of just
+            // resizing.
+            GlassEffectContainer(spacing: 24) {
+                shape
+                    .fill(.black.opacity(0.001))
+                    .glassEffect(glass, in: shape)
+                    .glassEffectID("pill", in: glassNamespace)
+            }
+            // Hidden entirely when empty; the black core alone covers the
+            // physical notch in the `.shape` state.
+            .opacity(visible && state != .shape ? 1 : 0)
+
+            if metrics.hasNotch, visible {
+                Rectangle()
+                    .fill(.black)
+                    .frame(width: metrics.notchSize.width, height: metrics.notchSize.height)
+            }
         }
     }
 }
