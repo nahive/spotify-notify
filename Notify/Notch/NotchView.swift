@@ -37,7 +37,10 @@ struct NotchView: View {
         .contentShape(Rectangle())
         .onHover { viewModel.hoverChanged($0) }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .animation(.smooth(duration: 0.35), value: viewModel.state)
+        // Same curve/duration as the window's own frame animation in
+        // NotchWindowController.layout(), so the content grows in lockstep with
+        // the panel instead of drifting apart and snapping (the expand "jump").
+        .animation(.easeInOut(duration: 0.35), value: viewModel.state)
         .environment(\.colorScheme, .dark)
     }
 
@@ -86,12 +89,17 @@ struct NotchView: View {
     /// animate, so state changes morph instead of cross-fading view trees.
     private var background: some View {
         let metrics = viewModel.metrics
-        let (glass, solid, gradient): (Double, Double, Double) = switch viewModel.state {
-        case .hidden: (0, 0, 0)
-        case .shape: (0, 1, 0)
-        case .pill: metrics.hasNotch ? (0, 1, 0) : (1, 0.75, 0)
-        case .expanded: (1, metrics.hasNotch ? 0.6 : 0.3, 0)
+        let (glass, solid): (Double, Double) = switch viewModel.state {
+        case .hidden: (0, 0)
+        case .shape: (0, 1)
+        case .pill: metrics.hasNotch ? (0, 1) : (1, 0.82)
+        case .expanded: (1, metrics.hasNotch ? 0.6 : 0.34)
         }
+
+        // On a real notch the fill stays flat black so the wings blend into the
+        // bezel; on a synthetic pill it fades top-to-bottom for a smoother,
+        // less slab-like gradient that melts out of the screen edge.
+        let bottom = solid * (metrics.hasNotch ? 1 : 0.55)
 
         return ZStack {
             shape
@@ -99,17 +107,13 @@ struct NotchView: View {
                 .glassEffect(.regular, in: shape)
                 .opacity(glass)
             shape
-                .fill(.black)
-                .opacity(solid)
-            shape
                 .fill(
                     LinearGradient(
-                        colors: [.black.opacity(0.92), .black.opacity(0.6), .black.opacity(0.15)],
+                        colors: [.black.opacity(solid), .black.opacity(bottom)],
                         startPoint: .top,
                         endPoint: .bottom
                     )
                 )
-                .opacity(gradient)
         }
     }
 }
