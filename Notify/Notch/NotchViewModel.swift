@@ -86,12 +86,6 @@ final class NotchViewModel: ObservableObject {
     // MARK: - State
 
     private func recompute() {
-        // Debug hook: NOTIFY_NOTCH_FORCE_STATE=pill|inline pins the UI to one state.
-        if let forced = Self.forcedState {
-            if forced != state { state = forced }
-            return
-        }
-
         let track = notch.track
 
         let base: NotchDisplayState
@@ -114,14 +108,6 @@ final class NotchViewModel: ObservableObject {
             state = next
         }
     }
-
-    private static let forcedState: NotchDisplayState? = {
-        switch ProcessInfo.processInfo.environment["NOTIFY_NOTCH_FORCE_STATE"] {
-        case "pill": .pill
-        case "inline", "expanded": .expanded
-        default: nil
-        }
-    }()
 
     // MARK: - Sizing
 

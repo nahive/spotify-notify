@@ -23,21 +23,19 @@ struct NotchView: View {
     }
 
     var body: some View {
-        // Size comes from the window bounds, which the controller animates. The
-        // content just fills them (inset by the glow margin) so it extends in
-        // lockstep with the window instead of the window snapping ahead of it.
+        // The content is sized to the per-state contentSize so the background
+        // shape draws at exactly the pill/expanded height (its rounded bottom
+        // stays on-screen instead of being clipped off into a square). The
+        // surrounding window is larger by the glow margin; the outer top-aligned
+        // frame flushes the content to the top and leaves that margin to spill.
+        let size = viewModel.contentSize
         ZStack(alignment: .top) {
             background
             content
         }
+        .frame(width: size.width, height: size.height)
         .contentShape(Rectangle())
         .onHover { viewModel.hoverChanged($0) }
-        .padding(EdgeInsets(
-            top: 0,
-            leading: NotchViewModel.glowPadding,
-            bottom: NotchViewModel.glowPadding * 1.6,
-            trailing: NotchViewModel.glowPadding
-        ))
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .animation(.smooth(duration: 0.35), value: viewModel.state)
         .environment(\.colorScheme, .dark)
@@ -53,11 +51,14 @@ struct NotchView: View {
                 topRow
                     .frame(height: viewModel.pillRowHeight)
                 ExpandedCard(notch: notch, accent: accent)
-                    .frame(height: viewModel.cardHeight)
+                    // Collapsed to zero height when not expanded so it takes no
+                    // layout space — otherwise it inflates the stack past the
+                    // pill height, pushing the title out of view and stretching
+                    // the background shape until its rounded bottom clips into a
+                    // square. Grows in as the panel opens.
+                    .frame(height: expanded ? viewModel.cardHeight : 0)
                     .opacity(expanded ? 1 : 0)
-                    // Tucked up behind the pill when collapsed; slides down into
-                    // place as the panel opens.
-                    .offset(y: expanded ? 0 : -18)
+                    .clipped()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .clipShape(shape)
