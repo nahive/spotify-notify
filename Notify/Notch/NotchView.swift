@@ -4,7 +4,6 @@ import SwiftUI
 struct NotchView: View {
     @ObservedObject var viewModel: NotchViewModel
     @ObservedObject private var notch: NotchInteractor
-    @Namespace private var glassNamespace
 
     init(viewModel: NotchViewModel) {
         self.viewModel = viewModel
@@ -82,41 +81,34 @@ struct NotchView: View {
         }
     }
 
-    /// Liquid Glass material for the pill. The glass refracts and lenses the
-    /// desktop behind it; the darkness comes from a black *tint on the glass*
-    /// (not an opaque fill over it) so the refraction stays visible, and
-    /// `.interactive()` lets the material respond to the pointer. On a physical
-    /// notch the camera strip stays opaque black so it blends with the real bezel.
+    /// One persistent surface for every state. Layer opacities and shape radii
+    /// animate, so state changes morph instead of cross-fading view trees.
     private var background: some View {
         let metrics = viewModel.metrics
-        let state = viewModel.state
-        let visible = state != .hidden
+        let (glass, solid, gradient): (Double, Double, Double) = switch viewModel.state {
+        case .hidden: (0, 0, 0)
+        case .shape: (0, 1, 0)
+        case .pill: metrics.hasNotch ? (0, 1, 0) : (1, 0.75, 0)
+        case .expanded: (1, metrics.hasNotch ? 0.6 : 0.3, 0)
+        }
 
-        // `.clear` lenses (sharp refraction) rather than frosts; the darkness is
-        // a black tint on the glass so the refraction stays visible. Darker on a
-        // physical notch so the wings blend toward the black bezel.
-        let tint = metrics.hasNotch ? 0.62 : 0.5
-        let glass: Glass = .clear.tint(.black.opacity(tint)).interactive()
-
-        return ZStack(alignment: .top) {
-            // The container gives the glass a shared sampling region, so the
-            // pill morphs like liquid as it extends/collapses instead of just
-            // resizing.
-            GlassEffectContainer(spacing: 24) {
-                shape
-                    .fill(.black.opacity(0.001))
-                    .glassEffect(glass, in: shape)
-                    .glassEffectID("pill", in: glassNamespace)
-            }
-            // Hidden entirely when empty; the black core alone covers the
-            // physical notch in the `.shape` state.
-            .opacity(visible && state != .shape ? 1 : 0)
-
-            if metrics.hasNotch, visible {
-                Rectangle()
-                    .fill(.black)
-                    .frame(width: metrics.notchSize.width, height: metrics.notchSize.height)
-            }
+        return ZStack {
+            shape
+                .fill(.black.opacity(0.01))
+                .glassEffect(.regular, in: shape)
+                .opacity(glass)
+            shape
+                .fill(.black)
+                .opacity(solid)
+            shape
+                .fill(
+                    LinearGradient(
+                        colors: [.black.opacity(0.92), .black.opacity(0.6), .black.opacity(0.15)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .opacity(gradient)
         }
     }
 }
