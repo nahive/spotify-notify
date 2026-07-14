@@ -1,6 +1,21 @@
 import Foundation
 import SwiftData
 
+// MARK: - Versioned schema
+
+/// V1 pins the schema shipped in 0.8 so future model changes can migrate
+/// through explicit `MigrationStage`s instead of relying on implicit
+/// lightweight migration.
+enum NotifySchemaV1: VersionedSchema {
+    static var versionIdentifier: Schema.Version { .init(1, 0, 0) }
+    static var models: [any PersistentModel.Type] { [SongHistory.self, AlbumArtwork.self] }
+}
+
+enum NotifyMigrationPlan: SchemaMigrationPlan {
+    static var schemas: [any VersionedSchema.Type] { [NotifySchemaV1.self] }
+    static var stages: [MigrationStage] { [] }
+}
+
 @Model
 final class AlbumArtwork {
     @Attribute(.unique) var id: UUID

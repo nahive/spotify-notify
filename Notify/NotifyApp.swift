@@ -19,18 +19,7 @@ struct NotifyApp: App {
     private let modelContainer: ModelContainer
 
     init() {
-        do {
-            let notifyURL = URL.applicationSupportDirectory.appendingPathComponent("Notify")
-            
-            try FileManager.default.createDirectory(at: notifyURL, withIntermediateDirectories: true)
-            
-            let storeURL = notifyURL.appendingPathComponent("SongHistory.sqlite")
-            let configuration = ModelConfiguration(url: storeURL)
-            
-            modelContainer = try ModelContainer(for: SongHistory.self, AlbumArtwork.self, configurations: configuration)
-        } catch {
-            fatalError("Failed to initialize ModelContainer: \(error)")
-        }
+        modelContainer = Self.makeModelContainer()
         
         let historyInteractor = HistoryInteractor(modelContext: modelContainer.mainContext)
         let musicInteractor = MusicInteractor(historyInteractor: historyInteractor)
@@ -49,7 +38,56 @@ struct NotifyApp: App {
         musicInteractor.set(application: defaultsInteractor.selectedApplication)
         shortcutsInteractor.registerSavedShortcut()
     }
-    
+
+    /// Opens the history store, quarantining a corrupt one instead of crashing.
+    private static func makeModelContainer() -> ModelContainer {
+        let notifyURL = URL.applicationSupportDirectory.appendingPathComponent("Notify")
+        try? FileManager.default.createDirectory(at: notifyURL, withIntermediateDirectories: true)
+
+        let storeURL = notifyURL.appendingPathComponent("SongHistory.sqlite")
+        let schema = Schema(versionedSchema: NotifySchemaV1.self)
+
+        func openStore() throws -> ModelContainer {
+            try ModelContainer(
+                for: schema,
+                migrationPlan: NotifyMigrationPlan.self,
+                configurations: ModelConfiguration(url: storeURL)
+            )
+        }
+
+        do {
+            return try openStore()
+        } catch {
+            System.log("Failed to open history store, quarantining it: \(error)", level: .error)
+
+            // Keep the user's data recoverable: move the store aside rather than
+            // deleting it. The WAL/SHM sidecars must move too, or a stale WAL
+            // would replay into the fresh store.
+            let stamp = Date.now.formatted(.iso8601.year().month().day().dateSeparator(.dash))
+            for suffix in ["", "-wal", "-shm"] {
+                let source = notifyURL.appendingPathComponent("SongHistory.sqlite\(suffix)")
+                let target = notifyURL.appendingPathComponent("SongHistory-corrupt-\(stamp).sqlite\(suffix)")
+                try? FileManager.default.moveItem(at: source, to: target)
+            }
+
+            do {
+                return try openStore()
+            } catch {
+                // Last resort: run this session in memory rather than crashing
+                // a menu bar app at launch.
+                System.log("Recreating history store failed, using in-memory store: \(error)", level: .error)
+                do {
+                    return try ModelContainer(
+                        for: schema,
+                        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+                    )
+                } catch {
+                    fatalError("Failed to create even an in-memory ModelContainer: \(error)")
+                }
+            }
+        }
+    }
+
     var body: some Scene {
         MenuBarExtra {
             MenuView()
