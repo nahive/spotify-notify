@@ -3,7 +3,6 @@ import Combine
 import QuartzCore
 import SwiftUI
 
-@available(macOS 26.0, *)
 @MainActor
 final class NotchWindowController {
     private let panel: NSPanel

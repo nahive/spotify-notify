@@ -1,6 +1,5 @@
 import SwiftUI
 
-@available(macOS 26.0, *)
 struct NotchSettingsView: View {
     @ObservedObject var defaultsInteractor: DefaultsInteractor
 

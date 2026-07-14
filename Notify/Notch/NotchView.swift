@@ -1,6 +1,5 @@
 import SwiftUI
 
-@available(macOS 26.0, *)
 struct NotchView: View {
     @ObservedObject var viewModel: NotchViewModel
     @ObservedObject private var notch: NotchInteractor

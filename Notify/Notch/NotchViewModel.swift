@@ -2,7 +2,6 @@ import AppKit
 import Combine
 import SwiftUI
 
-@available(macOS 26.0, *)
 enum NotchDisplayState: Equatable {
     /// Nothing rendered; the window still senses hover over the notch area.
     case hidden
@@ -14,7 +13,6 @@ enum NotchDisplayState: Equatable {
     case expanded
 }
 
-@available(macOS 26.0, *)
 @MainActor
 final class NotchViewModel: ObservableObject {
     @Published private(set) var state: NotchDisplayState = .shape

@@ -54,8 +54,6 @@ final class DefaultsInteractor: ObservableObject {
 
     @AppStorage(Key.menuBarShowSong) var shouldShowSongInMenuBar = true
 
-    // The notch overlay is only available on macOS 26+, but the setting itself
-    // must compile and persist on the macOS 14 floor.
     @AppStorage(Key.notchVisibility) var notchVisibility: NotchVisibilityMode = .off
     @AppStorage(Key.notchScreen) var notchPreferredScreen = DefaultsInteractor.automaticScreen
 

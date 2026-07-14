@@ -3,8 +3,7 @@ import Combine
 import SwiftUI
 
 /// Adapts MusicInteractor's published state into the `NowPlaying` snapshots the
-/// notch UI consumes, and owns the notch window's lifecycle. The window itself
-/// only exists on macOS 26+; this class is cheap and safe on the 14.0 floor.
+/// notch UI consumes, and owns the notch window's lifecycle.
 @MainActor
 final class NotchInteractor: ObservableObject {
     @Published private(set) var track: NowPlaying?
@@ -13,8 +12,7 @@ final class NotchInteractor: ObservableObject {
     private let defaultsInteractor: DefaultsInteractor
 
     private var cancellables = Set<AnyCancellable>()
-    // NotchWindowController is macOS 26-only, so it is held type-erased here.
-    private var windowController: Any?
+    private var windowController: NotchWindowController?
 
     private static let cacheLimit = 64
     private var artworkCache: [String: NSImage] = [:]
@@ -150,13 +148,11 @@ final class NotchInteractor: ObservableObject {
     // MARK: - Window lifecycle
 
     private func reconfigureNotchWindow() {
-        guard #available(macOS 26.0, *) else { return }
-
         let enabled = defaultsInteractor.notchVisibility != .off
         if enabled, windowController == nil {
             let viewModel = NotchViewModel(notch: self, defaults: defaultsInteractor)
             windowController = NotchWindowController(viewModel: viewModel)
-        } else if !enabled, let controller = windowController as? NotchWindowController {
+        } else if !enabled, let controller = windowController {
             controller.close()
             windowController = nil
         }

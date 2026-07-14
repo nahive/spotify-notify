@@ -2,7 +2,6 @@ import SwiftUI
 
 /// Minimal pill row for screens without a physical notch: a single centered
 /// line of track text with an equalizer.
-@available(macOS 26.0, *)
 struct CenteredPill: View {
     @ObservedObject var notch: NotchInteractor
     var accent: Color
@@ -34,7 +33,6 @@ struct CenteredPill: View {
 
 /// Minimal pill row for screens with a physical notch: track text and an
 /// equalizer on wings either side of the camera housing.
-@available(macOS 26.0, *)
 struct PillWings: View {
     @ObservedObject var notch: NotchInteractor
     var metrics: NotchMetrics
@@ -83,7 +81,6 @@ struct PillWings: View {
 
 /// The card of artwork, track detail and playback controls revealed beneath the
 /// pill on hover.
-@available(macOS 26.0, *)
 struct ExpandedCard: View {
     @ObservedObject var notch: NotchInteractor
     var accent: Color
@@ -133,7 +130,6 @@ struct ExpandedCard: View {
     }
 }
 
-@available(macOS 26.0, *)
 struct ArtworkThumb: View {
     var image: NSImage?
     var size: CGFloat
@@ -159,7 +155,6 @@ struct ArtworkThumb: View {
     }
 }
 
-@available(macOS 26.0, *)
 struct MediaButton: View {
     var icon: String
     var size: CGFloat
@@ -181,7 +176,6 @@ struct MediaButton: View {
     }
 }
 
-@available(macOS 26.0, *)
 struct WaveformIcon: View {
     var color: Color
     var isPlaying: Bool
@@ -196,7 +190,6 @@ struct WaveformIcon: View {
     }
 }
 
-@available(macOS 26.0, *)
 struct NotchMarqueeText: View {
     var text: String
     var font: Font

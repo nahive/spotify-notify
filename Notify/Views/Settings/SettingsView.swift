@@ -24,13 +24,11 @@ struct SettingsView: View {
                     Label("Notifications", systemImage: "bell.badge")
                 }
             
-            if #available(macOS 26.0, *) {
-                NotchSettingsView(defaultsInteractor: defaultsInteractor)
-                    .padding()
-                    .tabItem {
-                        Label("Notch", systemImage: "sparkles.tv")
-                    }
-            }
+            NotchSettingsView(defaultsInteractor: defaultsInteractor)
+                .padding()
+                .tabItem {
+                    Label("Notch", systemImage: "sparkles.tv")
+                }
 
             AboutSettingsView()
                 .padding()
