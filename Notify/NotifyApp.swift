@@ -8,20 +8,19 @@ import SwiftData
 struct NotifyApp: App {
     
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-    
-    @StateObject private var musicInteractor: MusicInteractor
-    @StateObject private var defaultsInteractor: DefaultsInteractor
-    @StateObject private var notificationsInteractor: NotificationsInteractor
-    @StateObject private var historyInteractor: HistoryInteractor
-    @StateObject private var shortcutsInteractor: ShortcutsInteractor
-    @StateObject private var notchInteractor: NotchInteractor
-    
+
+    @State private var musicInteractor: MusicInteractor
+    @State private var defaultsInteractor: DefaultsInteractor
+    @State private var notificationsInteractor: NotificationsInteractor
+    @State private var historyInteractor: HistoryInteractor
+    @State private var shortcutsInteractor: ShortcutsInteractor
+    @State private var notchInteractor: NotchInteractor
+
     private let modelContainer: ModelContainer
-    
+
     init() {
         do {
-            let appSupportURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-            let notifyURL = appSupportURL.appendingPathComponent("Notify")
+            let notifyURL = URL.applicationSupportDirectory.appendingPathComponent("Notify")
             
             try FileManager.default.createDirectory(at: notifyURL, withIntermediateDirectories: true)
             
@@ -40,12 +39,12 @@ struct NotifyApp: App {
         let shortcutsInteractor = ShortcutsInteractor(defaultsInteractor: defaultsInteractor, notificationsInteractor: notificationsInteractor)
         let notchInteractor = NotchInteractor(musicInteractor: musicInteractor, defaultsInteractor: defaultsInteractor)
 
-        self._musicInteractor = StateObject(wrappedValue: musicInteractor)
-        self._defaultsInteractor = StateObject(wrappedValue: defaultsInteractor)
-        self._notificationsInteractor = StateObject(wrappedValue: notificationsInteractor)
-        self._historyInteractor = StateObject(wrappedValue: historyInteractor)
-        self._shortcutsInteractor = StateObject(wrappedValue: shortcutsInteractor)
-        self._notchInteractor = StateObject(wrappedValue: notchInteractor)
+        self._musicInteractor = State(initialValue: musicInteractor)
+        self._defaultsInteractor = State(initialValue: defaultsInteractor)
+        self._notificationsInteractor = State(initialValue: notificationsInteractor)
+        self._historyInteractor = State(initialValue: historyInteractor)
+        self._shortcutsInteractor = State(initialValue: shortcutsInteractor)
+        self._notchInteractor = State(initialValue: notchInteractor)
 
         musicInteractor.set(application: defaultsInteractor.selectedApplication)
         shortcutsInteractor.registerSavedShortcut()
@@ -54,32 +53,32 @@ struct NotifyApp: App {
     var body: some Scene {
         MenuBarExtra {
             MenuView()
-                .environmentObject(musicInteractor)
-                .environmentObject(notificationsInteractor)
-                .environmentObject(defaultsInteractor)
-                .environmentObject(historyInteractor)
+                .environment(musicInteractor)
+                .environment(notificationsInteractor)
+                .environment(defaultsInteractor)
+                .environment(historyInteractor)
         } label: {
             MenuBarLabel()
-                .environmentObject(musicInteractor)
-                .environmentObject(defaultsInteractor)
+                .environment(musicInteractor)
+                .environment(defaultsInteractor)
         }
         .menuBarExtraStyle(.window)
         .modelContainer(modelContainer)
-        
+
         Window("Song History", id: "history") {
             HistoryView()
-                .environmentObject(historyInteractor)
-                .environmentObject(musicInteractor)
+                .environment(historyInteractor)
+                .environment(musicInteractor)
         }
         .windowResizability(.contentMinSize)
         .windowToolbarStyle(.unifiedCompact)
-        
+
         Settings {
             SettingsView()
-                .environmentObject(musicInteractor)
-                .environmentObject(notificationsInteractor)
-                .environmentObject(defaultsInteractor)
-                .environmentObject(shortcutsInteractor)
+                .environment(musicInteractor)
+                .environment(notificationsInteractor)
+                .environment(defaultsInteractor)
+                .environment(shortcutsInteractor)
         }
         .windowToolbarStyle(.unifiedCompact)
     }
@@ -109,8 +108,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
 // MARK: - MenuBarLabel
 private struct MenuBarLabel: View {
-    @EnvironmentObject private var musicInteractor: MusicInteractor
-    @EnvironmentObject private var defaultsInteractor: DefaultsInteractor
+    @Environment(MusicInteractor.self) private var musicInteractor
+    @Environment(DefaultsInteractor.self) private var defaultsInteractor
     
     var body: some View {
         HStack(spacing: 6) {

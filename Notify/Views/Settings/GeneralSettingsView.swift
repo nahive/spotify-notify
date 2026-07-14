@@ -1,20 +1,17 @@
 import SwiftUI
-import Combine
 
 struct GeneralSettingsView: View {
     let defaultsInteractor: DefaultsInteractor
-    @ObservedObject var musicInteractor: MusicInteractor
-    @ObservedObject var notificationsInteractor: NotificationsInteractor
-    
-    @State private var timerCancellable: AnyCancellable?
-    
+    let musicInteractor: MusicInteractor
+    let notificationsInteractor: NotificationsInteractor
+
     var body: some View {
         VStack {
             musicAppSelectionView
                 .padding(.bottom)
-            
+
             notificationPermissionsView
-            
+
             if let selectedApplication = defaultsInteractor.selectedApplication {
                 controlPermissionsView(for: selectedApplication)
                     .frame(height: 20)
@@ -24,12 +21,15 @@ struct GeneralSettingsView: View {
         .onChange(of: defaultsInteractor.selectedApplication) { _, new in
             musicInteractor.set(application: new)
         }
-        .onAppear {
+        .task {
+            // Each poll fires a live AppleEvent at the player (permission check),
+            // so keep the cadence low while the tab is visible. `.task` cancels
+            // the loop when the view disappears.
             refreshPermissions()
-            startTimer()
-        }
-        .onDisappear {
-            stopTimer()
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(5))
+                refreshPermissions()
+            }
         }
     }
 
@@ -108,20 +108,6 @@ struct GeneralSettingsView: View {
     private func refreshPermissions() {
         notificationsInteractor.updateNotificationsPermissions()
         musicInteractor.updateControlPermissions()
-    }
-
-    private func startTimer() {
-        // Each poll fires a live AppleEvent at the player (permission check),
-        // so keep the cadence low while the tab is visible.
-        timerCancellable = Timer.publish(every: 5.0, on: .main, in: .common)
-            .autoconnect()
-            .sink { _ in
-                refreshPermissions()
-            }
-    }
-
-    private func stopTimer() {
-        timerCancellable?.cancel()
     }
 }
 

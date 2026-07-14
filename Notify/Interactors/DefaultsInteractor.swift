@@ -1,5 +1,5 @@
 import Foundation
-import SwiftUI
+import Observation
 import Magnet
 
 enum NotchVisibilityMode: String, CaseIterable, Identifiable {
@@ -18,7 +18,8 @@ enum NotchVisibilityMode: String, CaseIterable, Identifiable {
 }
 
 @MainActor
-final class DefaultsInteractor: ObservableObject {
+@Observable
+final class DefaultsInteractor {
     enum Key {
         static let selectedApplication = "selected.application.key"
 
@@ -41,25 +42,58 @@ final class DefaultsInteractor: ObservableObject {
 
     static let automaticScreen = "auto"
 
-    @AppStorage(Key.selectedApplication) var selectedApplication: SupportedMusicApplication?
+    @ObservationIgnored private let store = UserDefaults.standard
 
-    @AppStorage(Key.notificationsEnabled) var areNotificationsEnabled = true
-    @AppStorage(Key.notificationsPlayPause) var shouldShowNotificationOnPlayPause = true
-    @AppStorage(Key.notificationsSound) var shouldPlayNotificationsSound = false
-    @AppStorage(Key.notificationsDisableOnFocus) var shouldDisableNotificationsOnFocus = true
-    @AppStorage(Key.notificationsLength) var notificationLength = 5
+    // This class is the sole writer of these keys, so plain stored properties
+    // with a `didSet` write-through replace @AppStorage. Keys and encodings are
+    // byte-identical to the @AppStorage versions (enums store their rawValue),
+    // so existing users keep their settings.
 
-    @AppStorage(Key.showAlbumArt) var shouldShowAlbumArt = true
-    @AppStorage(Key.showSongProgress) var shouldShowSongProgress = false
+    var selectedApplication: SupportedMusicApplication? {
+        didSet { store.set(selectedApplication?.rawValue, forKey: Key.selectedApplication) }
+    }
 
-    @AppStorage(Key.menuBarShowSong) var shouldShowSongInMenuBar = true
+    var areNotificationsEnabled: Bool {
+        didSet { store.set(areNotificationsEnabled, forKey: Key.notificationsEnabled) }
+    }
+    var shouldShowNotificationOnPlayPause: Bool {
+        didSet { store.set(shouldShowNotificationOnPlayPause, forKey: Key.notificationsPlayPause) }
+    }
+    var shouldPlayNotificationsSound: Bool {
+        didSet { store.set(shouldPlayNotificationsSound, forKey: Key.notificationsSound) }
+    }
+    var shouldDisableNotificationsOnFocus: Bool {
+        didSet { store.set(shouldDisableNotificationsOnFocus, forKey: Key.notificationsDisableOnFocus) }
+    }
+    var notificationLength: Int {
+        didSet { store.set(notificationLength, forKey: Key.notificationsLength) }
+    }
 
-    @AppStorage(Key.notchVisibility) var notchVisibility: NotchVisibilityMode = .off
-    @AppStorage(Key.notchScreen) var notchPreferredScreen = DefaultsInteractor.automaticScreen
+    var shouldShowAlbumArt: Bool {
+        didSet { store.set(shouldShowAlbumArt, forKey: Key.showAlbumArt) }
+    }
+    var shouldShowSongProgress: Bool {
+        didSet { store.set(shouldShowSongProgress, forKey: Key.showSongProgress) }
+    }
 
-    @AppStorage(Key.shortcutKeyCode) private var shortcutKeyCode = 0
-    @AppStorage(Key.shortcutModifiers) private var shortcutModifier = 0
-    
+    var shouldShowSongInMenuBar: Bool {
+        didSet { store.set(shouldShowSongInMenuBar, forKey: Key.menuBarShowSong) }
+    }
+
+    var notchVisibility: NotchVisibilityMode {
+        didSet { store.set(notchVisibility.rawValue, forKey: Key.notchVisibility) }
+    }
+    var notchPreferredScreen: String {
+        didSet { store.set(notchPreferredScreen, forKey: Key.notchScreen) }
+    }
+
+    private var shortcutKeyCode: Int {
+        didSet { store.set(shortcutKeyCode, forKey: Key.shortcutKeyCode) }
+    }
+    private var shortcutModifier: Int {
+        didSet { store.set(shortcutModifier, forKey: Key.shortcutModifiers) }
+    }
+
     var shortcut: KeyCombo? {
         get {
             guard shortcutKeyCode != 0, shortcutModifier != 0 else { return nil }
@@ -69,5 +103,31 @@ final class DefaultsInteractor: ObservableObject {
             shortcutKeyCode = newValue?.QWERTYKeyCode ?? 0
             shortcutModifier = newValue?.modifiers ?? 0
         }
+    }
+
+    init() {
+        let store = UserDefaults.standard
+        // `object(forKey:) as? Bool ?? default` preserves @AppStorage's
+        // absent-means-default semantics (`bool(forKey:)` would coerce to false).
+        selectedApplication = store.string(forKey: Key.selectedApplication)
+            .flatMap(SupportedMusicApplication.init(rawValue:))
+
+        areNotificationsEnabled = store.object(forKey: Key.notificationsEnabled) as? Bool ?? true
+        shouldShowNotificationOnPlayPause = store.object(forKey: Key.notificationsPlayPause) as? Bool ?? true
+        shouldPlayNotificationsSound = store.object(forKey: Key.notificationsSound) as? Bool ?? false
+        shouldDisableNotificationsOnFocus = store.object(forKey: Key.notificationsDisableOnFocus) as? Bool ?? true
+        notificationLength = store.object(forKey: Key.notificationsLength) as? Int ?? 5
+
+        shouldShowAlbumArt = store.object(forKey: Key.showAlbumArt) as? Bool ?? true
+        shouldShowSongProgress = store.object(forKey: Key.showSongProgress) as? Bool ?? false
+
+        shouldShowSongInMenuBar = store.object(forKey: Key.menuBarShowSong) as? Bool ?? true
+
+        notchVisibility = store.string(forKey: Key.notchVisibility)
+            .flatMap(NotchVisibilityMode.init(rawValue:)) ?? .off
+        notchPreferredScreen = store.string(forKey: Key.notchScreen) ?? DefaultsInteractor.automaticScreen
+
+        shortcutKeyCode = store.object(forKey: Key.shortcutKeyCode) as? Int ?? 0
+        shortcutModifier = store.object(forKey: Key.shortcutModifiers) as? Int ?? 0
     }
 }

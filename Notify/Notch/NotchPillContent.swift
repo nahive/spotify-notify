@@ -3,7 +3,7 @@ import SwiftUI
 /// Minimal pill row for screens without a physical notch: a single centered
 /// line of track text with an equalizer.
 struct CenteredPill: View {
-    @ObservedObject var notch: NotchInteractor
+    let notch: NotchInteractor
     var accent: Color
 
     var body: some View {
@@ -34,7 +34,7 @@ struct CenteredPill: View {
 /// Minimal pill row for screens with a physical notch: track text and an
 /// equalizer on wings either side of the camera housing.
 struct PillWings: View {
-    @ObservedObject var notch: NotchInteractor
+    let notch: NotchInteractor
     var metrics: NotchMetrics
     var wingWidth: CGFloat
     var accent: Color
@@ -82,7 +82,7 @@ struct PillWings: View {
 /// The card of artwork, track detail and playback controls revealed beneath the
 /// pill on hover.
 struct ExpandedCard: View {
-    @ObservedObject var notch: NotchInteractor
+    let notch: NotchInteractor
     var accent: Color
 
     var body: some View {

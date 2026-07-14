@@ -22,7 +22,7 @@ struct PlayingView: View {
         case none, previous, playPause, next
     }
     
-    @ObservedObject var musicInteractor: MusicInteractor
+    let musicInteractor: MusicInteractor
     let track: MusicTrack
 
     @State private var hoverTarget: PlayerHoverTarget = .none
@@ -127,7 +127,7 @@ struct PlayingView: View {
 
 // MARK: - CustomProgressView
 private struct CustomProgressView: View {
-    @ObservedObject var musicInteractor: MusicInteractor
+    let musicInteractor: MusicInteractor
     @State private var isDragging = false
     @State private var dragProgress: Double = 0
     

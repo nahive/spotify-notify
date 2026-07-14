@@ -38,7 +38,7 @@ private struct DetailHeaderView: View {
 
 private struct DetailArtworkView: View {
     let entry: SongHistory
-    @EnvironmentObject var historyInteractor: HistoryInteractor
+    @Environment(HistoryInteractor.self) var historyInteractor
     
     var body: some View {
         Group {
@@ -88,7 +88,7 @@ private struct DetailSongInfoView: View {
 
 private struct DetailStatsView: View {
     let entry: SongHistory
-    @EnvironmentObject var historyInteractor: HistoryInteractor
+    @Environment(HistoryInteractor.self) var historyInteractor
     
     var body: some View {
         let playCounts = historyInteractor.getPlayCounts(for: entry)

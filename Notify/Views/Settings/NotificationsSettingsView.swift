@@ -2,34 +2,34 @@ import SwiftUI
 import LaunchAtLogin
 
 struct NotificationSettingsView: View {
-    @ObservedObject var defaultsInteractor: DefaultsInteractor
+    @Bindable var defaultsInteractor: DefaultsInteractor
     let shortcutsInteractor: ShortcutsInteractor
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             LaunchAtLogin.Toggle("Launch on startup")
-            Toggle(isOn: defaultsInteractor.$shouldShowSongInMenuBar) {
+            Toggle(isOn: $defaultsInteractor.shouldShowSongInMenuBar) {
                 Text("Show song name in menu bar")
             }
             Divider()
                 .padding()
-            Toggle(isOn: defaultsInteractor.$areNotificationsEnabled) {
+            Toggle(isOn: $defaultsInteractor.areNotificationsEnabled) {
                 Text("Enable notifications")
             }
             VStack(alignment: .leading) {
-                Toggle(isOn: defaultsInteractor.$shouldShowNotificationOnPlayPause) {
+                Toggle(isOn: $defaultsInteractor.shouldShowNotificationOnPlayPause) {
                     Text("Display notification on play | pause")
                 }
-                Toggle(isOn: defaultsInteractor.$shouldPlayNotificationsSound) {
+                Toggle(isOn: $defaultsInteractor.shouldPlayNotificationsSound) {
                     Text("Play notification sound")
                 }
-                Toggle(isOn: defaultsInteractor.$shouldDisableNotificationsOnFocus) {
+                Toggle(isOn: $defaultsInteractor.shouldDisableNotificationsOnFocus) {
                     Text("Disable notifications when player is focused")
                 }
-                Toggle(isOn: defaultsInteractor.$shouldShowAlbumArt) {
+                Toggle(isOn: $defaultsInteractor.shouldShowAlbumArt) {
                     Text("Include album art")
                 }
-                Toggle(isOn: defaultsInteractor.$shouldShowSongProgress) {
+                Toggle(isOn: $defaultsInteractor.shouldShowSongProgress) {
                     Text("Display song progress in notification")
                 }
             }

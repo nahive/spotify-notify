@@ -6,10 +6,10 @@ struct MenuView: View {
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openSettings) private var openSettings
     
-    @EnvironmentObject var musicInteractor: MusicInteractor
-    @EnvironmentObject var notificationsInteractor: NotificationsInteractor
-    @EnvironmentObject var defaultsInteractor: DefaultsInteractor
-    @EnvironmentObject var historyInteractor: HistoryInteractor
+    @Environment(MusicInteractor.self) var musicInteractor
+    @Environment(NotificationsInteractor.self) var notificationsInteractor
+    @Environment(DefaultsInteractor.self) var defaultsInteractor
+    @Environment(HistoryInteractor.self) var historyInteractor
     
     var body: some View {
         ZStack(alignment: .topTrailing) {

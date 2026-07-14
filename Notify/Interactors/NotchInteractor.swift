@@ -1,35 +1,34 @@
 import AppKit
-import Combine
+import Observation
 import SwiftUI
 
 /// Adapts MusicInteractor's published state into the `NowPlaying` snapshots the
 /// notch UI consumes, and owns the notch window's lifecycle.
 @MainActor
-final class NotchInteractor: ObservableObject {
-    @Published private(set) var track: NowPlaying?
+@Observable
+final class NotchInteractor {
+    private(set) var track: NowPlaying?
 
-    private let musicInteractor: MusicInteractor
-    private let defaultsInteractor: DefaultsInteractor
+    @ObservationIgnored private let musicInteractor: MusicInteractor
+    @ObservationIgnored private let defaultsInteractor: DefaultsInteractor
 
-    private var cancellables = Set<AnyCancellable>()
-    private var windowController: NotchWindowController?
+    @ObservationIgnored private var musicObservationTask: Task<Void, Never>?
+    @ObservationIgnored private var defaultsObservationTask: Task<Void, Never>?
+    @ObservationIgnored private var windowController: NotchWindowController?
 
     private static let cacheLimit = 64
-    private var artworkCache: [String: NSImage] = [:]
-    private var accentCache: [String: Color] = [:]
-    private var artworkLoadTask: Task<Void, Never>?
+    @ObservationIgnored private var artworkCache: [String: NSImage] = [:]
+    @ObservationIgnored private var accentCache: [String: Color] = [:]
+    @ObservationIgnored private var artworkLoadTask: Task<Void, Never>?
 
     init(musicInteractor: MusicInteractor, defaultsInteractor: DefaultsInteractor) {
         self.musicInteractor = musicInteractor
         self.defaultsInteractor = defaultsInteractor
 
+        // Window creation is deferred past App.init automatically: the first
+        // Observations emission arrives on a later run-loop pass, after AppKit
+        // has finished launching.
         bind()
-
-        // Defer window creation until AppKit has finished launching; a MainActor
-        // task enqueued from App.init runs on the first run-loop pass after startup.
-        Task { @MainActor [weak self] in
-            self?.reconfigureNotchWindow()
-        }
     }
 
     // MARK: - Controls (called by the notch pill)
@@ -54,20 +53,23 @@ final class NotchInteractor: ObservableObject {
     // MARK: - Bindings
 
     private func bind() {
-        Publishers.CombineLatest(musicInteractor.$currentTrack, musicInteractor.$currentState)
-            .removeDuplicates { $0.0 == $1.0 && $0.1 == $1.1 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] track, state in
-                self?.rebuild(from: track, isPlaying: state == .playing)
+        let musicInteractor = musicInteractor
+        musicObservationTask = Task { [weak self] in
+            for await (track, state) in Observations({ (musicInteractor.currentTrack, musicInteractor.currentState) }) {
+                guard let self else { return }
+                self.rebuild(from: track, isPlaying: state == .playing)
             }
-            .store(in: &cancellables)
+        }
 
-        defaultsInteractor.objectWillChange
-            .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
-            .sink { [weak self] in
-                self?.reconfigureNotchWindow()
+        // Unlike the old objectWillChange subscription this only fires for the
+        // one setting the window lifecycle depends on, so no debounce is needed.
+        let defaultsInteractor = defaultsInteractor
+        defaultsObservationTask = Task { [weak self] in
+            for await _ in Observations({ defaultsInteractor.notchVisibility }) {
+                guard let self else { return }
+                self.reconfigureNotchWindow()
             }
-            .store(in: &cancellables)
+        }
     }
 
     private func rebuild(from musicTrack: MusicTrack?, isPlaying: Bool) {

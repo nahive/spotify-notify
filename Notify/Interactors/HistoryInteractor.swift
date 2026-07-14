@@ -1,13 +1,15 @@
 import Foundation
+import Observation
 import SwiftData
 import AppKit
 
 @MainActor
-final class HistoryInteractor: ObservableObject {
-    private var modelContext: ModelContext
-    private var lastSavedTrackId: String?
-    
-    @Published var recentHistory: [SongHistory] = []
+@Observable
+final class HistoryInteractor {
+    @ObservationIgnored private var modelContext: ModelContext
+    @ObservationIgnored private var lastSavedTrackId: String?
+
+    var recentHistory: [SongHistory] = []
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext

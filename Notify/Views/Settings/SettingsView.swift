@@ -2,10 +2,10 @@ import SwiftUI
 
 // MARK: - SettingsView
 struct SettingsView: View {
-    @EnvironmentObject var defaultsInteractor: DefaultsInteractor
-    @EnvironmentObject var musicInteractor: MusicInteractor
-    @EnvironmentObject var notificationsInteractor: NotificationsInteractor
-    @EnvironmentObject var shortcutsInteractor: ShortcutsInteractor
+    @Environment(DefaultsInteractor.self) var defaultsInteractor
+    @Environment(MusicInteractor.self) var musicInteractor
+    @Environment(NotificationsInteractor.self) var notificationsInteractor
+    @Environment(ShortcutsInteractor.self) var shortcutsInteractor
 
     var body: some View {
         TabView {
@@ -41,12 +41,3 @@ struct SettingsView: View {
     }
 }
 
-// MARK: - Preview
-struct Settings_Preview: PreviewProvider {
-    @StateObject private static var defaultsInteractor = DefaultsInteractor()
-    
-    static var previews: some View {
-        SettingsView()
-            .environmentObject(defaultsInteractor)
-    }
-}

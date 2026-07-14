@@ -1,34 +1,45 @@
 import Foundation
-import Combine
+import Observation
 @preconcurrency import UserNotifications
 import AppKit
 
 @MainActor
-final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayable {
-    private let defaultsInteractor: DefaultsInteractor
-    private let musicInteractor: MusicInteractor
-    
-    @Published var areNotificationsEnabled: Bool = false
-    
-    private var cancellables = Set<AnyCancellable>()
-    
+@Observable
+final class NotificationsInteractor: NSObject, AlertDisplayable {
+    @ObservationIgnored private let defaultsInteractor: DefaultsInteractor
+    @ObservationIgnored private let musicInteractor: MusicInteractor
+
+    var areNotificationsEnabled: Bool = false
+
+    @ObservationIgnored private var trackObservationTask: Task<Void, Never>?
+
     init(defaultsInteractor: DefaultsInteractor, musicInteractor: MusicInteractor) {
         self.defaultsInteractor = defaultsInteractor
         self.musicInteractor = musicInteractor
-        
+
         super.init()
-        
+
         UNUserNotificationCenter.current().delegate = self
-        
-        musicInteractor.$currentTrack
-            .dropFirst()
-            .sink(receiveValue: { [weak self] in
-                guard let self else { return }
-                self.showNotification($0)
-            })
-            .store(in: &cancellables)
-        
+
+        observeTrackChanges()
         updateNotificationsPermissions()
+    }
+
+    /// Notifies on every track publication after the initial value, mirroring
+    /// the old `$currentTrack.dropFirst()` Combine pipeline.
+    private func observeTrackChanges() {
+        let musicInteractor = musicInteractor
+        trackObservationTask = Task { [weak self] in
+            var isFirst = true
+            for await track in Observations({ musicInteractor.currentTrack }) {
+                guard let self else { return }
+                if isFirst {
+                    isFirst = false
+                    continue
+                }
+                self.showNotification(track)
+            }
+        }
     }
 
     // MARK: notification permissions
@@ -175,7 +186,11 @@ extension NotificationsInteractor: @preconcurrency UNUserNotificationCenterDeleg
 
 extension NotificationsInteractor {
     func openNotificationsSettings() {
-        NSWorkspace.shared.open("x-apple.systempreferences:com.apple.preference.notifications".asURL!)
+        guard let url = "x-apple.systempreferences:com.apple.preference.notifications".asURL else {
+            System.log("Invalid notification settings URL", level: .error)
+            return
+        }
+        NSWorkspace.shared.open(url)
     }
 }
 

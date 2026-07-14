@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct HistoryView: View {
-    @EnvironmentObject var historyInteractor: HistoryInteractor
-    @EnvironmentObject var musicInteractor: MusicInteractor
+    @Environment(HistoryInteractor.self) var historyInteractor
+    @Environment(MusicInteractor.self) var musicInteractor
     @State private var showingClearAlert = false
     @State private var selectedEntry: SongHistory?
     @State private var databaseSize = "Calculating..."
@@ -160,7 +160,7 @@ struct HistoryView: View {
 }
 
 private struct HeaderStatsView: View {
-    @EnvironmentObject var historyInteractor: HistoryInteractor
+    @Environment(HistoryInteractor.self) var historyInteractor
     
     var body: some View {
         let stats = historyInteractor.getHistoryStats()

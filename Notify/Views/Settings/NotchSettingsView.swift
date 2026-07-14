@@ -1,17 +1,17 @@
 import SwiftUI
 
 struct NotchSettingsView: View {
-    @ObservedObject var defaultsInteractor: DefaultsInteractor
+    @Bindable var defaultsInteractor: DefaultsInteractor
 
     var body: some View {
         VStack(alignment: .leading) {
-            Picker("Show around notch", selection: defaultsInteractor.$notchVisibility) {
+            Picker("Show around notch", selection: $defaultsInteractor.notchVisibility) {
                 ForEach(NotchVisibilityMode.allCases) { mode in
                     Text(mode.title).tag(mode)
                 }
             }
 
-            Picker("Screen", selection: defaultsInteractor.$notchPreferredScreen) {
+            Picker("Screen", selection: $defaultsInteractor.notchPreferredScreen) {
                 Text("Automatic").tag(DefaultsInteractor.automaticScreen)
                 ForEach(NSScreen.screens, id: \.localizedName) { screen in
                     Text(screen.localizedName).tag(screen.localizedName)

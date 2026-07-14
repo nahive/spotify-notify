@@ -1,5 +1,5 @@
 import AppKit
-import Combine
+import Observation
 import QuartzCore
 import SwiftUI
 
@@ -7,7 +7,8 @@ import SwiftUI
 final class NotchWindowController {
     private let panel: NSPanel
     private let viewModel: NotchViewModel
-    private var cancellables: Set<AnyCancellable> = []
+    private var layoutObservationTask: Task<Void, Never>?
+    private var screenObserver: (any NSObjectProtocol)?
 
     init(viewModel: NotchViewModel) {
         self.viewModel = viewModel
@@ -36,30 +37,35 @@ final class NotchWindowController {
         hostingView.sizingOptions = []
         panel.contentView = hostingView
 
-        viewModel.$state
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in self?.layout() }
-            .store(in: &cancellables)
+        layoutObservationTask = Task { [weak self] in
+            for await _ in Observations({ (viewModel.state, viewModel.metrics) }) {
+                guard let self else { return }
+                self.layout()
+            }
+        }
 
-        viewModel.$metrics
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in self?.layout() }
-            .store(in: &cancellables)
-
-        NotificationCenter.default.publisher(for: NSApplication.didChangeScreenParametersNotification)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
+        screenObserver = NotificationCenter.default.addObserver(
+            forName: NSApplication.didChangeScreenParametersNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
                 self?.viewModel.refreshScreen()
                 self?.layout()
             }
-            .store(in: &cancellables)
+        }
 
         layout()
         panel.orderFrontRegardless()
     }
 
     func close() {
-        cancellables.removeAll()
+        layoutObservationTask?.cancel()
+        layoutObservationTask = nil
+        if let screenObserver {
+            NotificationCenter.default.removeObserver(screenObserver)
+        }
+        screenObserver = nil
         panel.close()
     }
 

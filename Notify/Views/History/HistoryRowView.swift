@@ -5,7 +5,7 @@ struct HistoryRowView: View {
     let entry: SongHistory
     let isSelected: Bool
     let isCurrentlyPlaying: Bool
-    @EnvironmentObject var historyInteractor: HistoryInteractor
+    @Environment(HistoryInteractor.self) var historyInteractor
     
     private var musicAppColor: Color {
         switch entry.musicApp {

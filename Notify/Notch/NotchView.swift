@@ -1,13 +1,9 @@
 import SwiftUI
 
 struct NotchView: View {
-    @ObservedObject var viewModel: NotchViewModel
-    @ObservedObject private var notch: NotchInteractor
+    let viewModel: NotchViewModel
 
-    init(viewModel: NotchViewModel) {
-        self.viewModel = viewModel
-        self.notch = viewModel.notch
-    }
+    private var notch: NotchInteractor { viewModel.notch }
 
     private var accent: Color {
         notch.track?.accentColor ?? NowPlaying.fallbackAccent

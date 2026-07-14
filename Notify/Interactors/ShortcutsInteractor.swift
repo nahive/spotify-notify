@@ -1,8 +1,10 @@
 import Foundation
+import Observation
 import Magnet
 
 @MainActor
-final class ShortcutsInteractor: ObservableObject {
+@Observable
+final class ShortcutsInteractor {
     private static let hotKeyIdentifier = "showKey"
 
     private let defaultsInteractor: DefaultsInteractor

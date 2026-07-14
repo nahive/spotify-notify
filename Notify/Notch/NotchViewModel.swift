@@ -1,5 +1,5 @@
 import AppKit
-import Combine
+import Observation
 import SwiftUI
 
 enum NotchDisplayState: Equatable {
@@ -14,16 +14,17 @@ enum NotchDisplayState: Equatable {
 }
 
 @MainActor
-final class NotchViewModel: ObservableObject {
-    @Published private(set) var state: NotchDisplayState = .shape
-    @Published private(set) var metrics: NotchMetrics
+@Observable
+final class NotchViewModel {
+    private(set) var state: NotchDisplayState = .shape
+    private(set) var metrics: NotchMetrics
 
     let notch: NotchInteractor
     let defaults: DefaultsInteractor
 
-    private var hovering = false
-    private var collapseTask: Task<Void, Never>?
-    private var cancellables: Set<AnyCancellable> = []
+    @ObservationIgnored private var hovering = false
+    @ObservationIgnored private var collapseTask: Task<Void, Never>?
+    @ObservationIgnored private var observationTask: Task<Void, Never>?
 
     /// Width of each track-text wing beside a physical notch.
     private static let wingWidth: CGFloat = 156
@@ -40,18 +41,20 @@ final class NotchViewModel: ObservableObject {
         self.defaults = defaults
         self.metrics = NotchGeometry.metrics(for: NotchGeometry.pickScreen(preferred: defaults.notchPreferredScreen) ?? NSScreen.screens[0])
 
-        notch.$track
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in self?.recompute() }
-            .store(in: &cancellables)
-
-        defaults.objectWillChange
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                self?.refreshScreen()
-                self?.recompute()
+        // Track presence plus the two settings this view model depends on;
+        // reads inside the loop body are deliberately untracked.
+        observationTask = Task { [weak self] in
+            for await _ in Observations({ (notch.track == nil, defaults.notchVisibility, defaults.notchPreferredScreen) }) {
+                guard let self else { return }
+                self.refreshScreen()
+                self.recompute()
             }
-            .store(in: &cancellables)
+        }
+    }
+
+    deinit {
+        observationTask?.cancel()
+        collapseTask?.cancel()
     }
 
     // MARK: - Inputs
