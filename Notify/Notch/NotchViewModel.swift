@@ -27,15 +27,15 @@ final class NotchViewModel: ObservableObject {
     private var collapseTask: Task<Void, Never>?
     private var cancellables: Set<AnyCancellable> = []
 
-    static let glowPadding: CGFloat = 14
     /// Width of each track-text wing beside a physical notch.
-    private static let wingWidth: CGFloat = 140
+    private static let wingWidth: CGFloat = 156
     /// Pill width on screens without a physical notch.
     private static let syntheticWidth: CGFloat = 340
     /// Pill-row height on screens without a physical notch.
     private static let syntheticPillHeight: CGFloat = 34
-    /// Height of the artwork + controls card revealed on hover.
-    static let cardHeight: CGFloat = 82
+    /// Height of the expanded detail card revealed on hover. Fits two rows:
+    /// artwork/track detail on top, playback controls beneath.
+    static let cardHeight: CGFloat = 118
 
     init(notch: NotchInteractor, defaults: DefaultsInteractor) {
         self.notch = notch
@@ -130,17 +130,15 @@ final class NotchViewModel: ObservableObject {
         case .pill:
             return CGSize(width: width, height: pillRowHeight)
         case .expanded:
-            return CGSize(width: width, height: pillRowHeight + Self.cardHeight)
+            // The expanded panel is the detail card alone — no separate pill row
+            // above it — so the artwork/title sit right at the top.
+            return CGSize(width: width, height: Self.cardHeight)
         }
     }
 
-    var windowSize: CGSize {
-        // Window is sized to the largest content this state can show, plus room
-        // for effects to spill without clipping.
-        let content = contentSize
-        return CGSize(
-            width: content.width + 2 * Self.glowPadding,
-            height: content.height + Self.glowPadding * 1.6
-        )
-    }
+    /// The window is sized to exactly the content: the SwiftUI view fills it and
+    /// the shape draws to its edges. Keeping them equal makes the panel's own
+    /// frame animation the single source of truth for size, so the content grows
+    /// in perfect lockstep instead of animating separately and jumping.
+    var windowSize: CGSize { contentSize }
 }
