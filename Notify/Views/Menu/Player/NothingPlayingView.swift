@@ -44,7 +44,7 @@ struct NothingPlayingView: View {
                 )
                 .scaleEffect(isHovering ? 1.05 : 1.0)
             }
-            .buttonStyle(PlainButtonStyle())
+            .buttonStyle(.plain)
             .onHover { hovering in
                 withAnimation(.easeInOut(duration: 0.2)) {
                     isHovering = hovering

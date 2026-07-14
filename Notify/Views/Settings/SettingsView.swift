@@ -12,20 +12,17 @@ struct SettingsView: View {
             GeneralSettingsView(defaultsInteractor: defaultsInteractor,
                                 musicInteractor: musicInteractor,
                                 notificationsInteractor: notificationsInteractor)
-                .padding()
                 .tabItem {
                     Label("General", systemImage: "gear")
                 }
 
             NotificationSettingsView(defaultsInteractor: defaultsInteractor,
                                      shortcutsInteractor: shortcutsInteractor)
-                .padding()
                 .tabItem {
                     Label("Notifications", systemImage: "bell.badge")
                 }
-            
+
             NotchSettingsView(defaultsInteractor: defaultsInteractor)
-                .padding()
                 .tabItem {
                     Label("Notch", systemImage: "sparkles.tv")
                 }
@@ -36,7 +33,7 @@ struct SettingsView: View {
                     Label("About", systemImage: "info.circle")
                 }
         }
-        .frame(maxWidth: 450)
+        .frame(width: 450)
         .tabViewStyle(.automatic)
     }
 }

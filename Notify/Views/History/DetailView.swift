@@ -50,7 +50,7 @@ private struct DetailArtworkView: View {
             } else {
                 Image(systemName: "music.note")
                     .font(.system(size: 40))
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
         .frame(width: 140, height: 140)
@@ -72,13 +72,13 @@ private struct DetailSongInfoView: View {
             
             Text(entry.artist)
                 .font(.title2)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
             
             if let album = entry.album {
                 Text(album)
                     .font(.headline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             }
         }
@@ -96,7 +96,7 @@ private struct DetailStatsView: View {
         VStack(spacing: 12) {
             Text("Details")
                 .font(.headline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 20)
             
@@ -120,7 +120,7 @@ private struct DetailStatsView: View {
                 VStack(spacing: 10) {
                     Text("Metadata")
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 20)
                     
@@ -170,12 +170,12 @@ private struct DetailEmptyStateView: View {
         VStack(spacing: 20) {
             Image(systemName: "music.note.list")
                 .font(.system(size: 60))
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .scaleEffect(0.8)
             
             Text("Select a song to view details")
                 .font(.title2)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -190,7 +190,7 @@ private struct CompactStatView: View {
         VStack(spacing: 6) {
             Image(systemName: icon)
                 .font(.title3)
-                .foregroundColor(.appAccent)
+                .foregroundStyle(.appAccent)
             
             Text(value)
                 .font(.subheadline)
@@ -200,14 +200,14 @@ private struct CompactStatView: View {
             
             Text(title)
                 .font(.caption2)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .textCase(.uppercase)
                 .tracking(0.3)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 10)
         .padding(.horizontal, 6)
-        .cornerRadius(8)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.secondary.opacity(0.1), lineWidth: 0.5)
@@ -224,7 +224,7 @@ private struct MiniStatView: View {
         VStack(spacing: 3) {
             Image(systemName: icon)
                 .font(.caption)
-                .foregroundColor(.appAccent)
+                .foregroundStyle(.appAccent)
             
             Text(value)
                 .font(.caption)
@@ -234,13 +234,13 @@ private struct MiniStatView: View {
             
             Text(title)
                 .font(.caption2)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .textCase(.uppercase)
                 .tracking(0.2)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 6)
         .padding(.horizontal, 3)
-        .cornerRadius(6)
+        .clipShape(RoundedRectangle(cornerRadius: 6))
     }
 }

@@ -8,7 +8,7 @@ struct HistoryView: View {
     @State private var databaseSize = "Calculating..."
     
     var body: some View {
-        NavigationView {
+        NavigationSplitView {
             ZStack {
                 if historyInteractor.recentHistory.isEmpty {
                     EmptyHistoryView()
@@ -84,20 +84,20 @@ struct HistoryView: View {
                         Button("Clear All") {
                             showingClearAlert = true
                         }
-                        .foregroundColor(.red)
+                        .foregroundStyle(.red)
                         
                         Spacer()
 
                         Text("Database: \(databaseSize)")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                     .padding()
                     .background(.ultraThinMaterial, in: Rectangle())
                 }
             }
-            .frame(minWidth: 320)
-            
+            .navigationSplitViewColumnWidth(min: 320, ideal: 360)
+        } detail: {
             DetailView(selectedEntry: selectedEntry)
                 .frame(minWidth: 400)
         }
@@ -195,7 +195,7 @@ private struct StatView: View {
                 .fontWeight(.bold)
             Text(title)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         }
     }
 }
@@ -205,7 +205,7 @@ private struct EmptyHistoryView: View {
         VStack(spacing: 16) {
             Image(systemName: "music.note.list")
                 .font(.system(size: 60))
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
             
             Text("No Song History")
                 .font(.title2)
@@ -213,7 +213,7 @@ private struct EmptyHistoryView: View {
             
             Text("Songs you play will appear here")
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)

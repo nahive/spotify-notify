@@ -81,7 +81,7 @@ struct RadioPlayingView: View {
         }) {
             controlButtonContent(systemName: "backward.fill", size: .title3, padding: 8)
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(.plain)
     }
     
     private var playPauseButton: some View {
@@ -100,7 +100,7 @@ struct RadioPlayingView: View {
                 .background(buttonBackground)
                 .scaleEffect(isHovering ? 1.05 : 1.0)
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(.plain)
         .onHover { hovering in
             withAnimation(.easeInOut(duration: 0.2)) {
                 isHovering = hovering
@@ -114,7 +114,7 @@ struct RadioPlayingView: View {
         }) {
             controlButtonContent(systemName: "forward.fill", size: .title3, padding: 8)
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(.plain)
     }
     
     private func controlButtonContent(systemName: String, size: Font, padding: CGFloat) -> some View {

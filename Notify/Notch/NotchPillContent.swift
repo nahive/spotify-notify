@@ -9,7 +9,7 @@ struct CenteredPill: View {
     var body: some View {
         HStack(spacing: 10) {
             if let track = notch.track {
-                NotchMarqueeText(
+                MarqueeText(
                     text: track.artist.map { "\(track.title) — \($0)" } ?? track.title,
                     font: .system(size: 11, weight: .medium),
                     maxWidth: 210
@@ -54,7 +54,7 @@ struct PillWings: View {
     private var leftWing: some View {
         HStack(spacing: 7) {
             if let track = notch.track {
-                NotchMarqueeText(
+                MarqueeText(
                     text: track.artist.map { "\(track.title) — \($0)" } ?? track.title,
                     font: .system(size: 10.5, weight: .medium),
                     maxWidth: wingWidth - 72
@@ -93,14 +93,14 @@ struct ExpandedCard: View {
                 HStack(spacing: 12) {
                     ArtworkThumb(image: track.artwork, size: 48, cornerRadius: 10)
                     VStack(alignment: .leading, spacing: 2) {
-                        NotchMarqueeText(
+                        MarqueeText(
                             text: track.title,
                             font: .system(size: 13, weight: .semibold),
                             maxWidth: 230
                         )
                         .id("card-title-\(track.id)")
                         if let artist = track.artist {
-                            NotchMarqueeText(
+                            MarqueeText(
                                 text: artist,
                                 font: .system(size: 11),
                                 maxWidth: 230
@@ -190,35 +190,3 @@ struct WaveformIcon: View {
     }
 }
 
-struct NotchMarqueeText: View {
-    var text: String
-    var font: Font
-    var maxWidth: CGFloat
-
-    @State private var textWidth: CGFloat = 0
-    @State private var offset: CGFloat = 0
-
-    var body: some View {
-        Text(text)
-            .font(font)
-            .lineLimit(1)
-            .fixedSize()
-            .onGeometryChange(for: CGFloat.self) { proxy in
-                proxy.size.width
-            } action: { width in
-                textWidth = width
-                guard width > maxWidth else { return }
-                let distance = width - maxWidth
-                withAnimation(
-                    .linear(duration: Double(distance) / 18)
-                        .repeatForever(autoreverses: true)
-                        .delay(1.2)
-                ) {
-                    offset = -distance
-                }
-            }
-            .offset(x: offset)
-            .frame(width: textWidth == 0 ? nil : min(textWidth, maxWidth), alignment: .leading)
-            .clipped()
-    }
-}

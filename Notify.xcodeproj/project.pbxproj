@@ -40,6 +40,7 @@
 		4CF74EC12D412E7A009E8B00 /* AboutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC02D412E7A009E8B00 /* AboutSettingsView.swift */; };
 		4CF74EC62D413325009E8B00 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC52D413325009E8B00 /* PlayerView.swift */; };
 		4CFE1ED32DFEDD6000E52A47 /* SongHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED22DFEDD6000E52A47 /* SongHistory.swift */; };
+		4CAA11002E26000000000001 /* MarqueeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAA11002E26000000000002 /* MarqueeText.swift */; };
 		4CFE1ED52DFEDD7000E52A47 /* HistoryInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED42DFEDD7000E52A47 /* HistoryInteractor.swift */; };
 		5CA1DE022E1F0000A0000002 /* ShortcutsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA1DE012E1F0000A0000001 /* ShortcutsInteractor.swift */; };
 		5CA1DE132E1F0000A0000013 /* NowPlaying.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA1DE032E1F0000A0000003 /* NowPlaying.swift */; };
@@ -90,6 +91,7 @@
 		4CF74EC02D412E7A009E8B00 /* AboutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSettingsView.swift; sourceTree = "<group>"; };
 		4CF74EC52D413325009E8B00 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		4CFE1ED22DFEDD6000E52A47 /* SongHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongHistory.swift; sourceTree = "<group>"; };
+		4CAA11002E26000000000002 /* MarqueeText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarqueeText.swift; sourceTree = "<group>"; };
 		4CFE1ED42DFEDD7000E52A47 /* HistoryInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryInteractor.swift; sourceTree = "<group>"; };
 		5CA1DE012E1F0000A0000001 /* ShortcutsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsInteractor.swift; sourceTree = "<group>"; };
 		5CA1DE032E1F0000A0000003 /* NowPlaying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlaying.swift; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 			isa = PBXGroup;
 			children = (
 				4CFE1EDD2DFEDFAD00E52A47 /* History */,
+				4CAA11002E26000000000002 /* MarqueeText.swift */,
 				4CF74EC22D4132F0009E8B00 /* Menu */,
 				4CF74EB92D412D75009E8B00 /* Settings */,
 			);
@@ -436,6 +439,7 @@
 				5CA1DE1C2E1F0000A000001C /* NotchSettingsView.swift in Sources */,
 				4C3FB6F02D2D1A210073EE24 /* AppleMusicApplication.swift in Sources */,
 				4CFE1ED32DFEDD6000E52A47 /* SongHistory.swift in Sources */,
+				4CAA11002E26000000000001 /* MarqueeText.swift in Sources */,
 				4C858885203F218800ED1692 /* SpotifyApplication.swift in Sources */,
 				4CF74EC62D413325009E8B00 /* PlayerView.swift in Sources */,
 				4CDE08A62A35AB9B009609E7 /* NotifyApp.swift in Sources */,

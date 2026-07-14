@@ -6,18 +6,21 @@ struct GeneralSettingsView: View {
     let notificationsInteractor: NotificationsInteractor
 
     var body: some View {
-        VStack {
-            musicAppSelectionView
-                .padding(.bottom)
+        Form {
+            Section("Music app") {
+                musicAppSelectionView
+                    .frame(maxWidth: .infinity)
+            }
 
-            notificationPermissionsView
+            Section("Permissions") {
+                notificationPermissionsView
 
-            if let selectedApplication = defaultsInteractor.selectedApplication {
-                controlPermissionsView(for: selectedApplication)
-                    .frame(height: 20)
+                if let selectedApplication = defaultsInteractor.selectedApplication {
+                    controlPermissionsView(for: selectedApplication)
+                }
             }
         }
-        .padding()
+        .formStyle(.grouped)
         .onChange(of: defaultsInteractor.selectedApplication) { _, new in
             musicInteractor.set(application: new)
         }
@@ -64,13 +67,12 @@ struct GeneralSettingsView: View {
     }
 
     private var notificationPermissionsView: some View {
-        VStack {
-            HStack(alignment: .center) {
-                Circle()
-                    .foregroundStyle(notificationsInteractor.areNotificationsEnabled ? Color.appAccent : Color.red)
-                    .frame(width: 8)
-                Text("Notification permissions")
-            }
+        HStack {
+            Circle()
+                .foregroundStyle(notificationsInteractor.areNotificationsEnabled ? Color.appAccent : Color.red)
+                .frame(width: 8, height: 8)
+            Text("Notification permissions")
+            Spacer()
             if !notificationsInteractor.areNotificationsEnabled {
                 Button("Enable notifications") {
                     notificationsInteractor.registerForNotifications()
@@ -79,28 +81,33 @@ struct GeneralSettingsView: View {
         }
     }
 
+    @ViewBuilder
     private func controlPermissionsView(for app: SupportedMusicApplication) -> some View {
-        VStack {
+        HStack {
             switch musicInteractor.permissionStatus {
             case .granted:
-                HStack {
-                    Circle()
-                        .foregroundStyle(Color.appAccent)
-                        .frame(width: 8)
-                    Text("Control permissions")
-                }
+                Circle()
+                    .foregroundStyle(Color.appAccent)
+                    .frame(width: 8, height: 8)
+                Text("Control permissions")
             case .closed:
+                Circle()
+                    .foregroundStyle(Color.yellow)
+                    .frame(width: 8, height: 8)
+                Text("Control permissions")
+                Spacer()
                 Button("Open \(app.appName) to enable automation") {
                     musicInteractor.openApplication()
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(Color.yellow)
             case .denied:
+                Circle()
+                    .foregroundStyle(Color.red)
+                    .frame(width: 8, height: 8)
+                Text("Control permissions")
+                Spacer()
                 Button("Enable control for \(app.appName)") {
                     musicInteractor.registerForAutomation(for: app)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(Color.red)
             }
         }
     }

@@ -57,18 +57,3 @@ struct MenuView: View {
     }
 }
 
-// MARK: - MusicPlayerState Extensions
-private extension MusicPlayerState {
-    var localized: String {
-        switch self {
-        case .paused:
-            "Paused"
-        case .stopped:
-            "Stopped"
-        case .playing:
-            "Playing"
-        case .unknown:
-            "Unknown"
-        }
-    }
-}
