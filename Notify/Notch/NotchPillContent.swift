@@ -2,38 +2,39 @@ import SwiftUI
 
 /// Minimal pill row for screens without a physical notch: a single centered
 /// line of track text with an equalizer.
-@available(macOS 26.0, *)
 struct CenteredPill: View {
-    @ObservedObject var notch: NotchInteractor
+    let notch: NotchInteractor
     var accent: Color
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 10) {
             if let track = notch.track {
-                NotchMarqueeText(
+                MarqueeText(
                     text: track.artist.map { "\(track.title) — \($0)" } ?? track.title,
                     font: .system(size: 11, weight: .medium),
-                    maxWidth: 260
+                    maxWidth: 210
                 )
-                .foregroundStyle(.white.opacity(0.85))
+                .foregroundStyle(.white.opacity(0.9))
                 .id("mini-\(track.id)")
+                Spacer(minLength: 10)
                 WaveformIcon(color: accent, isPlaying: track.isPlaying, size: 11)
             } else {
                 Text("Nothing playing")
                     .font(.system(size: 11))
                     .foregroundStyle(.white.opacity(0.55))
+                    .frame(maxWidth: .infinity)
             }
         }
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, 14)
+        // Well clear of the side sweeps, which cut ~33pt in at the text baseline.
+        .padding(.horizontal, 66)
     }
 }
 
 /// Minimal pill row for screens with a physical notch: track text and an
 /// equalizer on wings either side of the camera housing.
-@available(macOS 26.0, *)
 struct PillWings: View {
-    @ObservedObject var notch: NotchInteractor
+    let notch: NotchInteractor
     var metrics: NotchMetrics
     var wingWidth: CGFloat
     var accent: Color
@@ -53,72 +54,81 @@ struct PillWings: View {
     private var leftWing: some View {
         HStack(spacing: 7) {
             if let track = notch.track {
-                NotchMarqueeText(
+                MarqueeText(
                     text: track.artist.map { "\(track.title) — \($0)" } ?? track.title,
                     font: .system(size: 10.5, weight: .medium),
-                    maxWidth: wingWidth - 20
+                    maxWidth: wingWidth - 72
                 )
                 .foregroundStyle(.white.opacity(0.85))
                 .id("mini-\(track.id)")
             }
             Spacer(minLength: 0)
         }
-        .padding(.leading, 12)
+        // Well clear of the side sweep, which cuts ~33pt in at the text baseline.
+        .padding(.leading, 60)
     }
 
     private func rightWing(height: CGFloat) -> some View {
         HStack(spacing: 10) {
             Spacer(minLength: 0)
             if let track = notch.track {
-                WaveformIcon(color: .white.opacity(0.5), isPlaying: track.isPlaying, size: height * 0.42)
+                WaveformIcon(color: accent, isPlaying: track.isPlaying, size: height * 0.42)
             }
         }
-        .padding(.trailing, 12)
+        .padding(.trailing, 60)
     }
 }
 
 /// The card of artwork, track detail and playback controls revealed beneath the
 /// pill on hover.
-@available(macOS 26.0, *)
 struct ExpandedCard: View {
-    @ObservedObject var notch: NotchInteractor
-    var accent: Color
+    let notch: NotchInteractor
 
     var body: some View {
-        HStack(spacing: 12) {
-            if let track = notch.track {
-                ArtworkThumb(image: track.artwork, size: 54, cornerRadius: 10)
-                VStack(alignment: .leading, spacing: 2) {
-                    NotchMarqueeText(
-                        text: track.title,
-                        font: .system(size: 12.5, weight: .semibold),
-                        maxWidth: 150
-                    )
-                    .id("card-title-\(track.id)")
-                    if let artist = track.artist {
-                        NotchMarqueeText(
-                            text: artist,
-                            font: .system(size: 10.5),
-                            maxWidth: 150
+        if let track = notch.track {
+            VStack(spacing: 0) {
+                // Artwork + track detail on top so a long title has the full
+                // width to itself and can never squeeze the controls.
+                HStack(spacing: 12) {
+                    ArtworkThumb(image: track.artwork, size: 48, cornerRadius: 10)
+                    VStack(alignment: .leading, spacing: 2) {
+                        MarqueeText(
+                            text: track.title,
+                            font: .system(size: 13, weight: .semibold),
+                            maxWidth: 230
                         )
-                        .foregroundStyle(.white.opacity(0.6))
-                        .id("card-artist-\(track.id)")
+                        .id("card-title-\(track.id)")
+                        if let artist = track.artist {
+                            MarqueeText(
+                                text: artist,
+                                font: .system(size: 11),
+                                maxWidth: 230
+                            )
+                            .foregroundStyle(.white.opacity(0.6))
+                            .id("card-artist-\(track.id)")
+                        }
                     }
+                    Spacer(minLength: 0)
                 }
-                Spacer(minLength: 4)
-                MediaButton(icon: "backward.fill", size: 13) { notch.previousTrack() }
-                MediaButton(icon: track.isPlaying ? "pause.fill" : "play.fill", size: 17) {
-                    notch.togglePlayPause()
+                Spacer(minLength: 8)
+                // Controls on their own row, pinned to the bottom.
+                HStack(spacing: 32) {
+                    MediaButton(icon: "backward.fill", size: 14) { notch.previousTrack() }
+                    MediaButton(icon: track.isPlaying ? "pause.fill" : "play.fill", size: 19) {
+                        notch.togglePlayPause()
+                    }
+                    MediaButton(icon: "forward.fill", size: 14) { notch.nextTrack() }
                 }
-                MediaButton(icon: "forward.fill", size: 13) { notch.nextTrack() }
             }
+            // Sits inside the card's side walls, which the stretched top
+            // flares push in to x = 20.
+            .padding(.horizontal, 28)
+            .padding(.vertical, 13)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
-        .padding(.horizontal, 16)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
-@available(macOS 26.0, *)
 struct ArtworkThumb: View {
     var image: NSImage?
     var size: CGFloat
@@ -144,7 +154,6 @@ struct ArtworkThumb: View {
     }
 }
 
-@available(macOS 26.0, *)
 struct MediaButton: View {
     var icon: String
     var size: CGFloat
@@ -166,7 +175,6 @@ struct MediaButton: View {
     }
 }
 
-@available(macOS 26.0, *)
 struct WaveformIcon: View {
     var color: Color
     var isPlaying: Bool
@@ -181,36 +189,3 @@ struct WaveformIcon: View {
     }
 }
 
-@available(macOS 26.0, *)
-struct NotchMarqueeText: View {
-    var text: String
-    var font: Font
-    var maxWidth: CGFloat
-
-    @State private var textWidth: CGFloat = 0
-    @State private var offset: CGFloat = 0
-
-    var body: some View {
-        Text(text)
-            .font(font)
-            .lineLimit(1)
-            .fixedSize()
-            .onGeometryChange(for: CGFloat.self) { proxy in
-                proxy.size.width
-            } action: { width in
-                textWidth = width
-                guard width > maxWidth else { return }
-                let distance = width - maxWidth
-                withAnimation(
-                    .linear(duration: Double(distance) / 18)
-                        .repeatForever(autoreverses: true)
-                        .delay(1.2)
-                ) {
-                    offset = -distance
-                }
-            }
-            .offset(x: offset)
-            .frame(width: textWidth == 0 ? nil : min(textWidth, maxWidth), alignment: .leading)
-            .clipped()
-    }
-}

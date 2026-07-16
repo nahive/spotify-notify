@@ -5,7 +5,7 @@ struct HistoryRowView: View {
     let entry: SongHistory
     let isSelected: Bool
     let isCurrentlyPlaying: Bool
-    @EnvironmentObject var historyInteractor: HistoryInteractor
+    @Environment(HistoryInteractor.self) var historyInteractor
     
     private var musicAppColor: Color {
         switch entry.musicApp {
@@ -22,18 +22,17 @@ struct HistoryRowView: View {
         HStack(spacing: 12) {
             ZStack {
                 Group {
-                    if let artworkData = historyInteractor.getArtworkData(for: entry),
-                       let image = NSImage(data: artworkData) {
+                    if let image = historyInteractor.artworkImage(for: entry) {
                         Image(nsImage: image)
                             .resizable()
                     } else {
                         Image(systemName: "music.note")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                             .font(.title2)
                     }
                 }
                 .frame(width: 40, height: 40)
-                .cornerRadius(6)
+                .clipShape(RoundedRectangle(cornerRadius: 6))
                 .scaleEffect(isSelected ? 1.05 : 1.0)
                 .animation(.easeInOut(duration: 0.2), value: isSelected)
                 
@@ -44,7 +43,7 @@ struct HistoryRowView: View {
                             Spacer()
                             Image(systemName: "waveform")
                                 .font(.caption2)
-                                .foregroundColor(musicAppColor)
+                                .foregroundStyle(musicAppColor)
                                 .background(
                                     Circle()
                                         .fill(Color.black.opacity(0.7))
@@ -61,25 +60,25 @@ struct HistoryRowView: View {
                     Text(entry.trackName)
                         .font(.headline)
                         .lineLimit(1)
-                        .foregroundColor(isCurrentlyPlaying ? musicAppColor : .primary)
+                        .foregroundStyle(isCurrentlyPlaying ? musicAppColor : .primary)
                     
                     if isCurrentlyPlaying {
                         Image(systemName: "speaker.wave.2.fill")
                             .font(.caption)
-                            .foregroundColor(musicAppColor)
+                            .foregroundStyle(musicAppColor)
                             .symbolEffect(.pulse, options: .repeating)
                     }
                 }
                 
                 Text(entry.artist)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .lineLimit(1)
                 
                 if let album = entry.album {
                     Text(album)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
             }
@@ -89,14 +88,14 @@ struct HistoryRowView: View {
             VStack(alignment: .trailing, spacing: 2) {
                 Text(entry.formattedPlayedAt)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 
                 Text(entry.musicApp)
                     .font(.caption2)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
                     .background(musicAppColor.opacity(0.2))
-                    .cornerRadius(4)
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
                     .scaleEffect(isSelected ? 1.1 : 1.0)
                     .animation(.easeInOut(duration: 0.2), value: isSelected)
             }
@@ -112,12 +111,14 @@ struct HistoryRowView: View {
                 }
             }
         )
-        .cornerRadius(8)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(isCurrentlyPlaying ? musicAppColor.opacity(0.3) : Color.clear, lineWidth: 1)
         )
         .animation(.easeInOut(duration: 0.2), value: isSelected)
         .animation(.easeInOut(duration: 0.2), value: isCurrentlyPlaying)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(entry.trackName) by \(entry.artist), \(entry.musicApp)")
     }
 } 

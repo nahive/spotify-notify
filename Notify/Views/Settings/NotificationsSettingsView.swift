@@ -2,47 +2,35 @@ import SwiftUI
 import LaunchAtLogin
 
 struct NotificationSettingsView: View {
-    @ObservedObject var defaultsInteractor: DefaultsInteractor
+    @Bindable var defaultsInteractor: DefaultsInteractor
     let shortcutsInteractor: ShortcutsInteractor
-    
+
     var body: some View {
-        VStack(alignment: .leading) {
-            LaunchAtLogin.Toggle("Launch on startup")
-            Toggle(isOn: defaultsInteractor.$shouldShowSongInMenuBar) {
-                Text("Show song name in menu bar")
+        Form {
+            Section {
+                LaunchAtLogin.Toggle("Launch on startup")
+                Toggle("Show song name in menu bar", isOn: $defaultsInteractor.shouldShowSongInMenuBar)
             }
-            Divider()
-                .padding()
-            Toggle(isOn: defaultsInteractor.$areNotificationsEnabled) {
-                Text("Enable notifications")
+
+            Section("Notifications") {
+                Toggle("Enable notifications", isOn: $defaultsInteractor.areNotificationsEnabled)
+                Group {
+                    Toggle("Display notification on play | pause", isOn: $defaultsInteractor.shouldShowNotificationOnPlayPause)
+                    Toggle("Play notification sound", isOn: $defaultsInteractor.shouldPlayNotificationsSound)
+                    Toggle("Disable notifications when player is focused", isOn: $defaultsInteractor.shouldDisableNotificationsOnFocus)
+                    Toggle("Include album art", isOn: $defaultsInteractor.shouldShowAlbumArt)
+                    Toggle("Display song progress in notification", isOn: $defaultsInteractor.shouldShowSongProgress)
+                }
+                .disabled(!defaultsInteractor.areNotificationsEnabled)
             }
-            VStack(alignment: .leading) {
-                Toggle(isOn: defaultsInteractor.$shouldShowNotificationOnPlayPause) {
-                    Text("Display notification on play | pause")
+
+            Section("Shortcut") {
+                LabeledContent("Display notification on") {
+                    ShortcutView(shortcutsInteractor: shortcutsInteractor, defaultsInteractor: defaultsInteractor)
+                        .frame(width: 160, height: 26)
                 }
-                Toggle(isOn: defaultsInteractor.$shouldPlayNotificationsSound) {
-                    Text("Play notification sound")
-                }
-                Toggle(isOn: defaultsInteractor.$shouldDisableNotificationsOnFocus) {
-                    Text("Disable notifications when player is focused")
-                }
-                Toggle(isOn: defaultsInteractor.$shouldShowAlbumArt) {
-                    Text("Include album art")
-                }
-                Toggle(isOn: defaultsInteractor.$shouldShowSongProgress) {
-                    Text("Display song progress in notification")
-                }
-            }
-            .padding(.leading)
-            .disabled(!defaultsInteractor.areNotificationsEnabled)
-            Divider()
-                .padding()
-            HStack() {
-                Text("Display notification on")
-                ShortcutView(shortcutsInteractor: shortcutsInteractor, defaultsInteractor: defaultsInteractor)
-                    .frame(height: 30)
             }
         }
-        .padding()
+        .formStyle(.grouped)
     }
 }

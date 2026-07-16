@@ -16,9 +16,17 @@ enum LogLevel: String, CaseIterable, Comparable, Sendable {
         }
     }
     
+    private var rank: Int {
+        switch self {
+        case .debug: 0
+        case .info: 1
+        case .warning: 2
+        case .error: 3
+        }
+    }
+
     static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
-        let order: [LogLevel] = [.debug, .info, .warning, .error]
-        return order.firstIndex(of: lhs)! < order.firstIndex(of: rhs)!
+        lhs.rank < rhs.rank
     }
 }
 

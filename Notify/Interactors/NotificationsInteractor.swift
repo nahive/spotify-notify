@@ -1,41 +1,57 @@
 import Foundation
-import Combine
+import Observation
 @preconcurrency import UserNotifications
 import AppKit
 
 @MainActor
-final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayable {
-    private let defaultsInteractor: DefaultsInteractor
-    private let musicInteractor: MusicInteractor
-    
-    @Published var areNotificationsEnabled: Bool = false
-    
-    private var cancellables = Set<AnyCancellable>()
-    
+@Observable
+final class NotificationsInteractor: NSObject, AlertDisplayable {
+    @ObservationIgnored private let defaultsInteractor: DefaultsInteractor
+    @ObservationIgnored private let musicInteractor: MusicInteractor
+
+    var areNotificationsEnabled: Bool = false
+
+    @ObservationIgnored private var trackObservationTask: Task<Void, Never>?
+
     init(defaultsInteractor: DefaultsInteractor, musicInteractor: MusicInteractor) {
         self.defaultsInteractor = defaultsInteractor
         self.musicInteractor = musicInteractor
-        
+
         super.init()
-        
+
         UNUserNotificationCenter.current().delegate = self
-        
-        musicInteractor.$currentTrack
-            .dropFirst()
-            .sink(receiveValue: { [weak self] in
-                guard let self else { return }
-                self.showNotification($0)
-            })
-            .store(in: &cancellables)
-        
+
+        observeTrackChanges()
         updateNotificationsPermissions()
+    }
+
+    /// Notifies on every track publication after the initial value, mirroring
+    /// the old `$currentTrack.dropFirst()` Combine pipeline.
+    private func observeTrackChanges() {
+        let musicInteractor = musicInteractor
+        trackObservationTask = Task { [weak self] in
+            var isFirst = true
+            for await track in Observations({ musicInteractor.currentTrack }) {
+                guard let self else { return }
+                if isFirst {
+                    isFirst = false
+                    continue
+                }
+                self.showNotification(track)
+            }
+        }
     }
 
     // MARK: notification permissions
     func registerForNotifications() {
         Task {
             do {
-                let _ = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
+                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
+                if !granted {
+                    showSettingsAlert(message: "Missing notification permissions") {
+                        openNotificationsSettings()
+                    }
+                }
             } catch {
                 showSettingsAlert(message: "Missing notification permissions") {
                     openNotificationsSettings()
@@ -64,9 +80,9 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
     // MARK: delivering notifications
     func forceShowNotification() {
         guard let track = musicInteractor.currentTrack else { return }
-        showNotification(track)
+        present(track)   // explicit user action: bypass all gates
     }
-    
+
     private func showNotification(_ track: MusicTrack?) {
         guard
             let track,
@@ -76,23 +92,27 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
         else {
             return
         }
-        
+
         if defaultsInteractor.shouldDisableNotificationsOnFocus && musicInteractor.isPlayerFrontmost {
             return
         }
 
+        present(track)
+    }
+
+    private func present(_ track: MusicTrack) {
         let model = MusicNotification(
-            track: track, 
-            style: defaultsInteractor.shouldShowSongProgress ? 
+            track: track,
+            style: defaultsInteractor.shouldShowSongProgress ?
                 .progress(
                     currentTime: musicInteractor.currentTrackProgress,
                     totalTime: musicInteractor.fullTrackDuration,
                     percentage: musicInteractor.currentProgressPercent
-                ) : 
+                ) :
                 .simple
         )
         let notification = UNMutableNotificationContent()
-    
+
         notification.title = model.title
         if let subtitle = model.subtitle {
             notification.subtitle = subtitle
@@ -103,12 +123,12 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
         if defaultsInteractor.shouldPlayNotificationsSound {
             notification.sound = .default
         }
-        
+
         Task {
             if defaultsInteractor.shouldShowAlbumArt, let artwork = track.artwork, let attachment = await createArtworkAttachment(artwork: artwork) {
                 notification.attachments = [attachment]
             }
-            deliverNotification(identifier: model.identifier, notification: notification)
+            await deliverNotification(identifier: model.identifier, notification: notification)
         }
     }
     
@@ -148,8 +168,12 @@ final class NotificationsInteractor: NSObject, ObservableObject, AlertDisplayabl
         return nil
     }
 
-    private func deliverNotification(identifier: String, notification: UNMutableNotificationContent) {
-        UNUserNotificationCenter.current().add(.init(identifier: identifier, content: notification, trigger: nil))
+    private func deliverNotification(identifier: String, notification: UNMutableNotificationContent) async {
+        do {
+            try await UNUserNotificationCenter.current().add(.init(identifier: identifier, content: notification, trigger: nil))
+        } catch {
+            System.log("Failed to deliver notification: \(error)", level: .warning)
+        }
     }
 }
 
@@ -175,17 +199,16 @@ extension NotificationsInteractor: @preconcurrency UNUserNotificationCenterDeleg
 
 extension NotificationsInteractor {
     func openNotificationsSettings() {
-        NSWorkspace.shared.open("x-apple.systempreferences:com.apple.preference.notifications".asURL!)
+        guard let url = "x-apple.systempreferences:com.apple.preference.notifications".asURL else {
+            System.log("Invalid notification settings URL", level: .error)
+            return
+        }
+        NSWorkspace.shared.open(url)
     }
 }
 
 // MARK: misc
 private extension URL {
-    var image: NSImage? {
-        guard let data = try? Data(contentsOf: self) else { return nil }
-        return NSImage(data: data)
-    }
-    
     var asyncImage: NSImage? {
         get async {
             do {

@@ -3,7 +3,6 @@ import SwiftUI
 struct RadioPlayingView: View {
     let musicInteractor: MusicInteractor
     
-    @State private var isHovering = false
     @State private var animationTrigger = false
     
     var body: some View {
@@ -16,13 +15,10 @@ struct RadioPlayingView: View {
         .padding(.vertical, 20)
         .padding(.horizontal, 30)
         .frame(maxWidth: 280)
+        .frame(maxWidth: .infinity)
         .onAppear {
-            startAnimations()
+            animationTrigger = true
         }
-    }
-    
-    private func startAnimations() {
-        animationTrigger = true
     }
     
     private var radioWavesView: some View {
@@ -69,63 +65,24 @@ struct RadioPlayingView: View {
     
     private var controlButtonsView: some View {
         HStack(spacing: 12) {
-            previousButton
-            playPauseButton
-            nextButton
+            PlayerControlButton(
+                systemName: "backward.fill",
+                font: .title3,
+                accessibilityLabel: "Previous track",
+                action: musicInteractor.previousTrack
+            )
+            PlayerControlButton(
+                systemName: musicInteractor.currentState == .playing ? "pause.fill" : "play.fill",
+                font: .title2,
+                accessibilityLabel: musicInteractor.currentState == .playing ? "Pause" : "Play",
+                action: musicInteractor.playPause
+            )
+            PlayerControlButton(
+                systemName: "forward.fill",
+                font: .title3,
+                accessibilityLabel: "Next track",
+                action: musicInteractor.nextTrack
+            )
         }
-    }
-    
-    private var previousButton: some View {
-        Button(action: {
-            musicInteractor.previousTrack()
-        }) {
-            controlButtonContent(systemName: "backward.fill", size: .title3, padding: 8)
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-    
-    private var playPauseButton: some View {
-        let iconName = musicInteractor.currentState == .playing ? "pause.fill" : "play.fill"
-        let buttonBackground = Circle()
-            .fill(.primary.opacity(isHovering ? 0.15 : 0.08))
-            .stroke(.primary.opacity(0.2), lineWidth: 1)
-        
-        return Button(action: {
-            musicInteractor.playPause()
-        }) {
-            Image(systemName: iconName)
-                .font(.title2)
-                .foregroundStyle(.primary)
-                .padding(12)
-                .background(buttonBackground)
-                .scaleEffect(isHovering ? 1.05 : 1.0)
-        }
-        .buttonStyle(PlainButtonStyle())
-        .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.2)) {
-                isHovering = hovering
-            }
-        }
-    }
-    
-    private var nextButton: some View {
-        Button(action: {
-            musicInteractor.nextTrack()
-        }) {
-            controlButtonContent(systemName: "forward.fill", size: .title3, padding: 8)
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-    
-    private func controlButtonContent(systemName: String, size: Font, padding: CGFloat) -> some View {
-        let buttonBackground = Circle()
-            .fill(.primary.opacity(0.1))
-            .stroke(.primary.opacity(0.2), lineWidth: 1)
-        
-        return Image(systemName: systemName)
-            .font(size)
-            .foregroundStyle(.primary)
-            .padding(padding)
-            .background(buttonBackground)
     }
 } 

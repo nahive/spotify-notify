@@ -1,14 +1,14 @@
 import SwiftUI
 
 struct HistoryView: View {
-    @EnvironmentObject var historyInteractor: HistoryInteractor
-    @EnvironmentObject var musicInteractor: MusicInteractor
+    @Environment(HistoryInteractor.self) var historyInteractor
+    @Environment(MusicInteractor.self) var musicInteractor
     @State private var showingClearAlert = false
     @State private var selectedEntry: SongHistory?
     @State private var databaseSize = "Calculating..."
     
     var body: some View {
-        NavigationView {
+        NavigationSplitView {
             ZStack {
                 if historyInteractor.recentHistory.isEmpty {
                     EmptyHistoryView()
@@ -25,7 +25,7 @@ struct HistoryView: View {
                                     HistoryRowView(
                                         entry: entry, 
                                         isSelected: selectedEntry?.id == entry.id,
-                                        isCurrentlyPlaying: isCurrentlyPlaying(entry)
+                                        isCurrentlyPlaying: entry.id == currentlyPlayingId
                                     )
                                     .id(entry.id)
                                     .contentShape(Rectangle())
@@ -84,20 +84,20 @@ struct HistoryView: View {
                         Button("Clear All") {
                             showingClearAlert = true
                         }
-                        .foregroundColor(.red)
+                        .foregroundStyle(.red)
                         
                         Spacer()
 
                         Text("Database: \(databaseSize)")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                     .padding()
                     .background(.ultraThinMaterial, in: Rectangle())
                 }
             }
-            .frame(minWidth: 320)
-            
+            .navigationSplitViewColumnWidth(min: 320, ideal: 360)
+        } detail: {
             DetailView(selectedEntry: selectedEntry)
                 .frame(minWidth: 400)
         }
@@ -132,21 +132,11 @@ struct HistoryView: View {
         }
     }
     
-    private func isCurrentlyPlaying(_ entry: SongHistory) -> Bool {
-        guard let currentTrack = musicInteractor.currentTrack,
-              musicInteractor.currentState == .playing else { return false }
-        
-        let isSameTrack = entry.trackId == currentTrack.id && 
-                         entry.artist == currentTrack.artist &&
-                         entry.trackName == currentTrack.name
-        
-        guard isSameTrack else { return false }
-        
-        let mostRecentEntry = historyInteractor.recentHistory
-            .filter { $0.trackId == currentTrack.id && $0.artist == currentTrack.artist && $0.trackName == currentTrack.name }
-            .max(by: { $0.playedAt < $1.playedAt })
-        
-        return entry.id == mostRecentEntry?.id
+    private var currentlyPlayingId: SongHistory.ID? {
+        guard let track = musicInteractor.currentTrack, musicInteractor.currentState == .playing else { return nil }
+        return historyInteractor.recentHistory
+            .filter { $0.trackId == track.id && $0.artist == track.artist && $0.trackName == track.name }
+            .max(by: { $0.playedAt < $1.playedAt })?.id
     }
     
     private func updateDatabaseSize() {
@@ -160,7 +150,7 @@ struct HistoryView: View {
 }
 
 private struct HeaderStatsView: View {
-    @EnvironmentObject var historyInteractor: HistoryInteractor
+    @Environment(HistoryInteractor.self) var historyInteractor
     
     var body: some View {
         let stats = historyInteractor.getHistoryStats()
@@ -195,7 +185,7 @@ private struct StatView: View {
                 .fontWeight(.bold)
             Text(title)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         }
     }
 }
@@ -205,7 +195,7 @@ private struct EmptyHistoryView: View {
         VStack(spacing: 16) {
             Image(systemName: "music.note.list")
                 .font(.system(size: 60))
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
             
             Text("No Song History")
                 .font(.title2)
@@ -213,7 +203,7 @@ private struct EmptyHistoryView: View {
             
             Text("Songs you play will appear here")
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)

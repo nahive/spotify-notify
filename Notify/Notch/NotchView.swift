@@ -1,14 +1,9 @@
 import SwiftUI
 
-@available(macOS 26.0, *)
 struct NotchView: View {
-    @ObservedObject var viewModel: NotchViewModel
-    @ObservedObject private var notch: NotchInteractor
+    let viewModel: NotchViewModel
 
-    init(viewModel: NotchViewModel) {
-        self.viewModel = viewModel
-        self.notch = viewModel.notch
-    }
+    private var notch: NotchInteractor { viewModel.notch }
 
     private var accent: Color {
         notch.track?.accentColor ?? NowPlaying.fallbackAccent
@@ -17,29 +12,45 @@ struct NotchView: View {
     private var shape: NotchShape {
         let hasNotch = viewModel.metrics.hasNotch
         return switch viewModel.state {
-        case .expanded: NotchShape(topRadius: 12, bottomRadius: hasNotch ? 16 : 28)
-        default: NotchShape(topRadius: 10, bottomRadius: hasNotch ? 13 : 22)
+        case .expanded:
+            // Same swoosh language as the pill — stretched top flares flowing
+            // into straight walls — but tighter bottom corners, so the tall
+            // card reads grounded rather than melting at its base.
+            NotchShape(
+                topRadius: 12,
+                topSpread: 20,
+                bottomRadius: hasNotch ? 16 : 20,
+                bottomSpread: hasNotch ? 26 : 32
+            )
+        case .pill:
+            // The corners consume the pill's full height (bottomRadius clamps
+            // to it), so NotchShape draws each side as one long shallow sweep.
+            NotchShape(
+                topRadius: 10,
+                topSpread: hasNotch ? 24 : 26,
+                bottomRadius: viewModel.pillRowHeight,
+                bottomSpread: hasNotch ? 34 : 48
+            )
+        default:
+            NotchShape(topRadius: 10, topSpread: 10, bottomRadius: hasNotch ? 13 : 20, bottomSpread: hasNotch ? 22 : 44)
         }
     }
 
     var body: some View {
-        // Size comes from the window bounds, which the controller animates. The
-        // content just fills them (inset by the glow margin) so it extends in
-        // lockstep with the window instead of the window snapping ahead of it.
+        // The view fills the window, which the controller sizes and animates.
+        // Content is driven off the window's live bounds (see `content`), so the
+        // panel's frame animation is the single source of truth for size and the
+        // pill grows in lockstep instead of animating separately and jumping.
         ZStack(alignment: .top) {
             background
             content
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .contentShape(Rectangle())
         .onHover { viewModel.hoverChanged($0) }
-        .padding(EdgeInsets(
-            top: 0,
-            leading: NotchViewModel.glowPadding,
-            bottom: NotchViewModel.glowPadding * 1.6,
-            trailing: NotchViewModel.glowPadding
-        ))
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .animation(.smooth(duration: 0.35), value: viewModel.state)
+        // Only cosmetic, state-driven properties animate here (shape corner
+        // radius, card fade); size comes from the window, not from this.
+        .animation(.easeInOut(duration: 0.35), value: viewModel.state)
         .environment(\.colorScheme, .dark)
     }
 
@@ -49,17 +60,24 @@ struct NotchView: View {
 
         switch viewModel.state {
         case .pill, .expanded:
-            VStack(spacing: 0) {
-                topRow
-                    .frame(height: viewModel.pillRowHeight)
-                ExpandedCard(notch: notch, accent: accent)
-                    .frame(height: viewModel.cardHeight)
-                    .opacity(expanded ? 1 : 0)
-                    // Tucked up behind the pill when collapsed; slides down into
-                    // place as the panel opens.
-                    .offset(y: expanded ? 0 : -18)
+            GeometryReader { geo in
+                ZStack(alignment: .top) {
+                    // Collapsed pill: minimal title + equalizer, pinned to the
+                    // top. Fades out as the panel opens.
+                    collapsedRow
+                        .frame(height: viewModel.pillRowHeight)
+                        .opacity(expanded ? 0 : 1)
+                    // Full detail card, forced to the window's live height so its
+                    // large intrinsic size can't stretch the layout (which would
+                    // clip the shape into a square). Content sits at the top
+                    // (artwork + title), controls at the bottom; as the panel
+                    // grows it's revealed top-down by the clip and fades in.
+                    ExpandedCard(notch: notch)
+                        .frame(width: geo.size.width, height: geo.size.height, alignment: .top)
+                        .opacity(expanded ? 1 : 0)
+                        .clipped()
+                }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .clipShape(shape)
         case .hidden, .shape:
             EmptyView()
@@ -67,7 +85,7 @@ struct NotchView: View {
     }
 
     @ViewBuilder
-    private var topRow: some View {
+    private var collapsedRow: some View {
         let metrics = viewModel.metrics
         if metrics.hasNotch {
             PillWings(
@@ -85,12 +103,17 @@ struct NotchView: View {
     /// animate, so state changes morph instead of cross-fading view trees.
     private var background: some View {
         let metrics = viewModel.metrics
-        let (glass, solid, gradient): (Double, Double, Double) = switch viewModel.state {
-        case .hidden: (0, 0, 0)
-        case .shape: (0, 1, 0)
-        case .pill: metrics.hasNotch ? (0, 1, 0) : (1, 0.75, 0)
-        case .expanded: (1, metrics.hasNotch ? 0.6 : 0.3, 0)
+        let (glass, solid): (Double, Double) = switch viewModel.state {
+        case .hidden: (0, 0)
+        case .shape: (0, 1)
+        case .pill: metrics.hasNotch ? (0, 1) : (1, 0.82)
+        case .expanded: (1, metrics.hasNotch ? 0.6 : 0.34)
         }
+
+        // On a real notch the fill stays flat black so the wings blend into the
+        // bezel; on a synthetic pill it fades top-to-bottom for a smoother,
+        // less slab-like gradient that melts out of the screen edge.
+        let bottom = solid * (metrics.hasNotch ? 1 : 0.55)
 
         return ZStack {
             shape
@@ -98,17 +121,13 @@ struct NotchView: View {
                 .glassEffect(.regular, in: shape)
                 .opacity(glass)
             shape
-                .fill(.black)
-                .opacity(solid)
-            shape
                 .fill(
                     LinearGradient(
-                        colors: [.black.opacity(0.92), .black.opacity(0.6), .black.opacity(0.15)],
+                        colors: [.black.opacity(solid), .black.opacity(bottom)],
                         startPoint: .top,
                         endPoint: .bottom
                     )
                 )
-                .opacity(gradient)
         }
     }
 }

@@ -10,25 +10,10 @@ struct NowPlaying: Equatable, Sendable {
     var artist: String?
     var album: String?
     var isPlaying: Bool
-    var duration: TimeInterval?
-    /// Playback position at `elapsedCapturedAt`. Captured from MusicInteractor's
-    /// 1 Hz poll when this snapshot is rebuilt, so `elapsed(at:)` can interpolate
-    /// without the notch re-rendering on every poll tick.
-    var elapsedBase: TimeInterval?
-    var elapsedCapturedAt: Date
     var artwork: NSImage?
     var accentColor: Color
-    var bundleIdentifier: String?
 
     var id: String {
         "\(title)|\(artist ?? "")|\(album ?? "")"
-    }
-
-    func elapsed(at date: Date = .now) -> TimeInterval? {
-        guard let elapsedBase else { return nil }
-        guard isPlaying else { return elapsedBase }
-        let value = elapsedBase + date.timeIntervalSince(elapsedCapturedAt)
-        if let duration { return min(value, duration) }
-        return value
     }
 }

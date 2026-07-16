@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Clipy/KeyHolder",
       "state" : {
-        "branch" : "master",
-        "revision" : "6b3f7d5ee1a8cf79f3f1ba6f03d14fddff6478ee"
+        "revision" : "69cfeabc06965bf98d6aa75c5a06c430795e01e4",
+        "version" : "4.3.0"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/LaunchAtLogin-Modern",
       "state" : {
-        "branch" : "main",
-        "revision" : "a04ec1c363be3627734f6dad757d82f5d4fa8fcc"
+        "revision" : "a04ec1c363be3627734f6dad757d82f5d4fa8fcc",
+        "version" : "1.1.0"
       }
     },
     {
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Clipy/Magnet",
       "state" : {
-        "branch" : "master",
-        "revision" : "b24a371a882033893266575f76964855eae65099"
+        "revision" : "c721032f386a6664a234e04b98cb68823865369a",
+        "version" : "3.5.0"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Clipy/Sauce",
       "state" : {
-        "revision" : "df657bc1beba23ffd580953f183cd756b5bcd514",
-        "version" : "2.4.1"
+        "revision" : "84d03fcddebf78e08f3105b1159300bfdae3b217",
+        "version" : "2.5.1"
       }
     }
   ],

@@ -11,6 +11,15 @@ struct NotchMetrics: Equatable, Sendable {
 enum NotchGeometry {
     static let syntheticNotchWidth: CGFloat = 190
 
+    static var fallbackMetrics: NotchMetrics {
+        NotchMetrics(
+            screenFrame: .zero,
+            hasNotch: false,
+            notchSize: CGSize(width: syntheticNotchWidth, height: 32),
+            menuBarHeight: 24
+        )
+    }
+
     static func metrics(for screen: NSScreen) -> NotchMetrics {
         let topInset = screen.safeAreaInsets.top
         let menuBarHeight = max(screen.frame.maxY - screen.visibleFrame.maxY, 24)

@@ -107,10 +107,30 @@ private extension AppleMusicTrack {
     }
     
     var musicArtwork: MusicArtwork? {
-        guard let artwork = self.artworks?().firstObject as? (any AppleMusicArtwork), let data = artwork.data else {
+        guard let artwork = self.artworks?().firstObject as? (any AppleMusicArtwork) else {
             return .none
         }
-        return .image(data)
+
+        // The bridge header types `data` as `NSImage`, but Music.app routinely
+        // hands back an NSAppleEventDescriptor that ScriptingBridge can't coerce.
+        // A Swift `as? NSImage` trusts that static `NSImage` typing and lets the
+        // descriptor through, so image selectors (isValid/TIFFRepresentation)
+        // crash. Route every candidate through the ObjC runtime so the check
+        // uses the real class, and prefer the raw original-format bytes.
+        for candidate in [artwork.rawData as AnyObject?, artwork.data as AnyObject?] {
+            guard let candidate else { continue }
+            if candidate.isKind(of: NSImage.self), let image = candidate as? NSImage, image.isValid {
+                return .image(image)
+            }
+            if let descriptor = candidate as? NSAppleEventDescriptor,
+               let image = NSImage(data: descriptor.data) {
+                return .image(image)
+            }
+            if let data = candidate as? Data, let image = NSImage(data: data) {
+                return .image(image)
+            }
+        }
+        return .none
     }
 }
 

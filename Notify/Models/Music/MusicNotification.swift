@@ -6,11 +6,10 @@ enum NotificationIdentifier: Sendable {
 }
 
 struct MusicNotification: Sendable {
-    let identifier = NSUUID().uuidString
+    let identifier = UUID().uuidString
     let title: String
     let subtitle: String?
     let body: String
-    let artwork: MusicArtwork?
     
     init(track: MusicTrack, style: Style) {
         title = track.name
@@ -42,8 +41,6 @@ struct MusicNotification: Sendable {
             }
             
         }()
-        
-        artwork = track.artwork
     }
 }
 

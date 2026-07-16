@@ -1,8 +1,7 @@
 import AppKit
-import Combine
+import Observation
 import SwiftUI
 
-@available(macOS 26.0, *)
 enum NotchDisplayState: Equatable {
     /// Nothing rendered; the window still senses hover over the notch area.
     case hidden
@@ -14,46 +13,49 @@ enum NotchDisplayState: Equatable {
     case expanded
 }
 
-@available(macOS 26.0, *)
 @MainActor
-final class NotchViewModel: ObservableObject {
-    @Published private(set) var state: NotchDisplayState = .shape
-    @Published private(set) var metrics: NotchMetrics
+@Observable
+final class NotchViewModel {
+    private(set) var state: NotchDisplayState = .shape
+    private(set) var metrics: NotchMetrics
 
     let notch: NotchInteractor
     let defaults: DefaultsInteractor
 
-    private var hovering = false
-    private var collapseTask: Task<Void, Never>?
-    private var cancellables: Set<AnyCancellable> = []
+    @ObservationIgnored private var hovering = false
+    @ObservationIgnored private var collapseTask: Task<Void, Never>?
+    @ObservationIgnored private var observationTask: Task<Void, Never>?
 
-    static let glowPadding: CGFloat = 14
     /// Width of each track-text wing beside a physical notch.
-    private static let wingWidth: CGFloat = 140
+    private static let wingWidth: CGFloat = 156
     /// Pill width on screens without a physical notch.
     private static let syntheticWidth: CGFloat = 340
     /// Pill-row height on screens without a physical notch.
     private static let syntheticPillHeight: CGFloat = 34
-    /// Height of the artwork + controls card revealed on hover.
-    static let cardHeight: CGFloat = 82
+    /// Height of the expanded detail card revealed on hover. Fits two rows:
+    /// artwork/track detail on top, playback controls beneath.
+    static let cardHeight: CGFloat = 118
 
     init(notch: NotchInteractor, defaults: DefaultsInteractor) {
         self.notch = notch
         self.defaults = defaults
-        self.metrics = NotchGeometry.metrics(for: NotchGeometry.pickScreen(preferred: defaults.notchPreferredScreen) ?? NSScreen.screens[0])
+        self.metrics = NotchGeometry.pickScreen(preferred: defaults.notchPreferredScreen)
+            .map(NotchGeometry.metrics(for:)) ?? NotchGeometry.fallbackMetrics
 
-        notch.$track
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in self?.recompute() }
-            .store(in: &cancellables)
-
-        defaults.objectWillChange
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                self?.refreshScreen()
-                self?.recompute()
+        // Track presence plus the two settings this view model depends on;
+        // reads inside the loop body are deliberately untracked.
+        observationTask = Task { [weak self] in
+            for await _ in Observations({ (notch.track == nil, defaults.notchVisibility, defaults.notchPreferredScreen) }) {
+                guard let self else { return }
+                self.refreshScreen()
+                self.recompute()
             }
-            .store(in: &cancellables)
+        }
+    }
+
+    deinit {
+        observationTask?.cancel()
+        collapseTask?.cancel()
     }
 
     // MARK: - Inputs
@@ -86,12 +88,6 @@ final class NotchViewModel: ObservableObject {
     // MARK: - State
 
     private func recompute() {
-        // Debug hook: NOTIFY_NOTCH_FORCE_STATE=pill|inline pins the UI to one state.
-        if let forced = Self.forcedState {
-            if forced != state { state = forced }
-            return
-        }
-
         let track = notch.track
 
         let base: NotchDisplayState
@@ -115,14 +111,6 @@ final class NotchViewModel: ObservableObject {
         }
     }
 
-    private static let forcedState: NotchDisplayState? = {
-        switch ProcessInfo.processInfo.environment["NOTIFY_NOTCH_FORCE_STATE"] {
-        case "pill": .pill
-        case "inline", "expanded": .expanded
-        default: nil
-        }
-    }()
-
     // MARK: - Sizing
 
     /// Height of the minimal pill row. The expanded card grows below it, so this
@@ -130,8 +118,6 @@ final class NotchViewModel: ObservableObject {
     var pillRowHeight: CGFloat {
         metrics.hasNotch ? metrics.notchSize.height : Self.syntheticPillHeight
     }
-
-    var cardHeight: CGFloat { Self.cardHeight }
 
     var contentSize: CGSize {
         let notchSize = metrics.notchSize
@@ -144,17 +130,15 @@ final class NotchViewModel: ObservableObject {
         case .pill:
             return CGSize(width: width, height: pillRowHeight)
         case .expanded:
-            return CGSize(width: width, height: pillRowHeight + Self.cardHeight)
+            // The expanded panel is the detail card alone — no separate pill row
+            // above it — so the artwork/title sit right at the top.
+            return CGSize(width: width, height: Self.cardHeight)
         }
     }
 
-    var windowSize: CGSize {
-        // Window is sized to the largest content this state can show, plus room
-        // for effects to spill without clipping.
-        let content = contentSize
-        return CGSize(
-            width: content.width + 2 * Self.glowPadding,
-            height: content.height + Self.glowPadding * 1.6
-        )
-    }
+    /// The window is sized to exactly the content: the SwiftUI view fills it and
+    /// the shape draws to its edges. Keeping them equal makes the panel's own
+    /// frame animation the single source of truth for size, so the content grows
+    /// in perfect lockstep instead of animating separately and jumping.
+    var windowSize: CGSize { contentSize }
 }

@@ -23,9 +23,15 @@ struct NothingPlayingView: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(nil)
             
             Button(action: {
-                musicInteractor.playPause()
+                if isAppleMusic {
+                    musicInteractor.openApplication()
+                } else {
+                    musicInteractor.playPause()
+                }
             }) {
                 HStack(spacing: 8) {
                     Image(systemName: "play.fill")
@@ -44,7 +50,7 @@ struct NothingPlayingView: View {
                 )
                 .scaleEffect(isHovering ? 1.05 : 1.0)
             }
-            .buttonStyle(PlainButtonStyle())
+            .buttonStyle(.plain)
             .onHover { hovering in
                 withAnimation(.easeInOut(duration: 0.2)) {
                     isHovering = hovering
@@ -58,5 +64,7 @@ struct NothingPlayingView: View {
         }
         .padding(.vertical, 20)
         .padding(.horizontal, 30)
+        .frame(maxWidth: 320)
+        .frame(maxWidth: .infinity)
     }
 } 
