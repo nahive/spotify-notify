@@ -45,11 +45,6 @@ final class NotchInteractor {
         musicInteractor.previousTrack()
     }
 
-    func seek(to seconds: TimeInterval) {
-        guard let duration = track?.duration, duration > 0 else { return }
-        musicInteractor.seek(to: seconds / duration)
-    }
-
     // MARK: - Bindings
 
     private func bind() {
@@ -86,12 +81,8 @@ final class NotchInteractor {
             artist: musicTrack.artist,
             album: musicTrack.album,
             isPlaying: isPlaying,
-            duration: musicTrack.duration.map(TimeInterval.init),
-            elapsedBase: musicInteractor.currentPositionSeconds,
-            elapsedCapturedAt: .now,
             artwork: artwork,
-            accentColor: artwork.map { accentColor(for: musicTrack.id, image: $0) } ?? NowPlaying.fallbackAccent,
-            bundleIdentifier: musicInteractor.currentApplication?.bundleId
+            accentColor: artwork.map { accentColor(for: musicTrack.id, image: $0) } ?? NowPlaying.fallbackAccent
         )
     }
 

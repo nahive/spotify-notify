@@ -8,6 +8,7 @@ import AppKit
 final class HistoryInteractor {
     @ObservationIgnored private var modelContext: ModelContext
     @ObservationIgnored private var lastSavedTrackId: String?
+    @ObservationIgnored private var imageCache: [UUID: NSImage] = [:]
 
     var recentHistory: [SongHistory] = []
     
@@ -124,6 +125,7 @@ final class HistoryInteractor {
         
         do {
             try modelContext.save()
+            imageCache.removeAll()
             loadRecentHistory()
         } catch {
             System.log("Failed to delete history entry: \(error)", level: .error)
@@ -134,7 +136,8 @@ final class HistoryInteractor {
         do {
             try modelContext.delete(model: SongHistory.self)
             try modelContext.save()
-            
+            imageCache.removeAll()
+
             loadRecentHistory()
             System.log("Cleared all song history", level: .info)
         } catch {
@@ -264,7 +267,11 @@ final class HistoryInteractor {
         return nil
     }
     
-    func getArtworkData(for entry: SongHistory) -> Data? {
-        return entry.artwork?.artworkData
+    func artworkImage(for entry: SongHistory) -> NSImage? {
+        guard let artwork = entry.artwork else { return nil }
+        if let cached = imageCache[artwork.id] { return cached }
+        guard let image = NSImage(data: artwork.artworkData) else { return nil }
+        imageCache[artwork.id] = image
+        return image
     }
 } 

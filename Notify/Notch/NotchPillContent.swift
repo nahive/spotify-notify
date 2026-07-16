@@ -72,7 +72,7 @@ struct PillWings: View {
         HStack(spacing: 10) {
             Spacer(minLength: 0)
             if let track = notch.track {
-                WaveformIcon(color: .white.opacity(0.5), isPlaying: track.isPlaying, size: height * 0.42)
+                WaveformIcon(color: accent, isPlaying: track.isPlaying, size: height * 0.42)
             }
         }
         .padding(.trailing, 60)
@@ -83,7 +83,6 @@ struct PillWings: View {
 /// pill on hover.
 struct ExpandedCard: View {
     let notch: NotchInteractor
-    var accent: Color
 
     var body: some View {
         if let track = notch.track {

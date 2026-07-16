@@ -42,8 +42,7 @@ private struct DetailArtworkView: View {
     
     var body: some View {
         Group {
-            if let artworkData = historyInteractor.getArtworkData(for: entry),
-               let image = NSImage(data: artworkData) {
+            if let image = historyInteractor.artworkImage(for: entry) {
                 Image(nsImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)

@@ -6,7 +6,6 @@ protocol MusicPlayerProtocol: AnyObject {
     var bundleId: String { get }
     
     var playbackChangedName: String { get }
-    var isOpen: Bool { get }
     var hasPermissionToControl: Bool { get }
     
     var currentTrack: MusicTrack? { get }

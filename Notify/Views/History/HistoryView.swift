@@ -25,7 +25,7 @@ struct HistoryView: View {
                                     HistoryRowView(
                                         entry: entry, 
                                         isSelected: selectedEntry?.id == entry.id,
-                                        isCurrentlyPlaying: isCurrentlyPlaying(entry)
+                                        isCurrentlyPlaying: entry.id == currentlyPlayingId
                                     )
                                     .id(entry.id)
                                     .contentShape(Rectangle())
@@ -132,21 +132,11 @@ struct HistoryView: View {
         }
     }
     
-    private func isCurrentlyPlaying(_ entry: SongHistory) -> Bool {
-        guard let currentTrack = musicInteractor.currentTrack,
-              musicInteractor.currentState == .playing else { return false }
-        
-        let isSameTrack = entry.trackId == currentTrack.id && 
-                         entry.artist == currentTrack.artist &&
-                         entry.trackName == currentTrack.name
-        
-        guard isSameTrack else { return false }
-        
-        let mostRecentEntry = historyInteractor.recentHistory
-            .filter { $0.trackId == currentTrack.id && $0.artist == currentTrack.artist && $0.trackName == currentTrack.name }
-            .max(by: { $0.playedAt < $1.playedAt })
-        
-        return entry.id == mostRecentEntry?.id
+    private var currentlyPlayingId: SongHistory.ID? {
+        guard let track = musicInteractor.currentTrack, musicInteractor.currentState == .playing else { return nil }
+        return historyInteractor.recentHistory
+            .filter { $0.trackId == track.id && $0.artist == track.artist && $0.trackName == track.name }
+            .max(by: { $0.playedAt < $1.playedAt })?.id
     }
     
     private func updateDatabaseSize() {

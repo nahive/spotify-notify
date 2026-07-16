@@ -39,7 +39,8 @@ final class NotchViewModel {
     init(notch: NotchInteractor, defaults: DefaultsInteractor) {
         self.notch = notch
         self.defaults = defaults
-        self.metrics = NotchGeometry.metrics(for: NotchGeometry.pickScreen(preferred: defaults.notchPreferredScreen) ?? NSScreen.screens[0])
+        self.metrics = NotchGeometry.pickScreen(preferred: defaults.notchPreferredScreen)
+            .map(NotchGeometry.metrics(for:)) ?? NotchGeometry.fallbackMetrics
 
         // Track presence plus the two settings this view model depends on;
         // reads inside the loop body are deliberately untracked.
@@ -117,8 +118,6 @@ final class NotchViewModel {
     var pillRowHeight: CGFloat {
         metrics.hasNotch ? metrics.notchSize.height : Self.syntheticPillHeight
     }
-
-    var cardHeight: CGFloat { Self.cardHeight }
 
     var contentSize: CGSize {
         let notchSize = metrics.notchSize

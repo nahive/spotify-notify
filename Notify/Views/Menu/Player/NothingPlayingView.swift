@@ -23,9 +23,15 @@ struct NothingPlayingView: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(nil)
             
             Button(action: {
-                musicInteractor.playPause()
+                if isAppleMusic {
+                    musicInteractor.openApplication()
+                } else {
+                    musicInteractor.playPause()
+                }
             }) {
                 HStack(spacing: 8) {
                     Image(systemName: "play.fill")
@@ -58,5 +64,7 @@ struct NothingPlayingView: View {
         }
         .padding(.vertical, 20)
         .padding(.horizontal, 30)
+        .frame(maxWidth: 320)
+        .frame(maxWidth: .infinity)
     }
 } 

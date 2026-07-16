@@ -72,7 +72,7 @@ struct NotchView: View {
                     // clip the shape into a square). Content sits at the top
                     // (artwork + title), controls at the bottom; as the panel
                     // grows it's revealed top-down by the clip and fades in.
-                    ExpandedCard(notch: notch, accent: accent)
+                    ExpandedCard(notch: notch)
                         .frame(width: geo.size.width, height: geo.size.height, alignment: .top)
                         .opacity(expanded ? 1 : 0)
                         .clipped()

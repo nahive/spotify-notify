@@ -7,7 +7,7 @@ struct MarqueeText: View {
     var text: String
     var font: Font
     var maxWidth: CGFloat
-    var speed: Double = 18
+    var speed: Double = 30
     var fadeEdges: Bool = false
 
     @State private var textWidth: CGFloat = 0

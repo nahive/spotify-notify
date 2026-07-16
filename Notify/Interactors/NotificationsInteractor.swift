@@ -46,7 +46,12 @@ final class NotificationsInteractor: NSObject, AlertDisplayable {
     func registerForNotifications() {
         Task {
             do {
-                let _ = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
+                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
+                if !granted {
+                    showSettingsAlert(message: "Missing notification permissions") {
+                        openNotificationsSettings()
+                    }
+                }
             } catch {
                 showSettingsAlert(message: "Missing notification permissions") {
                     openNotificationsSettings()
@@ -75,9 +80,9 @@ final class NotificationsInteractor: NSObject, AlertDisplayable {
     // MARK: delivering notifications
     func forceShowNotification() {
         guard let track = musicInteractor.currentTrack else { return }
-        showNotification(track)
+        present(track)   // explicit user action: bypass all gates
     }
-    
+
     private func showNotification(_ track: MusicTrack?) {
         guard
             let track,
@@ -87,23 +92,27 @@ final class NotificationsInteractor: NSObject, AlertDisplayable {
         else {
             return
         }
-        
+
         if defaultsInteractor.shouldDisableNotificationsOnFocus && musicInteractor.isPlayerFrontmost {
             return
         }
 
+        present(track)
+    }
+
+    private func present(_ track: MusicTrack) {
         let model = MusicNotification(
-            track: track, 
-            style: defaultsInteractor.shouldShowSongProgress ? 
+            track: track,
+            style: defaultsInteractor.shouldShowSongProgress ?
                 .progress(
                     currentTime: musicInteractor.currentTrackProgress,
                     totalTime: musicInteractor.fullTrackDuration,
                     percentage: musicInteractor.currentProgressPercent
-                ) : 
+                ) :
                 .simple
         )
         let notification = UNMutableNotificationContent()
-    
+
         notification.title = model.title
         if let subtitle = model.subtitle {
             notification.subtitle = subtitle
@@ -114,12 +123,12 @@ final class NotificationsInteractor: NSObject, AlertDisplayable {
         if defaultsInteractor.shouldPlayNotificationsSound {
             notification.sound = .default
         }
-        
+
         Task {
             if defaultsInteractor.shouldShowAlbumArt, let artwork = track.artwork, let attachment = await createArtworkAttachment(artwork: artwork) {
                 notification.attachments = [attachment]
             }
-            deliverNotification(identifier: model.identifier, notification: notification)
+            await deliverNotification(identifier: model.identifier, notification: notification)
         }
     }
     
@@ -159,8 +168,12 @@ final class NotificationsInteractor: NSObject, AlertDisplayable {
         return nil
     }
 
-    private func deliverNotification(identifier: String, notification: UNMutableNotificationContent) {
-        UNUserNotificationCenter.current().add(.init(identifier: identifier, content: notification, trigger: nil))
+    private func deliverNotification(identifier: String, notification: UNMutableNotificationContent) async {
+        do {
+            try await UNUserNotificationCenter.current().add(.init(identifier: identifier, content: notification, trigger: nil))
+        } catch {
+            System.log("Failed to deliver notification: \(error)", level: .warning)
+        }
     }
 }
 
@@ -196,11 +209,6 @@ extension NotificationsInteractor {
 
 // MARK: misc
 private extension URL {
-    var image: NSImage? {
-        guard let data = try? Data(contentsOf: self) else { return nil }
-        return NSImage(data: data)
-    }
-    
     var asyncImage: NSImage? {
         get async {
             do {

@@ -50,7 +50,7 @@ struct GeneralSettingsView: View {
                                 .frame(width: 80, height: 80)
                         }
                     } else {
-                        Text(app.appName + " is not installed")
+                        Text("\(app.appName) is not installed")
                             .frame(width: 80, height: 80)
                             .multilineTextAlignment(.center)
                     }

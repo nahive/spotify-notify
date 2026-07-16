@@ -3,12 +3,19 @@ import Observation
 import QuartzCore
 import SwiftUI
 
+/// Owns the notch panel and its SwiftUI hosting view. Retained by
+/// `NotchInteractor`; released only when `reconfigureNotchWindow()` calls
+/// `close()` and then nils the reference. The `NotchInteractor` ⇄
+/// `NotchViewModel` strong cycle is intentional (both are app-lifetime) and is
+/// broken by that teardown path, so `close()` is the single safe teardown and
+/// must stay idempotent.
 @MainActor
 final class NotchWindowController {
     private let panel: NSPanel
     private let viewModel: NotchViewModel
     private var layoutObservationTask: Task<Void, Never>?
     private var screenObserver: (any NSObjectProtocol)?
+    private var isClosed = false
 
     init(viewModel: NotchViewModel) {
         self.viewModel = viewModel
@@ -60,6 +67,8 @@ final class NotchWindowController {
     }
 
     func close() {
+        guard !isClosed else { return }
+        isClosed = true
         layoutObservationTask?.cancel()
         layoutObservationTask = nil
         if let screenObserver {

@@ -22,8 +22,7 @@ struct HistoryRowView: View {
         HStack(spacing: 12) {
             ZStack {
                 Group {
-                    if let artworkData = historyInteractor.getArtworkData(for: entry),
-                       let image = NSImage(data: artworkData) {
+                    if let image = historyInteractor.artworkImage(for: entry) {
                         Image(nsImage: image)
                             .resizable()
                     } else {
@@ -119,5 +118,7 @@ struct HistoryRowView: View {
         )
         .animation(.easeInOut(duration: 0.2), value: isSelected)
         .animation(.easeInOut(duration: 0.2), value: isCurrentlyPlaying)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(entry.trackName) by \(entry.artist), \(entry.musicApp)")
     }
 } 
