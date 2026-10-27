@@ -24,10 +24,13 @@ Menu bar app that shows what's playing in **Spotify or Apple Music** — as nati
 ```
 brew tap nahive/spotify-notify
 brew trust nahive/spotify-notify
-brew install --cask spotify-notify --no-quarantine
+brew install --cask spotify-notify
+xattr -dr com.apple.quarantine /Applications/Notify.app
 ```
 
 Homebrew 7 and later refuse casks from untrusted taps, so the `brew trust` step is needed there.
+
+Notify is signed but not notarized, so macOS refuses to open it until the quarantine flag is removed; the `xattr` line does that. Run it again after each `brew upgrade --cask spotify-notify`, and after installing from a downloaded release. (Homebrew 7 removed the `--no-quarantine` option that used to handle this.)
 
 ## Features
 
