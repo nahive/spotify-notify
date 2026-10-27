@@ -2,6 +2,7 @@ import SwiftUI
 import UserNotifications
 import AppKit
 import SwiftData
+import AppIntents
 
 // MARK: - Main App
 @main
@@ -35,8 +36,12 @@ struct NotifyApp: App {
         self._shortcutsInteractor = State(initialValue: shortcutsInteractor)
         self._notchInteractor = State(initialValue: notchInteractor)
 
-        musicInteractor.set(application: defaultsInteractor.selectedApplication)
-        shortcutsInteractor.registerSavedShortcut()
+        AppDependencyManager.shared.add(dependency: musicInteractor)
+        AppDependencyManager.shared.add(dependency: notificationsInteractor)
+        AppDependencyManager.shared.add(dependency: historyInteractor)
+
+        musicInteractor.set(selection: defaultsInteractor.playerSelection)
+        shortcutsInteractor.registerSavedShortcutAfterLaunch()
     }
 
     /// Opens the history store, quarantining a corrupt one instead of crashing.
@@ -45,7 +50,7 @@ struct NotifyApp: App {
         try? FileManager.default.createDirectory(at: notifyURL, withIntermediateDirectories: true)
 
         let storeURL = notifyURL.appendingPathComponent("SongHistory.sqlite")
-        let schema = Schema(versionedSchema: NotifySchemaV1.self)
+        let schema = Schema(versionedSchema: NotifySchemaV2.self)
 
         func openStore() throws -> ModelContainer {
             try ModelContainer(
@@ -92,6 +97,7 @@ struct NotifyApp: App {
         MenuBarExtra {
             MenuView()
                 .environment(musicInteractor)
+                .environment(notchInteractor)
                 .environment(notificationsInteractor)
                 .environment(defaultsInteractor)
                 .environment(historyInteractor)
@@ -125,8 +131,6 @@ struct NotifyApp: App {
 // MARK: - App Delegate
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    @Environment(\.openSettings) private var openSettings
-
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         System.log("Notify application started", level: .info)
     }
@@ -135,12 +139,59 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         guard !flag else {
             return true
         }
-        openSettings()
+        // `@Environment(\.openSettings)` only resolves inside a View, so the
+        // AppKit responder-chain action is the only route from a delegate.
+        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+        AppWindow.bringToFront(where: AppWindow.isSettings)
         return true
     }
     
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         false
+    }
+}
+
+// MARK: - AppWindow
+/// Opens the app's windows in front. Notify is an LSUIElement agent and its
+/// MenuBarExtra panel never activates the app, so a window opened from it
+/// appears behind the frontmost app without focus. Activating first isn't
+/// enough either: SwiftUI creates the window on a later run-loop pass, after
+/// the panel has closed and focus has returned to the previous app.
+@MainActor
+enum AppWindow {
+    static func showSettings(using openSettings: OpenSettingsAction) {
+        openSettings()
+        bringToFront(where: isSettings)
+    }
+
+    static func showHistory(using openWindow: OpenWindowAction) {
+        openWindow(id: "history")
+        bringToFront(where: isHistory)
+    }
+
+    static func isSettings(_ window: NSWindow) -> Bool {
+        window.identifier?.rawValue == "com_apple_SwiftUI_Settings_window"
+    }
+
+    /// SwiftUI names `Window(id: "history")` instances "history-AppWindow-N".
+    static func isHistory(_ window: NSWindow) -> Bool {
+        window.identifier?.rawValue.hasPrefix("history") == true
+    }
+
+    static func bringToFront(where matches: @escaping @MainActor (NSWindow) -> Bool) {
+        NSApp.activate()
+        Task {
+            // Poll briefly for the window SwiftUI is about to create.
+            for _ in 0..<20 {
+                if let window = NSApp.windows.first(where: { matches($0) && $0.isVisible }) {
+                    NSApp.activate()
+                    window.makeKeyAndOrderFront(nil)
+                    window.orderFrontRegardless()
+                    return
+                }
+                try? await Task.sleep(for: .milliseconds(25))
+            }
+        }
     }
 }
 

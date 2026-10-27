@@ -3,29 +3,87 @@ import Observation
 import SwiftData
 import AppKit
 
+struct HistoryStats: Equatable, Sendable {
+    struct DayCount: Equatable, Sendable, Identifiable {
+        let day: Date
+        let plays: Int
+        var id: Date { day }
+    }
+
+    struct NamedCount: Equatable, Sendable, Identifiable {
+        let name: String
+        let plays: Int
+        var id: String { name }
+    }
+
+    var totalSongs = 0
+    var uniqueArtists = 0
+    var totalDuration = 0
+    /// One entry per day for the last `HistoryInteractor.chartDays` days,
+    /// zero-filled so the chart has no gaps.
+    var playsPerDay: [DayCount] = []
+    var topArtists: [NamedCount] = []
+    var topAlbums: [NamedCount] = []
+
+    static let empty = HistoryStats()
+}
+
 @MainActor
 @Observable
 final class HistoryInteractor {
-    @ObservationIgnored private var modelContext: ModelContext
-    @ObservationIgnored private var lastSavedTrackId: String?
-    @ObservationIgnored private var imageCache: [UUID: NSImage] = [:]
+    /// A track re-entering within this window is the same play, not a repeat.
+    private static let repeatWindow: TimeInterval = 30
+    /// Rows beyond this are dropped oldest-first; an always-running agent must
+    /// not grow its store without bound.
+    private static let historyLimit = 5_000
+    private static let pageSize = 100
+    static let chartDays = 14
+    private static let topCount = 5
 
-    var recentHistory: [SongHistory] = []
-    
+    @ObservationIgnored private let modelContext: ModelContext
+    @ObservationIgnored private var saveTask: Task<Void, Never>?
+    @ObservationIgnored private let imageCache = NSCache<NSUUID, NSImage>()
+
+    /// The rows the history list shows: newest first, filtered by `query`,
+    /// paged in `pageSize` steps by `loadMore()`.
+    private(set) var entries: [SongHistory] = []
+    private(set) var hasMore = false
+    /// Bumped on every insert/delete so views can refresh derived data
+    /// (stats, charts) without re-running it when only paging changed.
+    private(set) var revision = 0
+
+    /// Searched in the store, not in `entries`, so it reaches every row rather
+    /// than only the loaded page.
+    var query = "" {
+        didSet {
+            guard query != oldValue else { return }
+            fetchLimit = Self.pageSize
+            reload()
+        }
+    }
+
+    @ObservationIgnored private var fetchLimit = HistoryInteractor.pageSize
+
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
-        loadRecentHistory()
+        imageCache.countLimit = 100
+        reload()
     }
-    
-    func updateModelContext(_ modelContext: ModelContext) {
-        self.modelContext = modelContext
-        loadRecentHistory()
-    }
-    
+
     func saveSongIfNeeded(from track: MusicTrack, musicApp: SupportedMusicApplication) {
-        guard track.id != lastSavedTrackId else { return }
-        Task {
-            await saveSong(from: track, musicApp: musicApp)
+        if let last = latestEntry(),
+           last.trackId == track.id,
+           Date.now.timeIntervalSince(last.playedAt) < Self.repeatWindow {
+            return
+        }
+
+        // Chained so two saves can never straddle the artwork download and
+        // insert duplicate rows.
+        let previous = saveTask
+        saveTask = Task { [weak self] in
+            await previous?.value
+            guard let self else { return }
+            await self.saveSong(from: track, musicApp: musicApp)
         }
     }
     
@@ -61,8 +119,8 @@ final class HistoryInteractor {
             modelContext.insert(historyEntry)
             try modelContext.save()
             
-            lastSavedTrackId = track.id
-            loadRecentHistory()
+            pruneHistory()
+            didChange()
             System.log("Saved song to history: \(track.name) by \(track.artist)", level: .info)
             
         } catch {
@@ -106,64 +164,167 @@ final class HistoryInteractor {
         }
     }
     
-    func loadRecentHistory(limit: Int = 100) {
+    func loadMore() {
+        guard hasMore else { return }
+        fetchLimit += Self.pageSize
+        reload()
+    }
+
+    private func reload() {
+        let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
         var descriptor = FetchDescriptor<SongHistory>(
+            predicate: query.isEmpty ? nil : #Predicate {
+                $0.trackName.localizedStandardContains(query)
+                    || $0.artist.localizedStandardContains(query)
+                    || ($0.album ?? "").localizedStandardContains(query)
+            },
             sortBy: [SortDescriptor(\.playedAt, order: .reverse)]
         )
-        descriptor.fetchLimit = limit
-        
+        // One extra row tells us whether another page exists without a count query.
+        descriptor.fetchLimit = fetchLimit + 1
+
         do {
-            recentHistory = try modelContext.fetch(descriptor)
+            let fetched = try modelContext.fetch(descriptor)
+            hasMore = fetched.count > fetchLimit
+            entries = Array(fetched.prefix(fetchLimit))
         } catch {
             System.log("Failed to load song history: \(error)", level: .error)
-            recentHistory = []
+            entries = []
+            hasMore = false
         }
+    }
+
+    private func didChange() {
+        revision += 1
+        reload()
+    }
+
+    private func latestEntry() -> SongHistory? {
+        recentEntries(limit: 1).first
+    }
+
+    /// Newest rows regardless of the list's search and paging.
+    func recentEntries(limit: Int) -> [SongHistory] {
+        var descriptor = FetchDescriptor<SongHistory>(sortBy: [SortDescriptor(\.playedAt, order: .reverse)])
+        descriptor.fetchLimit = limit
+        return (try? modelContext.fetch(descriptor)) ?? []
     }
     
     func deleteHistoryEntry(_ entry: SongHistory) {
+        // Captured before the delete: afterwards the relationship is gone and
+        // the externalStorage blob would be orphaned forever.
+        let artwork = entry.artwork
         modelContext.delete(entry)
-        
+
         do {
             try modelContext.save()
-            imageCache.removeAll()
-            loadRecentHistory()
+            if let artwork {
+                try deleteOrphanedArtwork([artwork])
+            }
+            didChange()
         } catch {
             System.log("Failed to delete history entry: \(error)", level: .error)
         }
     }
-    
+
     func clearAllHistory() {
         do {
             try modelContext.delete(model: SongHistory.self)
+            try modelContext.delete(model: AlbumArtwork.self)
             try modelContext.save()
-            imageCache.removeAll()
+            imageCache.removeAllObjects()
 
-            loadRecentHistory()
+            didChange()
             System.log("Cleared all song history", level: .info)
         } catch {
             System.log("Failed to clear history: \(error)", level: .error)
         }
     }
-    
-    func getHistoryStats() -> (totalSongs: Int, uniqueArtists: Set<String>, totalDuration: Int) {
-        // Only artist and duration are needed; skip materializing artwork and
-        // the rest of the row.
+
+    private func pruneHistory() {
+        do {
+            var descriptor = FetchDescriptor<SongHistory>(
+                sortBy: [SortDescriptor(\.playedAt, order: .reverse)]
+            )
+            descriptor.fetchOffset = Self.historyLimit
+
+            let stale = try modelContext.fetch(descriptor)
+            guard !stale.isEmpty else { return }
+
+            let artworks = Set(stale.compactMap(\.artwork))
+            for entry in stale {
+                modelContext.delete(entry)
+            }
+            try modelContext.save()
+            try deleteOrphanedArtwork(artworks)
+
+            System.log("Pruned \(stale.count) history rows", level: .info)
+        } catch {
+            System.log("Failed to prune history: \(error)", level: .error)
+        }
+    }
+
+    /// Must run after the song deletes are saved: the inverse `songs`
+    /// relationship only drops deleted rows once the delete is processed, so
+    /// checking earlier sees the artwork as still in use and leaks its blob.
+    private func deleteOrphanedArtwork(_ artworks: Set<AlbumArtwork>) throws {
+        let orphaned = artworks.filter(\.songs.isEmpty)
+        guard !orphaned.isEmpty else { return }
+
+        for artwork in orphaned {
+            imageCache.removeObject(forKey: artwork.id as NSUUID)
+            modelContext.delete(artwork)
+        }
+        try modelContext.save()
+    }
+
+    func getHistoryStats() -> HistoryStats {
+        // One pass over at most `historyLimit` rows, fetching only the columns
+        // the stats use; skip materializing artwork and the rest of the row.
         var descriptor = FetchDescriptor<SongHistory>()
-        descriptor.propertiesToFetch = [\.artist, \.duration]
+        descriptor.propertiesToFetch = [\.artist, \.album, \.duration, \.playedAt]
 
         do {
             let allHistory = try modelContext.fetch(descriptor)
-            let totalSongs = allHistory.count
-            let uniqueArtists = Set(allHistory.map { $0.artist })
-            let totalDuration = allHistory.compactMap { $0.duration }.reduce(0, +)
-
-            return (totalSongs, uniqueArtists, totalDuration)
+            return HistoryStats(
+                totalSongs: allHistory.count,
+                uniqueArtists: Set(allHistory.map(\.artist)).count,
+                totalDuration: allHistory.compactMap(\.duration).reduce(0, +),
+                playsPerDay: Self.playsPerDay(allHistory),
+                topArtists: Self.top(allHistory.map(\.artist)),
+                topAlbums: Self.top(allHistory.compactMap { entry in
+                    entry.album.map { "\($0) — \(entry.artist)" }
+                })
+            )
         } catch {
             System.log("Failed to get history stats: \(error)", level: .error)
-            return (0, [], 0)
+            return .empty
         }
     }
     
+    private static func playsPerDay(_ history: [SongHistory]) -> [HistoryStats.DayCount] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+        guard let start = calendar.date(byAdding: .day, value: -(chartDays - 1), to: today) else { return [] }
+
+        let counts = Dictionary(grouping: history.lazy.map(\.playedAt).filter { $0 >= start }) {
+            calendar.startOfDay(for: $0)
+        }.mapValues(\.count)
+
+        return (0..<chartDays).compactMap { offset in
+            calendar.date(byAdding: .day, value: offset, to: start).map {
+                HistoryStats.DayCount(day: $0, plays: counts[$0] ?? 0)
+            }
+        }
+    }
+
+    private static func top(_ names: [String]) -> [HistoryStats.NamedCount] {
+        Dictionary(names.map { ($0, 1) }, uniquingKeysWith: +)
+            .sorted { $0.value != $1.value ? $0.value > $1.value : $0.key < $1.key }
+            .prefix(topCount)
+            .map { HistoryStats.NamedCount(name: $0.key, plays: $0.value) }
+    }
+
     func getDatabaseSize() -> String {
         do {
             let container = modelContext.container
@@ -202,14 +363,13 @@ final class HistoryInteractor {
     }
     
     private func resizeImage(_ image: NSImage, to size: NSSize) -> NSImage? {
-        let resizedImage = NSImage(size: size)
-        resizedImage.lockFocus()
-        
         let imageSize = image.size
+        guard imageSize.width > 0, imageSize.height > 0 else { return nil }
+
         let aspectRatio = imageSize.width / imageSize.height
         let targetAspectRatio = size.width / size.height
-        
-        var drawRect: NSRect
+
+        let drawRect: NSRect
         if aspectRatio > targetAspectRatio {
             let drawWidth = size.height * aspectRatio
             drawRect = NSRect(x: (size.width - drawWidth) / 2, y: 0, width: drawWidth, height: size.height)
@@ -217,11 +377,11 @@ final class HistoryInteractor {
             let drawHeight = size.width / aspectRatio
             drawRect = NSRect(x: 0, y: (size.height - drawHeight) / 2, width: size.width, height: drawHeight)
         }
-        
-        image.draw(in: drawRect)
-        resizedImage.unlockFocus()
-        
-        return resizedImage
+
+        return NSImage(size: size, flipped: false) { _ in
+            image.draw(in: drawRect)
+            return true
+        }
     }
     
     private func getOrCreateAlbumArtwork(for track: MusicTrack) async -> AlbumArtwork? {
@@ -249,7 +409,13 @@ final class HistoryInteractor {
                     artworkData = compressArtwork(image)
                 }
                 
-                if let artworkData = artworkData {
+                if let artworkData {
+                    // Re-check after the await: another save for the same album
+                    // may have inserted while the download was in flight.
+                    if let raced = try modelContext.fetch(descriptor).first {
+                        return raced
+                    }
+
                     let newArtwork = AlbumArtwork(
                         album: album,
                         artist: track.artist,
@@ -269,9 +435,12 @@ final class HistoryInteractor {
     
     func artworkImage(for entry: SongHistory) -> NSImage? {
         guard let artwork = entry.artwork else { return nil }
-        if let cached = imageCache[artwork.id] { return cached }
+
+        let key = artwork.id as NSUUID
+        if let cached = imageCache.object(forKey: key) { return cached }
+
         guard let image = NSImage(data: artwork.artworkData) else { return nil }
-        imageCache[artwork.id] = image
+        imageCache.setObject(image, forKey: key)
         return image
     }
 } 

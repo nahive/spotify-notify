@@ -52,6 +52,27 @@ enum SupportedMusicApplication: String, CaseIterable {
         }
     }
     
+    /// Distributed notification the player posts on every playback change.
+    var playbackChangedName: Notification.Name {
+        switch self {
+        case .spotify:
+            .init("com.spotify.client.PlaybackStateChanged")
+        case .applemusic:
+            .init("com.apple.Music.playerInfo")
+        }
+    }
+
+    /// Maps the `musicApp` name stored in history back to the app. "Music"
+    /// covers rows written before the name was "Apple Music".
+    init?(appName: String) {
+        if appName == "Music" {
+            self = .applemusic
+            return
+        }
+        guard let match = Self.allCases.first(where: { $0.appName == appName }) else { return nil }
+        self = match
+    }
+
     var isInstalled: Bool {
         NSWorkspace.shared.urlForApplication(withBundleIdentifier: self.bundleId) != nil
     }

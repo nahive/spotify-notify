@@ -3,6 +3,7 @@ import SwiftUI
 struct RadioPlayingView: View {
     let musicInteractor: MusicInteractor
     
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var animationTrigger = false
     
     var body: some View {
@@ -17,7 +18,7 @@ struct RadioPlayingView: View {
         .frame(maxWidth: 280)
         .frame(maxWidth: .infinity)
         .onAppear {
-            animationTrigger = true
+            animationTrigger = !reduceMotion
         }
     }
     
@@ -40,9 +41,11 @@ struct RadioPlayingView: View {
             .frame(width: 4, height: baseHeight)
             .scaleEffect(y: animationTrigger ? 1.0 : scaleFactors[index], anchor: .bottom)
             .animation(
-                .easeInOut(duration: 0.8)
-                .repeatForever(autoreverses: true)
-                .delay(animationDelay),
+                reduceMotion
+                    ? nil
+                    : .easeInOut(duration: 0.8)
+                        .repeatForever(autoreverses: true)
+                        .delay(animationDelay),
                 value: animationTrigger
             )
     }

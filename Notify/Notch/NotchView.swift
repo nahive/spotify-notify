@@ -67,6 +67,8 @@ struct NotchView: View {
                     collapsedRow
                         .frame(height: viewModel.pillRowHeight)
                         .opacity(expanded ? 0 : 1)
+                        // Opacity-0 views stay in the VoiceOver traversal order.
+                        .accessibilityHidden(expanded)
                     // Full detail card, forced to the window's live height so its
                     // large intrinsic size can't stretch the layout (which would
                     // clip the shape into a square). Content sits at the top
@@ -75,6 +77,7 @@ struct NotchView: View {
                     ExpandedCard(notch: notch)
                         .frame(width: geo.size.width, height: geo.size.height, alignment: .top)
                         .opacity(expanded ? 1 : 0)
+                        .accessibilityHidden(!expanded)
                         .clipped()
                 }
             }

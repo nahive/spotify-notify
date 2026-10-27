@@ -33,7 +33,8 @@ struct SettingsView: View {
                     Label("About", systemImage: "info.circle")
                 }
         }
-        .frame(width: 450)
+        // Height pinned too, or the window resizes on every tab switch.
+        .frame(width: 450, height: 360)
         .tabViewStyle(.automatic)
     }
 }

@@ -29,12 +29,12 @@ final class NotchViewModel {
     /// Width of each track-text wing beside a physical notch.
     private static let wingWidth: CGFloat = 156
     /// Pill width on screens without a physical notch.
-    private static let syntheticWidth: CGFloat = 340
+    static let syntheticWidth: CGFloat = 340
     /// Pill-row height on screens without a physical notch.
     private static let syntheticPillHeight: CGFloat = 34
-    /// Height of the expanded detail card revealed on hover. Fits two rows:
-    /// artwork/track detail on top, playback controls beneath.
-    static let cardHeight: CGFloat = 118
+    /// Height of the expanded detail card revealed on hover. Fits three rows:
+    /// artwork/track detail, the scrubber, and playback controls.
+    static let cardHeight: CGFloat = 140
 
     init(notch: NotchInteractor, defaults: DefaultsInteractor) {
         self.notch = notch
@@ -92,10 +92,11 @@ final class NotchViewModel {
 
         let base: NotchDisplayState
         switch defaults.notchVisibility {
-        case .off, .always:
-            // .off never reaches here (the window is destroyed); treat it like .always defensively.
-            base = track == nil ? .shape : .pill
-        case .whilePlaying:
+        case .off, .whilePlaying:
+            // .off never reaches here (the window is destroyed); treat it like
+            // .whilePlaying defensively. Keyed on track presence rather than
+            // `isPlaying` on purpose: the expanded card's play button is the
+            // only way to resume from the notch.
             base = track == nil ? (metrics.hasNotch ? .shape : .hidden) : .pill
         case .onHover:
             base = metrics.hasNotch ? .shape : .hidden

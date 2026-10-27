@@ -2,11 +2,23 @@ import Foundation
 
 enum NotificationIdentifier: Sendable {
     static let skip = "notification.skip"
+    static let favorite = "notification.favorite"
+    static let unfavorite = "notification.unfavorite"
     static let category = "notification.category"
+    /// Players that support favorites get a second action, and which one
+    /// depends on the track's current state.
+    static let favoriteCategory = "notification.category.favorite"
+    static let unfavoriteCategory = "notification.category.unfavorite"
+    /// userInfo key: the track a banner was built for, so its actions can't
+    /// hit a track that started after delivery.
+    static let trackIdKey = "trackId"
+    /// Stable across deliveries so each banner replaces the previous one
+    /// instead of stacking a permanent entry per track in Notification Center.
+    static let nowPlaying = "notification.nowplaying"
 }
 
 struct MusicNotification: Sendable {
-    let identifier = UUID().uuidString
+    let identifier = NotificationIdentifier.nowPlaying
     let title: String
     let subtitle: String?
     let body: String

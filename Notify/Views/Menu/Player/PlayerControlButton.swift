@@ -1,11 +1,12 @@
 import SwiftUI
 
-/// Circular transport button shared by the menu player and radio views.
-/// A real `Button` so keyboard focus + Return activate it and VoiceOver
-/// reports it correctly.
+/// Transport button shared by the menu player and radio views: a bare glyph
+/// with a soft circular highlight on hover. A real `Button` so keyboard
+/// focus + Return activate it and VoiceOver reports it correctly.
 struct PlayerControlButton: View {
     let systemName: String
-    var font: Font = .body
+    var font: Font = .system(size: 18, weight: .semibold)
+    var size: CGFloat = 36
     let accessibilityLabel: String
     var accessibilityHint: String? = nil
     let action: () -> Void
@@ -17,22 +18,27 @@ struct PlayerControlButton: View {
             Image(systemName: systemName)
                 .font(font)
                 .foregroundStyle(.primary)
-                .padding(10)
-                .background(
-                    Circle()
-                        .fill(.primary.opacity(hovering ? 0.2 : 0.1))
-                        .stroke(.primary.opacity(0.15), lineWidth: 1)
-                )
-                .scaleEffect(hovering ? 1.08 : 1.0)
-                .shadow(color: .primary.opacity(0.2), radius: hovering ? 4 : 0)
+                .frame(width: size, height: size)
+                .background(.primary.opacity(hovering ? 0.1 : 0), in: Circle())
+                .contentShape(Circle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressScaleButtonStyle())
         .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.2)) {
+            withAnimation(.easeOut(duration: 0.15)) {
                 self.hovering = hovering
             }
         }
         .accessibilityLabel(accessibilityLabel)
         .accessibilityHint(accessibilityHint ?? "")
+    }
+}
+
+/// Shrinks and dims slightly while pressed.
+struct PressScaleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.88 : 1)
+            .opacity(configuration.isPressed ? 0.7 : 1)
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
     }
 }

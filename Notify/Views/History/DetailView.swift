@@ -1,83 +1,114 @@
 import SwiftUI
+import Charts
 
 struct DetailView: View {
-    let selectedEntry: SongHistory?
-    
+    let entry: SongHistory
+
     var body: some View {
-        Group {
-            if let entry = selectedEntry {
-                ScrollView {
-                    VStack(spacing: 0) {
-                        DetailHeaderView(entry: entry)
-                        DetailStatsView(entry: entry)
-                    }
-                }
-            } else {
-                DetailEmptyStateView()
+        ScrollView {
+            VStack(spacing: 0) {
+                DetailHeaderView(entry: entry)
+                DetailStatsView(entry: entry)
+                    .padding(.top, 16)
             }
+            .padding(.bottom, 20)
         }
-        .animation(.easeInOut(duration: 0.3), value: selectedEntry?.id)
     }
 }
 
+/// Full-bleed hero: the artwork, blurred and dimmed, behind a sharp copy and
+/// the track details.
 private struct DetailHeaderView: View {
     let entry: SongHistory
-    
+    @Environment(HistoryInteractor.self) private var historyInteractor
+
+    @State private var artwork: NSImage?
+
     var body: some View {
-        VStack(spacing: 16) {
-            Spacer(minLength: 20)
-            
-            DetailArtworkView(entry: entry)
+        VStack(spacing: 14) {
+            DetailArtworkView(artwork: artwork)
             DetailSongInfoView(entry: entry)
-            
-            Spacer(minLength: 24)
+            HStack(spacing: 10) {
+                HistoryEntryActions(entry: entry)
+            }
+            .labelStyle(.iconOnly)
+            .buttonStyle(.glass)
+            .controlSize(.large)
         }
+        .padding(.top, 28)
+        .padding(.bottom, 24)
         .frame(maxWidth: .infinity)
+        .background {
+            ZStack {
+                if let artwork {
+                    Image(nsImage: artwork)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .blur(radius: 40, opaque: true)
+                        .saturation(1.4)
+                        .transition(.opacity)
+                }
+                // Fades the hero into the window background so the stats
+                // below don't sit on a hard edge.
+                LinearGradient(
+                    colors: [.clear, Color(nsColor: .windowBackgroundColor)],
+                    startPoint: .center,
+                    endPoint: .bottom
+                )
+            }
+            .clipped()
+        }
+        .task(id: entry.id) {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                artwork = historyInteractor.artworkImage(for: entry)
+            }
+        }
     }
 }
 
 private struct DetailArtworkView: View {
-    let entry: SongHistory
-    @Environment(HistoryInteractor.self) var historyInteractor
-    
+    let artwork: NSImage?
+
     var body: some View {
         Group {
-            if let image = historyInteractor.artworkImage(for: entry) {
-                Image(nsImage: image)
+            if let artwork {
+                Image(nsImage: artwork)
                     .resizable()
+                    .interpolation(.medium)
                     .aspectRatio(contentMode: .fill)
             } else {
                 Image(systemName: "music.note")
                     .font(.system(size: 40))
                     .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(.quaternary)
             }
         }
-        .frame(width: 140, height: 140)
-        .clipShape(RoundedRectangle(cornerRadius: 14))
-        .shadow(color: .black.opacity(0.18), radius: 8, x: 0, y: 4)
-        .animation(.spring(response: 0.6, dampingFraction: 0.8), value: entry.id)
+        .frame(width: 160, height: 160)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .shadow(color: .black.opacity(0.3), radius: 16, y: 8)
     }
 }
 
 private struct DetailSongInfoView: View {
     let entry: SongHistory
-    
+
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 4) {
             Text(entry.trackName)
                 .font(.title)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
-            
+
             Text(entry.artist)
-                .font(.title2)
+                .font(.title3)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
-            
+
             if let album = entry.album {
                 Text(album)
                     .font(.headline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.tertiary)
                     .multilineTextAlignment(.center)
             }
         }
@@ -89,9 +120,10 @@ private struct DetailStatsView: View {
     let entry: SongHistory
     @Environment(HistoryInteractor.self) var historyInteractor
     
+    /// Three `fetchCount` queries — resolved once per selection, never in `body`.
+    @State private var playCounts = (songPlays: 0, artistPlays: 0, albumPlays: 0)
+
     var body: some View {
-        let playCounts = historyInteractor.getPlayCounts(for: entry)
-        
         VStack(spacing: 12) {
             Text("Details")
                 .font(.headline)
@@ -152,8 +184,9 @@ private struct DetailStatsView: View {
                     .padding(.horizontal, 20)
                 }
             }
-            
-            Spacer(minLength: 12)
+        }
+        .task(id: entry.id) {
+            playCounts = historyInteractor.getPlayCounts(for: entry)
         }
     }
     
@@ -164,19 +197,107 @@ private struct DetailStatsView: View {
     }
 }
 
-private struct DetailEmptyStateView: View {
+/// Shown when no song is selected: plays per day and the most played
+/// artists and albums.
+struct HistoryOverviewView: View {
+    let stats: HistoryStats
+
     var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "music.note.list")
-                .font(.system(size: 60))
-                .foregroundStyle(.secondary)
-                .scaleEffect(0.8)
-            
-            Text("Select a song to view details")
-                .font(.title2)
-                .foregroundStyle(.secondary)
+        if stats.totalSongs == 0 {
+            ContentUnavailableView(
+                "No Listening Data Yet",
+                systemImage: "chart.bar",
+                description: Text("Charts appear once songs are in your history.")
+            )
+        } else {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    OverviewSection(title: "Last \(HistoryInteractor.chartDays) Days") {
+                        Chart(stats.playsPerDay) { day in
+                            BarMark(
+                                x: .value("Day", day.day, unit: .day),
+                                y: .value("Plays", day.plays)
+                            )
+                            .foregroundStyle(Color.appAccent.gradient)
+                            .cornerRadius(3)
+                        }
+                        .chartXAxis {
+                            AxisMarks(values: .stride(by: .day, count: 2)) {
+                                AxisValueLabel(format: .dateTime.day().month(.abbreviated))
+                            }
+                        }
+                        .frame(height: 160)
+                    }
+
+                    OverviewSection(title: "Top Artists") {
+                        TopList(items: stats.topArtists)
+                    }
+
+                    if !stats.topAlbums.isEmpty {
+                        OverviewSection(title: "Top Albums") {
+                            TopList(items: stats.topAlbums)
+                        }
+                    }
+                }
+                .padding(20)
+            }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+private struct OverviewSection<Content: View>: View {
+    let title: String
+    @ViewBuilder var content: Content
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title)
+                .font(.headline)
+                .foregroundStyle(.secondary)
+            content
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+}
+
+/// Ranked rows rather than a Chart: Charts lays category labels over the bars
+/// once names get long, and a top-5 list needs no axis anyway.
+private struct TopList: View {
+    let items: [HistoryStats.NamedCount]
+
+    private var maxPlays: Int {
+        max(items.map(\.plays).max() ?? 1, 1)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            ForEach(items) { item in
+                VStack(alignment: .leading, spacing: 5) {
+                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        Text(item.name)
+                            .font(.subheadline)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .help(item.name)
+                        Spacer(minLength: 8)
+                        Text("\(item.plays)")
+                            .font(.subheadline.monospacedDigit())
+                            .foregroundStyle(.secondary)
+                    }
+
+                    GeometryReader { geo in
+                        Capsule()
+                            .fill(Color.appAccent.gradient)
+                            .frame(width: max(6, geo.size.width * CGFloat(item.plays) / CGFloat(maxPlays)))
+                    }
+                    .frame(height: 6)
+                }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("\(item.name), \(item.plays) plays")
+            }
+        }
     }
 }
 

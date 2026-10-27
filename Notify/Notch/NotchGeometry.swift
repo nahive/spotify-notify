@@ -45,12 +45,19 @@ enum NotchGeometry {
         )
     }
 
+    /// Stable across relaunches and unambiguous between two identically named
+    /// external displays, unlike `localizedName`.
+    static func identifier(for screen: NSScreen) -> String {
+        (screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)
+            .map { "\($0.uint32Value)" } ?? screen.localizedName
+    }
+
     static func pickScreen(preferred: String) -> NSScreen? {
         let screens = NSScreen.screens
         guard !screens.isEmpty else { return nil }
 
         if preferred != DefaultsInteractor.automaticScreen,
-           let match = screens.first(where: { $0.localizedName == preferred }) {
+           let match = screens.first(where: { identifier(for: $0) == preferred }) {
             return match
         }
 
