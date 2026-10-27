@@ -10,50 +10,75 @@ struct MenuView: View {
     @Environment(NotificationsInteractor.self) var notificationsInteractor
     @Environment(DefaultsInteractor.self) var defaultsInteractor
     @Environment(HistoryInteractor.self) var historyInteractor
-    
+    @Environment(NotchInteractor.self) var notchInteractor
+
+    /// Accent extracted from the artwork (the notch pill computes it anyway);
+    /// nil with nothing playing so the menu falls back to plain material.
+    private var accent: Color? {
+        notchInteractor.track.map(\.accentColor)
+    }
+
     var body: some View {
         PlayerView(musicInteractor: musicInteractor, track: musicInteractor.currentTrack)
-            .frame(width: 480)
-            .padding()
+            .frame(width: PlayingView.width)
+            .padding(16)
+            .background {
+                // A soft wash from the top only: the panel's own material
+                // stays the surface, the artwork colour just warms it.
+                if let accent {
+                    LinearGradient(
+                        colors: [accent.opacity(0.3), accent.opacity(0)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+                }
+            }
+            .animation(.easeInOut(duration: 0.6), value: accent)
+            .onAppear {
+                // Shuffle, repeat and volume change without any notification.
+                musicInteractor.refreshPlaybackOptions()
+            }
             .overlay(alignment: .topTrailing) {
                 Menu {
-                    if let selectedApplication = defaultsInteractor.selectedApplication {
+                    if let application = musicInteractor.currentApplication {
+                        // `Label`, not Text + Image: SwiftUI's AppKit menu
+                        // renderer drops a sibling Image and only bridges Label
+                        // to NSMenuItem.image.
                         Button {
                             musicInteractor.openApplication()
                         } label: {
-                            Text("Open \(selectedApplication.appName)")
-                            Image(systemName: "play.house")
+                            Label("Open \(application.appName)", systemImage: "play.house")
                         }
                         Divider()
                     }
                     Button {
-                        openWindow(id: "history")
-                        NSApp.activate(ignoringOtherApps: true)
+                        AppWindow.showHistory(using: openWindow)
                     } label: {
-                        Text("Song History")
-                        Image(systemName: "clock")
+                        Label("Song History", systemImage: "clock")
                     }
                     Button {
-                        openSettings()
-                        NSApp.activate(ignoringOtherApps: true)
+                        AppWindow.showSettings(using: openSettings)
                     } label: {
-                        Text("Settings")
-                        Image(systemName: "gear")
+                        Label("Settings", systemImage: "gear")
                     }
+                    .keyboardShortcut(",")
                     Button {
                         NSApp.terminate(nil)
                     } label: {
-                        Text("Quit")
-                        Image(systemName: "power")
+                        Label("Quit", systemImage: "power")
                     }
+                    .keyboardShortcut("q")
                 } label: {
                     Image(systemName: "ellipsis")
                 }
                 .menuIndicator(.hidden)
                 .menuStyle(.borderlessButton)
                 .accessibilityLabel("More options")
-                .frame(width: 25, height: 20)
-                .padding()
+                .frame(width: 28, height: 28)
+                .contentShape(Rectangle())
+                .padding(8)
             }
     }
 }

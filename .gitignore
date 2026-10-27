@@ -121,3 +121,5 @@ buildServer.json
 
 # Claude Code
 CLAUDE.md
+# Local signing overrides (team id / identity)
+Notify/Other/Local.xcconfig

@@ -26,10 +26,22 @@ struct AboutSettingsView: View {
                 }
             }
             .padding()
+            Text(versionString)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
             Text("Created with ❤ by nahive")
                 .padding(.bottom)
-                .foregroundStyle(Color.gray)
-                .font(.system(size: 10))
+                // Fixed point sizes bypass the macOS "Larger Text" setting and
+                // Color.gray on the window background fails 4.5:1.
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
+    }
+
+    private var versionString: String {
+        let info = Bundle.main.infoDictionary
+        let short = info?["CFBundleShortVersionString"] as? String ?? "—"
+        let build = info?["CFBundleVersion"] as? String ?? "—"
+        return "Version \(short) (\(build))"
     }
 }

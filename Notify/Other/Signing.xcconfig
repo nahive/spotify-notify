@@ -1,0 +1,18 @@
+// Signing configuration.
+//
+// The repository is public, so no personal Team ID lives here. Out of the box
+// the app builds ad-hoc signed ("-"), which is enough to run it locally.
+//
+// To sign with your own account, create Notify/Other/Local.xcconfig — it is
+// gitignored — containing:
+//
+//   DEVELOPMENT_TEAM = YOURTEAMID
+//   CODE_SIGN_IDENTITY = Apple Development
+//
+// The target must not set these itself: target build settings beat this file,
+// so a value there would silently override Local.xcconfig.
+
+CODE_SIGN_STYLE = Automatic
+CODE_SIGN_IDENTITY = -
+
+#include? "Local.xcconfig"

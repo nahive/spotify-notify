@@ -14,17 +14,17 @@ final class AppleMusicPlayer: NSObject, MusicPlayerProtocol {
         get {
             if isOpen {
                 if storedApplication == nil {
-                    storedApplication = SBApplication(bundleIdentifier: bundleId)
+                    let app = SBApplication(bundleIdentifier: bundleId)
+                    // Ticks (1/60 s). The default is ~2 minutes, which would
+                    // beachball the menu bar whenever Music is unresponsive.
+                    app?.timeout = 120
+                    storedApplication = app
                 }
             } else {
                 storedApplication = nil
             }
             return storedApplication
         }
-    }
-    
-    var playbackChangedName: String {
-        bundleId + ".playerInfo"
     }
     
     var hasPermissionToControl: Bool {
@@ -73,6 +73,66 @@ final class AppleMusicPlayer: NSObject, MusicPlayerProtocol {
     func seek(to position: Double) {
         application?.setPlayerPosition?(position)
     }
+
+    // MARK: Playback options
+
+    var volume: Int? {
+        application?.soundVolume
+    }
+
+    var isShuffling: Bool? {
+        application?.shuffleEnabled
+    }
+
+    var repeatMode: RepeatMode? {
+        application?.songRepeat.map { mode in
+            switch mode {
+            case .off: .off
+            case .one: .one
+            case .all: .all
+            }
+        }
+    }
+
+    var supportedRepeatModes: [RepeatMode] { [.off, .all, .one] }
+
+    var supportsFavorites: Bool { true }
+
+    func setVolume(_ volume: Int) {
+        application?.setSoundVolume?(volume)
+    }
+
+    func setShuffling(_ isShuffling: Bool) {
+        application?.setShuffleEnabled?(isShuffling)
+    }
+
+    func setRepeatMode(_ mode: RepeatMode) {
+        let value: AppleMusicERpt = switch mode {
+        case .off: .off
+        case .one: .one
+        case .all: .all
+        }
+        application?.setSongRepeat?(value)
+    }
+
+    func setCurrentTrackFavorited(_ isFavorited: Bool) {
+        application?.currentTrack?.setFavorited?(isFavorited)
+    }
+
+    func play(trackId: String) -> Bool {
+        guard let databaseID = Int(trackId),
+              let library = (application?.sources?().firstObject as? any AppleMusicSource)?
+                .libraryPlaylists?().firstObject as? any AppleMusicPlaylist,
+              let tracks = library.tracks?() else { return false }
+
+        // A single `whose` Apple Event; iterating the library would send one
+        // event per track.
+        let matches = tracks.filtered(using: NSPredicate(format: "databaseID == %ld", databaseID)) as NSArray
+        guard let track = matches.firstObject as? any AppleMusicTrack else { return false }
+
+        track.playOnce?(true)
+        return true
+    }
 }
 
 private extension AppleMusicTrack {
@@ -93,7 +153,9 @@ private extension AppleMusicTrack {
             rating: rating,
             bpm: bpm,
             bitRate: bitRate,
-            isLoved: loved,
+            // Music renamed "loved" to "favorited"; `loved` is no longer in
+            // its scripting dictionary and always reads nil.
+            isLoved: favorited ?? loved,
             composer: composer,
             releaseDate: releaseDate ?? nil
         )

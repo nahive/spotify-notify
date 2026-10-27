@@ -45,6 +45,16 @@ final class NotchInteractor {
         musicInteractor.previousTrack()
     }
 
+    // Read straight through so views observe MusicInteractor's per-second
+    // progress without republishing a NowPlaying snapshot every tick.
+    var progress: Double { musicInteractor.currentProgressPercent }
+    var elapsed: String { musicInteractor.currentTrackProgress }
+    var duration: String { musicInteractor.fullTrackDuration }
+
+    func seek(to fraction: Double) {
+        musicInteractor.seek(to: fraction)
+    }
+
     // MARK: - Bindings
 
     private func bind() {

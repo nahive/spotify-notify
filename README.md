@@ -1,14 +1,14 @@
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/nahive/spotify-notify/master/logo.png" alt="Notify" width="200"/>
+<img src="docs/logo.png" alt="Notify" width="200"/>
 </p>
 <p align="center">
-<img src="https://raw.githubusercontent.com/nahive/spotify-notify/master/p1.png" alt="normal dark mode" width="300"/>
-<img src="https://raw.githubusercontent.com/nahive/spotify-notify/master/p2.png" alt="normal light mode" width="300"/>
+<img src="docs/p1.png" alt="normal dark mode" width="300"/>
+<img src="docs/p2.png" alt="normal light mode" width="300"/>
 </p>
 <p align="center">
-<img src="https://raw.githubusercontent.com/nahive/spotify-notify/master/p3.png" alt="extended dark mode" width="300"/>
-<img src="https://raw.githubusercontent.com/nahive/spotify-notify/master/p4.png" alt="extended light mode" width="300"/>
+<img src="docs/p3.png" alt="extended dark mode" width="300"/>
+<img src="docs/p4.png" alt="extended light mode" width="300"/>
 </p>
 
 # Notify
@@ -28,25 +28,26 @@ brew install --cask spotify-notify --no-quarantine
 
 ## Features
 
-- [x] Spotify and Apple Music support
+- [x] Spotify and Apple Music support, with automatic switching to whichever is playing ✨
 - [x] Notification sounds (toggle)
 - [x] Notification on play/pause (toggle)
-- [x] Customizable status bar icon (default, dark and none)
+- [x] Show song name in the menu bar (toggle)
 - [x] Launch on login (toggle)
 - [x] Album artwork (toggle)
 - [x] Toggle disabling of notifications when player is focused (toggle)
 - [x] Shortcuts for showing notification (customizable) ✨
 - [x] Show progress of a song in notification ✨
-- [x] Ability to skip song from notification ✨
-- [x] Options to control player from menu bar ✨
-- [x] Song history with play counts and stats
-- [x] Now-playing pill around the notch with hover controls (macOS 26+) ✨
+- [x] Ability to skip song from notification, and favorite it in Apple Music ✨
+- [x] Options to control player from menu bar, including shuffle, repeat and volume ✨
+- [x] Searchable song history with play counts, charts and one-click replay
+- [x] Now-playing pill around the notch with hover controls and scrubbing (macOS 26+) ✨
+- [x] Shortcuts, Spotlight and Siri actions (App Intents) ✨
 - [ ] Customizable options in notification
-- [ ] Add localizations
+- [x] Localizations (English, Japanese)
 
 ## Notes
 
-When running the app on macOS Mojave (10.14) or higher, the first time you attempt to control Spotify you will be presented with the following dialog box:
+The first time you attempt to control Spotify or Apple Music, macOS presents the following dialog box:
 
 <p align="center"><img src="docs/authorisation.png" alt="Authorisation"/></p>
 
@@ -58,11 +59,16 @@ If you click Don't Allow by accident, you can reset the permissions dialogue usi
 $ tccutil reset AppleEvents
 ```
 
-Additionally, it is now required to sign the app using a paid developer account. To do this, simply set the signing team and certificate in the General settings of the Notify target:
+The app builds and runs ad-hoc signed out of the box. To sign with your own account, create `Notify/Other/Local.xcconfig` (gitignored) containing:
 
-<p align="center"><img src="docs/signing.png" alt="Signing"/></p>
+```
+DEVELOPMENT_TEAM = YOURTEAMID
+CODE_SIGN_IDENTITY = Apple Development
+```
 
 ## Building
+
+**Requirements:** macOS 26 or later, Xcode 26 or later.
 
 ```
 $ git clone https://github.com/nahive/spotify-notify.git

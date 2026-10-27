@@ -15,7 +15,11 @@ final class SpotifyPlayer: NSObject, MusicPlayerProtocol {
         get {
             if isOpen {
                 if storedApplication == nil {
-                    storedApplication = SBApplication(bundleIdentifier: bundleId)
+                    let app = SBApplication(bundleIdentifier: bundleId)
+                    // Ticks (1/60 s). The default is ~2 minutes, which would
+                    // beachball the menu bar whenever Spotify is unresponsive.
+                    app?.timeout = 120
+                    storedApplication = app
                 }
             } else {
                 storedApplication = nil
@@ -24,12 +28,9 @@ final class SpotifyPlayer: NSObject, MusicPlayerProtocol {
         }
     }
 
-    var playbackChangedName: String {
-        bundleId + ".PlaybackStateChanged"
-    }
-    
     var hasPermissionToControl: Bool {
-        application?.playerState != .unknown
+        guard let state = application?.playerState else { return false }
+        return state != .unknown
     }
     
     var currentTrack: MusicTrack? {
@@ -64,6 +65,46 @@ final class SpotifyPlayer: NSObject, MusicPlayerProtocol {
     func seek(to position: Double) {
         application?.setPlayerPosition?(position)
     }
+
+    // MARK: Playback options
+
+    var volume: Int? {
+        application?.soundVolume
+    }
+
+    var isShuffling: Bool? {
+        application?.shuffling
+    }
+
+    var repeatMode: RepeatMode? {
+        application?.repeating.map { $0 ? .all : .off }
+    }
+
+    // Spotify's scripting dictionary only exposes repeat as on/off.
+    var supportedRepeatModes: [RepeatMode] { [.off, .all] }
+
+    // Spotify's dictionary can read `starred` but not set it.
+    var supportsFavorites: Bool { false }
+
+    func setVolume(_ volume: Int) {
+        application?.setSoundVolume?(volume)
+    }
+
+    func setShuffling(_ isShuffling: Bool) {
+        application?.setShuffling?(isShuffling)
+    }
+
+    func setRepeatMode(_ mode: RepeatMode) {
+        application?.setRepeating?(mode != .off)
+    }
+
+    func setCurrentTrackFavorited(_ isFavorited: Bool) {}
+
+    func play(trackId: String) -> Bool {
+        guard let application else { return false }
+        application.playTrack?(trackId, inContext: nil)
+        return true
+    }
 }
 
 private extension SpotifyTrack {
@@ -85,8 +126,9 @@ private extension SpotifyTrack {
         )
     }
     
-    var fixedDuration: Int {
-        (duration ?? 0) / 1000
+    var fixedDuration: Int? {
+        guard let duration, duration > 0 else { return nil }
+        return duration / 1000
     }
     
     var musicArtwork: MusicArtwork? {

@@ -1,28 +1,40 @@
 import SwiftUI
+import LaunchAtLogin
 
 struct GeneralSettingsView: View {
-    let defaultsInteractor: DefaultsInteractor
+    @Bindable var defaultsInteractor: DefaultsInteractor
     let musicInteractor: MusicInteractor
     let notificationsInteractor: NotificationsInteractor
 
     var body: some View {
         Form {
-            Section("Music app") {
+            Section {
+                LaunchAtLogin.Toggle("Launch on startup")
+                Toggle("Show song name in menu bar", isOn: $defaultsInteractor.shouldShowSongInMenuBar)
+            }
+
+            Section {
                 musicAppSelectionView
                     .frame(maxWidth: .infinity)
+            } header: {
+                Text("Music app")
+            } footer: {
+                if defaultsInteractor.playerSelection == .automatic {
+                    Text(automaticFooter)
+                }
             }
 
             Section("Permissions") {
                 notificationPermissionsView
 
-                if let selectedApplication = defaultsInteractor.selectedApplication {
-                    controlPermissionsView(for: selectedApplication)
+                if let application = musicInteractor.currentApplication {
+                    controlPermissionsView(for: application)
                 }
             }
         }
         .formStyle(.grouped)
-        .onChange(of: defaultsInteractor.selectedApplication) { _, new in
-            musicInteractor.set(application: new)
+        .onChange(of: defaultsInteractor.playerSelection) { _, new in
+            musicInteractor.set(selection: new)
         }
         .task {
             // Each poll fires a live AppleEvent at the player (permission check),
@@ -36,34 +48,80 @@ struct GeneralSettingsView: View {
         }
     }
 
+    private var automaticFooter: String {
+        guard let application = musicInteractor.currentApplication else {
+            return "Follows whichever of Spotify or Apple Music starts playing."
+        }
+        return "Follows whichever app starts playing. Currently following \(application.appName)."
+    }
+
     private var musicAppSelectionView: some View {
-        HStack {
+        HStack(spacing: 12) {
+            selectionTile(
+                .automatic,
+                title: "Automatic",
+                color: .appAccent,
+                isEnabled: true,
+                help: "Follow whichever app is playing"
+            ) {
+                Image(systemName: "arrow.triangle.2.circlepath")
+                    .font(.system(size: 30, weight: .medium))
+                    .foregroundStyle(.primary)
+                    .frame(width: 64, height: 64)
+            }
+
             ForEach(SupportedMusicApplication.allCases, id: \.rawValue) { app in
-                ZStack {
-                    if app.isInstalled {
-                        if let icon = app.icon {
-                            Image(nsImage: icon)
-                                .resizable()
-                                .frame(width: 80, height: 80)
-                        } else {
-                            Text(app.appName)
-                                .frame(width: 80, height: 80)
-                        }
+                selectionTile(
+                    .fixed(app),
+                    title: app.appName,
+                    color: app.color,
+                    isEnabled: app.isInstalled,
+                    help: app.isInstalled ? "Always use \(app.appName)" : "\(app.appName) is not installed"
+                ) {
+                    if let icon = app.icon {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .frame(width: 64, height: 64)
                     } else {
-                        Text("\(app.appName) is not installed")
-                            .frame(width: 80, height: 80)
-                            .multilineTextAlignment(.center)
+                        Image(systemName: "music.note")
+                            .font(.system(size: 30))
+                            .frame(width: 64, height: 64)
                     }
                 }
-                .background(defaultsInteractor.selectedApplication == app ? app.color.opacity(0.5) : Color.clear)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .onTapGesture {
-                    guard app.isInstalled else { return }
-                    defaultsInteractor.selectedApplication = app
-                }
-                .accessibilityLabel("Select \(app.appName)")
             }
         }
+    }
+
+    private func selectionTile(
+        _ selection: PlayerSelection,
+        title: String,
+        color: Color,
+        isEnabled: Bool,
+        help: String,
+        @ViewBuilder icon: () -> some View
+    ) -> some View {
+        let isSelected = defaultsInteractor.playerSelection == selection
+        return Button {
+            defaultsInteractor.playerSelection = selection
+        } label: {
+            VStack(spacing: 6) {
+                icon()
+                Text(title)
+                    .font(.caption)
+                    .foregroundStyle(isSelected ? .primary : .secondary)
+            }
+            .padding(8)
+            .frame(width: 96)
+            .opacity(isEnabled ? 1 : 0.35)
+            .background(isSelected ? color.opacity(0.35) : Color.clear,
+                        in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .disabled(!isEnabled)
+        .help(help)
+        .accessibilityLabel(title)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     private var notificationPermissionsView: some View {

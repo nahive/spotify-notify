@@ -11,9 +11,19 @@ enum NotifySchemaV1: VersionedSchema {
     static var models: [any PersistentModel.Type] { [SongHistory.self, AlbumArtwork.self] }
 }
 
+/// V2 drops the Spotlight attribute from `artist` (a private listening history
+/// has no business in system-wide search) and adds the indexes the history
+/// queries actually use.
+enum NotifySchemaV2: VersionedSchema {
+    static var versionIdentifier: Schema.Version { .init(2, 0, 0) }
+    static var models: [any PersistentModel.Type] { [SongHistory.self, AlbumArtwork.self] }
+}
+
 enum NotifyMigrationPlan: SchemaMigrationPlan {
-    static var schemas: [any VersionedSchema.Type] { [NotifySchemaV1.self] }
-    static var stages: [MigrationStage] { [] }
+    static var schemas: [any VersionedSchema.Type] { [NotifySchemaV1.self, NotifySchemaV2.self] }
+    static var stages: [MigrationStage] {
+        [.lightweight(fromVersion: NotifySchemaV1.self, toVersion: NotifySchemaV2.self)]
+    }
 }
 
 @Model
@@ -43,7 +53,6 @@ final class SongHistory {
     var id: UUID
     var trackId: String
     var trackName: String
-    @Attribute(.spotlight)
     var artist: String
     var album: String?
     var albumArtist: String?
@@ -68,6 +77,9 @@ final class SongHistory {
     var composer: String? // Apple Music only
     var spotifyUrl: String? // Spotify only
     var releaseDate: Date? // Apple Music only
+
+    // Backs `HistoryInteractor.reload`'s playedAt sort and `getPlayCounts`' filters.
+    #Index<SongHistory>([\.playedAt], [\.artist], [\.trackName, \.artist])
     
     init(
         trackId: String,

@@ -6,13 +6,18 @@ struct CenteredPill: View {
     let notch: NotchInteractor
     var accent: Color
 
+    /// Pill width minus horizontal padding (2x66), HStack spacing, the waveform
+    /// icon and the spacer minimum. Derived, not guessed: the old literal 210
+    /// overran the real budget and clipped long titles mid-scroll.
+    private static let textWidth = NotchViewModel.syntheticWidth - 132 - 10 - 11 - 10
+
     var body: some View {
         HStack(spacing: 10) {
             if let track = notch.track {
                 MarqueeText(
                     text: track.artist.map { "\(track.title) — \($0)" } ?? track.title,
                     font: .system(size: 11, weight: .medium),
-                    maxWidth: 210
+                    maxWidth: Self.textWidth
                 )
                 .foregroundStyle(.white.opacity(0.9))
                 .id("mini-\(track.id)")
@@ -111,13 +116,17 @@ struct ExpandedCard: View {
                     Spacer(minLength: 0)
                 }
                 Spacer(minLength: 8)
+                NotchProgressBar(notch: notch, accent: track.accentColor)
+                Spacer(minLength: 4)
                 // Controls on their own row, pinned to the bottom.
                 HStack(spacing: 32) {
-                    MediaButton(icon: "backward.fill", size: 14) { notch.previousTrack() }
-                    MediaButton(icon: track.isPlaying ? "pause.fill" : "play.fill", size: 19) {
+                    MediaButton(icon: "backward.fill", label: "Previous track", size: 14) { notch.previousTrack() }
+                    MediaButton(icon: track.isPlaying ? "pause.fill" : "play.fill",
+                                label: track.isPlaying ? "Pause" : "Play",
+                                size: 19) {
                         notch.togglePlayPause()
                     }
-                    MediaButton(icon: "forward.fill", size: 14) { notch.nextTrack() }
+                    MediaButton(icon: "forward.fill", label: "Next track", size: 14) { notch.nextTrack() }
                 }
             }
             // Sits inside the card's side walls, which the stretched top
@@ -125,6 +134,62 @@ struct ExpandedCard: View {
             .padding(.horizontal, 28)
             .padding(.vertical, 13)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        }
+    }
+}
+
+/// Thin scrubber with elapsed/total time; drag anywhere on the track to seek.
+struct NotchProgressBar: View {
+    let notch: NotchInteractor
+    var accent: Color
+
+    @State private var dragFraction: Double?
+
+    var body: some View {
+        let fraction = min(1, max(0, dragFraction ?? notch.progress))
+
+        HStack(spacing: 8) {
+            Text(notch.elapsed)
+                .frame(width: 30, alignment: .trailing)
+
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(.white.opacity(0.18))
+                    Capsule()
+                        .fill(accent)
+                        .frame(width: geo.size.width * fraction)
+                }
+                .frame(height: dragFraction == nil ? 4 : 6)
+                .frame(maxHeight: .infinity)
+                .contentShape(Rectangle())
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { value in
+                            dragFraction = min(1, max(0, value.location.x / max(geo.size.width, 1)))
+                        }
+                        .onEnded { _ in
+                            if let dragFraction {
+                                notch.seek(to: dragFraction)
+                            }
+                            dragFraction = nil
+                        }
+                )
+                .animation(.easeOut(duration: 0.15), value: dragFraction == nil)
+            }
+            .frame(height: 12)
+
+            Text(notch.duration)
+                .frame(width: 30, alignment: .leading)
+        }
+        .font(.system(size: 9, weight: .medium).monospacedDigit())
+        .foregroundStyle(.white.opacity(0.6))
+        .accessibilityElement()
+        .accessibilityLabel("Playback position")
+        .accessibilityValue("\(notch.elapsed) of \(notch.duration)")
+        .accessibilityAdjustableAction { direction in
+            let step = direction == .increment ? 0.05 : -0.05
+            notch.seek(to: min(1, max(0, notch.progress + step)))
         }
     }
 }
@@ -156,6 +221,7 @@ struct ArtworkThumb: View {
 
 struct MediaButton: View {
     var icon: String
+    var label: String
     var size: CGFloat
     var action: () -> Void
 
@@ -166,12 +232,15 @@ struct MediaButton: View {
             Image(systemName: icon)
                 .font(.system(size: size, weight: .semibold))
                 .foregroundStyle(.white.opacity(hovering ? 1 : 0.85))
-                .frame(width: size + 12, height: size + 12)
+                // 28pt floor: the macOS minimum for a hover-only hit target.
+                .frame(width: max(size + 12, 28), height: max(size + 12, 28))
                 .background(.white.opacity(hovering ? 0.15 : 0), in: Circle())
                 .contentShape(Circle())
         }
         .buttonStyle(.plain)
         .onHover { hovering = $0 }
+        .accessibilityLabel(label)
+        .help(label)
     }
 }
 
@@ -186,6 +255,7 @@ struct WaveformIcon: View {
             .foregroundStyle(color)
             .symbolEffect(.variableColor.iterative, isActive: isPlaying)
             .frame(height: size)
+            .accessibilityHidden(true)
     }
 }
 

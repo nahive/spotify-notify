@@ -45,7 +45,7 @@ final class NotchWindowController {
         panel.contentView = hostingView
 
         layoutObservationTask = Task { [weak self] in
-            for await _ in Observations({ (viewModel.state, viewModel.metrics) }) {
+            for await _ in Observations({ (viewModel.state, viewModel.metrics, viewModel.notch.track == nil) }) {
                 guard let self else { return }
                 self.layout()
             }
@@ -79,6 +79,11 @@ final class NotchWindowController {
     }
 
     private func layout() {
+        // With no track, hover can never change state (see NotchViewModel.recompute),
+        // so the panel must not eat clicks — in .hidden/.shape it is an invisible
+        // 190x32 rectangle sitting on top of the menu bar.
+        panel.ignoresMouseEvents = viewModel.notch.track == nil
+
         let size = viewModel.windowSize
         let screenFrame = viewModel.metrics.screenFrame
         let frame = NSRect(
