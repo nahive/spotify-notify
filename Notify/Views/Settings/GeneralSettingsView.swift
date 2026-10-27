@@ -9,7 +9,11 @@ struct GeneralSettingsView: View {
     var body: some View {
         Form {
             Section {
-                LaunchAtLogin.Toggle("Launch on startup")
+                // The label closure keeps the title localized: a bare literal picks
+                // the package's `some StringProtocol` initializer instead.
+                LaunchAtLogin.Toggle {
+                    Text("Launch on startup")
+                }
                 Toggle("Show song name in menu bar", isOn: $defaultsInteractor.shouldShowSongInMenuBar)
             }
 
@@ -48,7 +52,7 @@ struct GeneralSettingsView: View {
         }
     }
 
-    private var automaticFooter: String {
+    private var automaticFooter: LocalizedStringKey {
         guard let application = musicInteractor.currentApplication else {
             return "Follows whichever of Spotify or Apple Music starts playing."
         }
@@ -73,7 +77,7 @@ struct GeneralSettingsView: View {
             ForEach(SupportedMusicApplication.allCases, id: \.rawValue) { app in
                 selectionTile(
                     .fixed(app),
-                    title: app.appName,
+                    title: LocalizedStringKey(app.appName),
                     color: app.color,
                     isEnabled: app.isInstalled,
                     help: app.isInstalled ? "Always use \(app.appName)" : "\(app.appName) is not installed"
@@ -94,10 +98,10 @@ struct GeneralSettingsView: View {
 
     private func selectionTile(
         _ selection: PlayerSelection,
-        title: String,
+        title: LocalizedStringKey,
         color: Color,
         isEnabled: Bool,
-        help: String,
+        help: LocalizedStringKey,
         @ViewBuilder icon: () -> some View
     ) -> some View {
         let isSelected = defaultsInteractor.playerSelection == selection

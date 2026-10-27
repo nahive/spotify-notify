@@ -221,7 +221,7 @@ struct ArtworkThumb: View {
 
 struct MediaButton: View {
     var icon: String
-    var label: String
+    var label: LocalizedStringKey
     var size: CGFloat
     var action: () -> Void
 

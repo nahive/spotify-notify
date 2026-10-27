@@ -153,7 +153,7 @@ private struct NotchShapePlayground: View {
                 )
                 .fill(.black)
                 .overlay(alignment: .center) {
-                    Text("猛独が襲う (feat. 初音ミク) — 一二三")
+                    Text(verbatim: "猛独が襲う (feat. 初音ミク) — 一二三")
                         .font(.system(size: 11, weight: .medium))
                         .foregroundStyle(.white.opacity(0.9))
                         .lineLimit(1)

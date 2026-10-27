@@ -246,7 +246,7 @@ struct HistoryOverviewView: View {
 }
 
 private struct OverviewSection<Content: View>: View {
-    let title: String
+    let title: LocalizedStringKey
     @ViewBuilder var content: Content
 
     var body: some View {
@@ -282,7 +282,7 @@ private struct TopList: View {
                             .truncationMode(.tail)
                             .help(item.name)
                         Spacer(minLength: 8)
-                        Text("\(item.plays)")
+                        Text(item.plays, format: .number)
                             .font(.subheadline.monospacedDigit())
                             .foregroundStyle(.secondary)
                     }
@@ -302,7 +302,7 @@ private struct TopList: View {
 }
 
 private struct CompactStatView: View {
-    let title: String
+    let title: LocalizedStringKey
     let value: String
     let icon: String
     
@@ -336,7 +336,7 @@ private struct CompactStatView: View {
 }
 
 private struct MiniStatView: View {
-    let title: String
+    let title: LocalizedStringKey
     let value: String
     let icon: String
     
