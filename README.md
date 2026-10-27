@@ -19,7 +19,9 @@
 ![Build Version](https://img.shields.io/github/release/nahive/spotify-notify.svg)
 ##### *Inspired by [Spotify Notifications](https://github.com/citruspi/Spotify-Notifications) written in Swift*
 
-Menu bar app that shows what's playing in **Spotify or Apple Music** — as native notifications, in the menu bar, and (on macOS 26+) around the notch.
+Menu bar app that shows what's playing in **Spotify or Apple Music**: native notifications, a mini-player in the menu bar, a now-playing card around the notch, and a searchable listening history.
+
+**Requires macOS 26 (Tahoe) or later.**
 
 ## [Download latest release here](https://github.com/nahive/spotify-notify/releases)
 
@@ -38,22 +40,33 @@ Notify is signed but not notarized, so macOS refuses to open it until the quaran
 
 ## Features
 
-- [x] Spotify and Apple Music support, with automatic switching to whichever is playing ✨
-- [x] Notification sounds (toggle)
-- [x] Notification on play/pause (toggle)
-- [x] Show song name in the menu bar (toggle)
-- [x] Launch on login (toggle)
-- [x] Album artwork (toggle)
-- [x] Toggle disabling of notifications when player is focused (toggle)
-- [x] Shortcuts for showing notification (customizable) ✨
-- [x] Show progress of a song in notification ✨
-- [x] Ability to skip song from notification, and favorite it in Apple Music ✨
-- [x] Options to control player from menu bar, including shuffle, repeat and volume ✨
-- [x] Searchable song history with play counts, charts and one-click replay
-- [x] Now-playing pill around the notch with hover controls and scrubbing (macOS 26+) ✨
-- [x] Shortcuts, Spotlight and Siri actions (App Intents) ✨
-- [ ] Customizable options in notification
-- [x] Localizations (English, Japanese)
+**Players**
+- Spotify and Apple Music, following whichever is playing, or pinned to one
+
+**Menu bar**
+- Mini-player with artwork, scrubbing, shuffle, repeat and volume
+- Optional song name in the menu bar
+
+**Notifications**
+- A banner on every track change, and optionally on play and pause
+- Album artwork, song progress and sound, each optional
+- Skip from the banner, and favorite in Apple Music
+- Optionally silent while the player is the frontmost app
+- A global keyboard shortcut that shows the current song
+
+**Notch**
+- A now-playing card around the notch, or a floating pill on displays without one, with controls and scrubbing on hover
+
+**History**
+- Searchable listening history with play counts and one-click replay
+- Charts of plays per day, top artists and top albums
+
+**Automation**
+- Shortcuts, Spotlight and Siri actions: play/pause, skip, current song, recent songs and more
+
+**Other**
+- Launch at login
+- English and Japanese
 
 ## Notes
 
@@ -63,10 +76,10 @@ The first time you attempt to control Spotify or Apple Music, macOS presents the
 
 You must grant permission for the app to work. Choosing Don't Allow will make the app unable to retrieve any information about the currently playing track.
 
-If you click Don't Allow by accident, you can reset the permissions dialogue using
+If you click Don't Allow by accident, you can reset the permission dialog for Notify with
 
 ```
-$ tccutil reset AppleEvents
+$ tccutil reset AppleEvents io.nahive.SpotifyNotify
 ```
 
 The app builds and runs ad-hoc signed out of the box. To sign with your own account, create `Notify/Other/Local.xcconfig` (gitignored) containing:
@@ -99,4 +112,4 @@ If you want to **contribute**, submit a pull request.
 The source code is dedicated to the public domain. See the `LICENCE.md` file for
 more information.
 
-The Spotify artwork and icon is owned by Spotify AB Inc.
+The Spotify artwork and icon are owned by Spotify AB Inc.
