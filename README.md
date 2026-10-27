@@ -23,8 +23,11 @@ Menu bar app that shows what's playing in **Spotify or Apple Music** — as nati
 
 ```
 brew tap nahive/spotify-notify
+brew trust nahive/spotify-notify
 brew install --cask spotify-notify --no-quarantine
 ```
+
+Homebrew 7 and later refuse casks from untrusted taps, so the `brew trust` step is needed there.
 
 ## Features
 
