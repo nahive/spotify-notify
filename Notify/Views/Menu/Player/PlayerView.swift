@@ -121,7 +121,7 @@ struct PlayingView: View {
         }
     }
 
-    private var repeatLabel: String {
+    private var repeatLabel: LocalizedStringKey {
         switch musicInteractor.repeatMode {
         case .off: "Repeat off"
         case .all: "Repeat all"
@@ -180,8 +180,8 @@ private struct VolumeView: View {
 /// while dragging. `onChange` fires live; `onCommit` once on release.
 struct CapsuleSlider: View {
     let value: Double
-    let accessibilityLabel: String
-    let accessibilityValue: String
+    let accessibilityLabel: LocalizedStringKey
+    let accessibilityValue: LocalizedStringKey
     var onChange: ((Double) -> Void)?
     var onCommit: ((Double) -> Void)?
 
@@ -238,7 +238,7 @@ struct CapsuleSlider: View {
 private struct OptionToggleButton: View {
     let systemName: String
     let isOn: Bool
-    let label: String
+    let label: LocalizedStringKey
     let action: () -> Void
 
     var body: some View {

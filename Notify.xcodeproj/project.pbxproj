@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5CA1DE222E1F0000A0000022 /* PlaybackIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA1DE212E1F0000A0000021 /* PlaybackIntents.swift */; };
 		4C3FB6F02D2D1A210073EE24 /* AppleMusicApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3FB6EF2D2D1A210073EE24 /* AppleMusicApplication.swift */; };
 		4C3FB6F42D2D1D4D0073EE24 /* MusicPlayerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3FB6F32D2D1D4D0073EE24 /* MusicPlayerProtocol.swift */; };
+		4C4443473090E40C00491F1D /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4C4443463090E40C00491F1D /* InfoPlist.xcstrings */; };
+		4C4443483090E40C00491F1D /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4C4443453090E40C00491F1D /* AppShortcuts.xcstrings */; };
 		4C4E199E2DFF079F00989540 /* RadioPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E199D2DFF079F00989540 /* RadioPlayingView.swift */; };
 		4C4E19AD2E00300500989540 /* HistoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19A92E00300500989540 /* HistoryRowView.swift */; };
 		4C4E19B12E00308F00989540 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E19B02E00308F00989540 /* HistoryView.swift */; };
@@ -18,6 +19,9 @@
 		4C858885203F218800ED1692 /* SpotifyApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C858884203F218800ED1692 /* SpotifyApplication.swift */; };
 		4C926D4C288043F40008809E /* KeyHolder in Frameworks */ = {isa = PBXBuildFile; productRef = 4C926D4B288043F40008809E /* KeyHolder */; };
 		4C926D4F288044010008809E /* Magnet in Frameworks */ = {isa = PBXBuildFile; productRef = 4C926D4E288044010008809E /* Magnet */; };
+		4CAA11002E26000000000001 /* MarqueeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAA11002E26000000000002 /* MarqueeText.swift */; };
+		4CAA11012E26000000000001 /* PlayerControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAA11012E26000000000002 /* PlayerControlButton.swift */; };
+		4CAA11052E26000000000005 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4CAA11042E26000000000004 /* Localizable.xcstrings */; };
 		4CAD3BD52DFEB59400D6BF22 /* NothingPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAD3BD42DFEB59400D6BF22 /* NothingPlayingView.swift */; };
 		4CAD3BD72DFEBC3400D6BF22 /* MusicTrack+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAD3BD62DFEBC3400D6BF22 /* MusicTrack+Validation.swift */; };
 		4CAF91122A3620B700C6A19B /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAF91112A3620B700C6A19B /* Logger.swift */; };
@@ -40,9 +44,7 @@
 		4CF74EBF2D412E38009E8B00 /* ShortcutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EBE2D412E38009E8B00 /* ShortcutView.swift */; };
 		4CF74EC12D412E7A009E8B00 /* AboutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC02D412E7A009E8B00 /* AboutSettingsView.swift */; };
 		4CF74EC62D413325009E8B00 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF74EC52D413325009E8B00 /* PlayerView.swift */; };
-		4CAA11012E26000000000001 /* PlayerControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAA11012E26000000000002 /* PlayerControlButton.swift */; };
 		4CFE1ED32DFEDD6000E52A47 /* SongHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED22DFEDD6000E52A47 /* SongHistory.swift */; };
-		4CAA11002E26000000000001 /* MarqueeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAA11002E26000000000002 /* MarqueeText.swift */; };
 		4CFE1ED52DFEDD7000E52A47 /* HistoryInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE1ED42DFEDD7000E52A47 /* HistoryInteractor.swift */; };
 		5CA1DE022E1F0000A0000002 /* ShortcutsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA1DE012E1F0000A0000001 /* ShortcutsInteractor.swift */; };
 		5CA1DE132E1F0000A0000013 /* NowPlaying.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA1DE032E1F0000A0000003 /* NowPlaying.swift */; };
@@ -55,15 +57,16 @@
 		5CA1DE1A2E1F0000A000001A /* NotchInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA1DE0A2E1F0000A000000A /* NotchInteractor.swift */; };
 		5CA1DE1B2E1F0000A000001B /* ArtworkAccent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA1DE0B2E1F0000A000000B /* ArtworkAccent.swift */; };
 		5CA1DE1C2E1F0000A000001C /* NotchSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA1DE0C2E1F0000A000000C /* NotchSettingsView.swift */; };
-		4CAA11052E26000000000005 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4CAA11042E26000000000004 /* Localizable.xcstrings */; };
+		5CA1DE222E1F0000A0000022 /* PlaybackIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA1DE212E1F0000A0000021 /* PlaybackIntents.swift */; };
 		FB400A90203EFA3800F2D63C /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5CA1DE212E1F0000A0000021 /* PlaybackIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackIntents.swift; sourceTree = "<group>"; };
 		4C3340EC2A370EE90045B06B /* Notify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Notify.entitlements; sourceTree = "<group>"; };
 		4C3FB6EF2D2D1A210073EE24 /* AppleMusicApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicApplication.swift; sourceTree = "<group>"; };
 		4C3FB6F32D2D1D4D0073EE24 /* MusicPlayerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerProtocol.swift; sourceTree = "<group>"; };
+		4C4443453090E40C00491F1D /* AppShortcuts.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = AppShortcuts.xcstrings; sourceTree = "<group>"; };
+		4C4443463090E40C00491F1D /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		4C4E199D2DFF079F00989540 /* RadioPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioPlayingView.swift; sourceTree = "<group>"; };
 		4C4E19A92E00300500989540 /* HistoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRowView.swift; sourceTree = "<group>"; };
 		4C4E19B02E00308F00989540 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
@@ -71,9 +74,11 @@
 		4C5764C31C982DC800364AFE /* Notify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5764C81C982DC900364AFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4C5764CD1C982DC900364AFE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C858884203F218800ED1692 /* SpotifyApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyApplication.swift; sourceTree = "<group>"; };
+		4CAA11002E26000000000002 /* MarqueeText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarqueeText.swift; sourceTree = "<group>"; };
+		4CAA11012E26000000000002 /* PlayerControlButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControlButton.swift; sourceTree = "<group>"; };
 		4CAA11032E26000000000003 /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
 		4CAA11042E26000000000004 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		4C858884203F218800ED1692 /* SpotifyApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyApplication.swift; sourceTree = "<group>"; };
 		4CAD3BD42DFEB59400D6BF22 /* NothingPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NothingPlayingView.swift; sourceTree = "<group>"; };
 		4CAD3BD62DFEBC3400D6BF22 /* MusicTrack+Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MusicTrack+Validation.swift"; sourceTree = "<group>"; };
 		4CAF91112A3620B700C6A19B /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -95,9 +100,7 @@
 		4CF74EBE2D412E38009E8B00 /* ShortcutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutView.swift; sourceTree = "<group>"; };
 		4CF74EC02D412E7A009E8B00 /* AboutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSettingsView.swift; sourceTree = "<group>"; };
 		4CF74EC52D413325009E8B00 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
-		4CAA11012E26000000000002 /* PlayerControlButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControlButton.swift; sourceTree = "<group>"; };
 		4CFE1ED22DFEDD6000E52A47 /* SongHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongHistory.swift; sourceTree = "<group>"; };
-		4CAA11002E26000000000002 /* MarqueeText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarqueeText.swift; sourceTree = "<group>"; };
 		4CFE1ED42DFEDD7000E52A47 /* HistoryInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryInteractor.swift; sourceTree = "<group>"; };
 		5CA1DE012E1F0000A0000001 /* ShortcutsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsInteractor.swift; sourceTree = "<group>"; };
 		5CA1DE032E1F0000A0000003 /* NowPlaying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlaying.swift; sourceTree = "<group>"; };
@@ -110,6 +113,7 @@
 		5CA1DE0A2E1F0000A000000A /* NotchInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchInteractor.swift; sourceTree = "<group>"; };
 		5CA1DE0B2E1F0000A000000B /* ArtworkAccent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtworkAccent.swift; sourceTree = "<group>"; };
 		5CA1DE0C2E1F0000A000000C /* NotchSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchSettingsView.swift; sourceTree = "<group>"; };
+		5CA1DE212E1F0000A0000021 /* PlaybackIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackIntents.swift; sourceTree = "<group>"; };
 		FB400A8F203EFA3800F2D63C /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -128,14 +132,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5CA1DE232E1F0000A0000023 /* Intents */ = {
-			isa = PBXGroup;
-			children = (
-				5CA1DE212E1F0000A0000021 /* PlaybackIntents.swift */,
-			);
-			path = Intents;
-			sourceTree = "<group>";
-		};
 		4C4E199F2E002C1A00989540 /* Music */ = {
 			isa = PBXGroup;
 			children = (
@@ -207,20 +203,6 @@
 				5CA1DE0B2E1F0000A000000B /* ArtworkAccent.swift */,
 			);
 			path = Helpers;
-			sourceTree = "<group>";
-		};
-		5CA1DE0D2E1F0000A000000D /* Notch */ = {
-			isa = PBXGroup;
-			children = (
-				5CA1DE032E1F0000A0000003 /* NowPlaying.swift */,
-				5CA1DE042E1F0000A0000004 /* NotchGeometry.swift */,
-				5CA1DE052E1F0000A0000005 /* NotchShape.swift */,
-				5CA1DE062E1F0000A0000006 /* NotchViewModel.swift */,
-				5CA1DE072E1F0000A0000007 /* NotchWindowController.swift */,
-				5CA1DE082E1F0000A0000008 /* NotchView.swift */,
-				5CA1DE092E1F0000A0000009 /* NotchPillContent.swift */,
-			);
-			path = Notch;
 			sourceTree = "<group>";
 		};
 		4C9FDB6B2E02E4C90045C310 /* Player */ = {
@@ -319,6 +301,28 @@
 			path = History;
 			sourceTree = "<group>";
 		};
+		5CA1DE0D2E1F0000A000000D /* Notch */ = {
+			isa = PBXGroup;
+			children = (
+				5CA1DE032E1F0000A0000003 /* NowPlaying.swift */,
+				5CA1DE042E1F0000A0000004 /* NotchGeometry.swift */,
+				5CA1DE052E1F0000A0000005 /* NotchShape.swift */,
+				5CA1DE062E1F0000A0000006 /* NotchViewModel.swift */,
+				5CA1DE072E1F0000A0000007 /* NotchWindowController.swift */,
+				5CA1DE082E1F0000A0000008 /* NotchView.swift */,
+				5CA1DE092E1F0000A0000009 /* NotchPillContent.swift */,
+			);
+			path = Notch;
+			sourceTree = "<group>";
+		};
+		5CA1DE232E1F0000A0000023 /* Intents */ = {
+			isa = PBXGroup;
+			children = (
+				5CA1DE212E1F0000A0000021 /* PlaybackIntents.swift */,
+			);
+			path = Intents;
+			sourceTree = "<group>";
+		};
 		FB400A8E203EFA3800F2D63C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -340,6 +344,8 @@
 			isa = PBXGroup;
 			children = (
 				4CAA11042E26000000000004 /* Localizable.xcstrings */,
+				4C4443453090E40C00491F1D /* AppShortcuts.xcstrings */,
+				4C4443463090E40C00491F1D /* InfoPlist.xcstrings */,
 				4C5764C81C982DC900364AFE /* Assets.xcassets */,
 			);
 			path = Resources;
@@ -422,6 +428,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C5764C91C982DC900364AFE /* Assets.xcassets in Resources */,
+				4C4443473090E40C00491F1D /* InfoPlist.xcstrings in Resources */,
+				4C4443483090E40C00491F1D /* AppShortcuts.xcstrings in Resources */,
 				4CAA11052E26000000000005 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -482,9 +490,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXVariantGroup section */
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
 		4C5764D91C982DC900364AFE /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -538,10 +543,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_UPCOMING_FEATURE_EXISTENTIAL_ANY = YES;
 				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
@@ -596,10 +603,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_UPCOMING_FEATURE_EXISTENTIAL_ANY = YES;
 				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
@@ -627,12 +636,14 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = Notify;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
 			};
@@ -657,11 +668,13 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = io.nahive.SpotifyNotify;
 				PRODUCT_NAME = Notify;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
 			};
 			name = Release;

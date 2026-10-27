@@ -7,8 +7,8 @@ struct PlayerControlButton: View {
     let systemName: String
     var font: Font = .system(size: 18, weight: .semibold)
     var size: CGFloat = 36
-    let accessibilityLabel: String
-    var accessibilityHint: String? = nil
+    let accessibilityLabel: LocalizedStringKey
+    var accessibilityHint: LocalizedStringKey? = nil
     let action: () -> Void
 
     @State private var hovering = false
@@ -29,7 +29,7 @@ struct PlayerControlButton: View {
             }
         }
         .accessibilityLabel(accessibilityLabel)
-        .accessibilityHint(accessibilityHint ?? "")
+        .accessibilityHint(accessibilityHint.map { Text($0) } ?? Text(verbatim: ""))
     }
 }
 

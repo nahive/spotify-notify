@@ -26,7 +26,7 @@ struct NothingPlayingView: View {
         }
     }
 
-    private var title: String {
+    private var title: LocalizedStringKey {
         switch reason {
         case .noAppSelected: "No Music App Found"
         case .automationDenied: "Automation Access Needed"
@@ -35,7 +35,7 @@ struct NothingPlayingView: View {
         }
     }
 
-    private var message: String {
+    private var message: LocalizedStringKey {
         switch reason {
         case .noAppSelected:
             "Install Spotify or Apple Music, or pick one in Settings, to see what's playing."
@@ -48,7 +48,7 @@ struct NothingPlayingView: View {
         }
     }
 
-    private var actionTitle: String {
+    private var actionTitle: LocalizedStringKey {
         switch reason {
         case .noAppSelected: "Open Settings"
         case .automationDenied: "Grant Access"
