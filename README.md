@@ -1,14 +1,18 @@
-
 <p align="center">
 <img src="docs/logo.png" alt="Notify" width="200"/>
 </p>
 <p align="center">
-<img src="docs/p1.png" alt="normal dark mode" width="300"/>
-<img src="docs/p2.png" alt="normal light mode" width="300"/>
+<img src="docs/menu-dark.png" alt="Menu bar player in dark mode" width="352"/>
+<img src="docs/menu-light.png" alt="Menu bar player in light mode" width="352"/>
 </p>
 <p align="center">
-<img src="docs/p3.png" alt="extended dark mode" width="300"/>
-<img src="docs/p4.png" alt="extended light mode" width="300"/>
+<img src="docs/notch.png" alt="Now-playing card around the notch, with scrubber and controls" width="340"/>
+</p>
+<p align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/history-dark.png">
+  <img src="docs/history-light.png" alt="Song history with listening overview: plays per day and top artists" width="720"/>
+</picture>
 </p>
 
 # Notify
